@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+	prefWidth="1400.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controllers.LoginWindowStep1Controller">
+	<children>
+		<Pane prefHeight="130.0" prefWidth="1400.0"
+			style="-fx-background-color: #70d4f6;" AnchorPane.leftAnchor="0.0"
+			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<children>
+				<Label layoutX="79.0" layoutY="38.0" text="LOGOWANIE">
+					<font>
+						<Font size="37.0" />
+					</font>
+				</Label>
+				<JFXButton fx:id="openAccountCreator" layoutX="1202.0"
+					layoutY="38.0" prefHeight="54.0" prefWidth="184.0" text="Utwórz konto"
+					textFill="WHITE">
+					<font>
+						<Font name="System Bold Italic" size="24.0" />
+					</font>
+				</JFXButton>
+			</children>
+		</Pane>
+		<VBox alignment="CENTER" layoutX="400.0" layoutY="150.0"
+			prefHeight="200.0" prefWidth="700.0" spacing="20.0">
+			<children>
+				<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0"
+					spacing="20.0">
+					<children>
+						<Label text="Numer Identyfikacyjny" textFill="#0b090a">
+							<font>
+								<Font name="Arial" size="20.0" />
+							</font>
+						</Label>
+						<JFXTextField focusColor="WHITE" prefHeight="46.0"
+							prefWidth="350.0" promptText="  Wpisz numer"
+							style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
+							unFocusColor="#cccccc">
+							<font>
+								<Font size="20.0" />
+							</font>
+						</JFXTextField>
+					</children>
+					<opaqueInsets>
+						<Insets />
+					</opaqueInsets>
+				</HBox>
+				<HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
+					<children>
+						<JFXButton fx:id="goToNextStep" prefHeight="46.0"
+							prefWidth="350.0" style="-fx-background-color: #00549E;" text="DALEJ"
+							textFill="WHITE">
+							<font>
+								<Font name="System Bold" size="20.0" />
+							</font>
+						</JFXButton>
+					</children>
+					<padding>
+						<Insets right="65.0" />
+					</padding>
+				</HBox>
+			</children>
+		</VBox>
+		<VBox layoutX="150.0" layoutY="350.0" prefHeight="300.0"
+			prefWidth="1100.0" spacing="15.0">
+			<children>
+				<Label prefHeight="40.0" prefWidth="1004.0"
+					text="   Pamiętaj o podstawowych zasadach bezpieczeństwa.">
+					<font>
+						<Font size="18.0" />
+					</font>
+					<opaqueInsets>
+						<Insets />
+					</opaqueInsets>
+					<graphic>
+						<FontAwesomeIcon
+							glyphStyle="-fx-fill: linear-gradient( #70d4f6 0%, #247cbc 70%, #2c85c1 85%);"
+							iconName="LOCK" size="2em" />
+					</graphic>
+				</Label>
+				<Label prefHeight="21.0" prefWidth="992.0"
+					text="Zanim wprowadzisz na stronie swój Identyfikator użytkownika i Kod Dostępu sprawdź, czy:">
+					<font>
+						<Font size="18.0" />
+					</font>
+				</Label>
+				<Label
+					text=" adres strony logowania rozpoczyna się od https (oznaczającego bezpieczne połączenie internetowe)">
+					<font>
+						<Font size="18.0" />
+					</font>
+					<graphic>
+						<FontAwesomeIcon iconName="CIRCLE_THIN" />
+					</graphic>
+				</Label>
+				<Label
+					text=" w pasku adresu lub na pasku stanu w dolnej części ekranu przeglądarki widoczna jest zamknięta kłódka">
+					<font>
+						<Font size="18.0" />
+					</font>
+					<graphic>
+						<FontAwesomeIcon iconName="CIRCLE_THIN" />
+					</graphic>
+				</Label>
+				<Label
+					text=" certyfikat wystawiony dla witryny jest zgodny z nazwą banku">
+					<font>
+						<Font size="18.0" />
+					</font>
+					<graphic>
+						<FontAwesomeIcon iconName="CIRCLE_THIN" />
+					</graphic>
+				</Label>
+				<Label contentDisplay="RIGHT" prefHeight="27.0" prefWidth="1145.0"
+					text="Pamiętaj:">
+					<font>
+						<Font size="18.0" />
+					</font>
+					<graphic>
+						<Label
+							text="Bank nie wymaga potwierdzenia danych SMS-em lub mailem ani też instalacji jakichkolwiek aplikacji na telefonach/komputerach użytkowników.">
+							<font>
+								<Font size="16.0" />
+							</font>
+						</Label>
+					</graphic>
+				</Label>
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>
