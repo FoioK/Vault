@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -42,7 +43,7 @@
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXTextField prefWidth="350.0">
+								<JFXTextField fx:id="firstNameField" prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -57,7 +58,7 @@
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXTextField prefWidth="350.0">
+								<JFXTextField fx:id="lastNameField" prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -72,7 +73,7 @@
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXTextField prefWidth="350.0">
+								<JFXTextField fx:id="personIdField" prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -87,7 +88,7 @@
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXTextField prefWidth="350.0">
+								<JFXTextField fx:id="adressField" prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -102,7 +103,7 @@
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXTextField prefWidth="350.0">
+								<JFXTextField fx:id="telefonNumberField" prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -114,14 +115,14 @@
 				<VBox prefHeight="550.0" prefWidth="600.0">
 					<children>
 						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="50.0">
+							spacing="20.0">
 							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Login">
+								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="email">
 									<font>
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXTextField prefWidth="350.0">
+								<JFXTextField fx:id="emailField" prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -129,14 +130,15 @@
 							</children>
 						</HBox>
 						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="50.0">
+							spacing="20.0">
 							<children>
 								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Hasło">
 									<font>
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXPasswordField prefWidth="350.0">
+								<JFXPasswordField fx:id="passwordField"
+									prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
@@ -144,18 +146,32 @@
 							</children>
 						</HBox>
 						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="50.0">
+							spacing="20.0">
 							<children>
 								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Powtórz hasło">
 									<font>
 										<Font size="26.0" />
 									</font>
 								</Label>
-								<JFXPasswordField prefWidth="350.0">
+								<JFXPasswordField fx:id="repeatPasswordField"
+									prefWidth="350.0">
 									<font>
 										<Font size="24.0" />
 									</font>
 								</JFXPasswordField>
+							</children>
+						</HBox>
+						<HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+							<children>
+								<JFXButton fx:id="createAccount" prefWidth="300.0"
+									style="-fx-background-color: #00549E;" text="Utwórz" textFill="WHITE">
+									<font>
+										<Font name="System Bold" size="32.0" />
+									</font>
+									<opaqueInsets>
+										<Insets />
+									</opaqueInsets>
+								</JFXButton>
 							</children>
 						</HBox>
 					</children>
