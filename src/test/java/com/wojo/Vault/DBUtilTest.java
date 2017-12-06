@@ -94,7 +94,7 @@ public class DBUtilTest {
 				" 'testLogin',\r\n" + 
 				" 'testPassword');");
 		
-		ResultSet resultSet = DBUtil.dbExecuteQuery("SELECT * FROM person");
+		ResultSet resultSet = DBUtil.dbExecuteQuery("SELECT * FROM person WHERE idPerson = '101';");
 		if(resultSet.next()) {
 			assertEquals(101, resultSet.getInt(1));
 			assertEquals("TestFirstName", resultSet.getString(2));

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="840.0" prefWidth="375.0"
+	style="-fx-background-color: #F2F4F4;" xmlns="http://javafx.com/javafx/8.0.141"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controllers.DesktopLeftPaneController">
+	<children>
+		<JFXButton fx:id="logOut" layoutX="42.0" layoutY="751.0"
+			prefHeight="75.0" prefWidth="300.0" text="Wyloguj">
+			<font>
+				<Font size="25.0" />
+			</font>
+		</JFXButton>
+		<Label alignment="CENTER" layoutY="125.0" prefHeight="115.0"
+			prefWidth="375.0"
+			style="-fx-background-color: linear-gradient( #247cbc 0%,#23639b 60%,#00529b 85%);"
+			text="More features coming soon" textFill="WHITE">
+			<font>
+				<Font name="System Bold" size="24.0" />
+			</font>
+		</Label>
+	</children>
+</AnchorPane>

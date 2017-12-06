@@ -23,8 +23,8 @@ public class Account {
 		return lastName;
 	}
 
-	public static void setLastName(String secondName) {
-		Account.lastName = secondName;
+	public static void setLastName(String lastName) {
+		Account.lastName = lastName;
 	}
 
 	public static String getPersonId() {

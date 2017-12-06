@@ -43,8 +43,9 @@
 								<Font name="Arial" size="20.0" />
 							</font>
 						</Label>
-						<JFXPasswordField focusColor="WHITE" prefHeight="46.0"
-							prefWidth="350.0" promptText="  Wpisz hasło użytkownika"
+						<JFXPasswordField fx:id="passwordFiled"
+							focusColor="WHITE" prefHeight="46.0" prefWidth="350.0"
+							promptText="  Wpisz hasło użytkownika"
 							style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
 							unFocusColor="#cccccc">
 							<font>
@@ -58,8 +59,9 @@
 				</HBox>
 				<HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
 					<children>
-						<JFXButton prefHeight="46.0" prefWidth="350.0"
-							style="-fx-background-color: #00549E;" text="ZALOGUJ" textFill="WHITE">
+						<JFXButton fx:id="logInButton" prefHeight="46.0"
+							prefWidth="350.0" style="-fx-background-color: #00549E;" text="ZALOGUJ"
+							textFill="WHITE">
 							<font>
 								<Font name="System Bold" size="20.0" />
 							</font>

@@ -1,8 +1,12 @@
 package com.wojo.Vault.Controllers;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import com.wojo.Vault.Account;
+import com.wojo.Vault.AccountDAO;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +19,9 @@ public class LoginWindowStep1Controller {
 
 	@FXML
 	private JFXButton goToNextStep;
+	
+	@FXML
+	private JFXTextField loginField;
 
 	@FXML
 	private JFXButton openAccountCreator;
@@ -22,7 +29,22 @@ public class LoginWindowStep1Controller {
 	@FXML
 	void initialize() {
 		goToNextStep.addEventHandler(ActionEvent.ACTION, e -> {
-			loadLoginWindowStep2();
+			boolean isLogin = false;
+			try {
+				isLogin = AccountDAO.searchPersonLogin(loginField.getText());
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			if(isLogin) {
+				Account.setLogin(loginField.getText());
+				loadLoginWindowStep2();
+			}
+			else {
+				//TODO badLogin
+			}
 		});
 		
 		openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> {

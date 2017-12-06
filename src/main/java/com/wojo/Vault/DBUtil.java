@@ -76,8 +76,9 @@ public class DBUtil {
 
 		return crs;
 	}
-	
-	public static void dbExecuteUpdate(String updateStatement) throws SQLException, ClassNotFoundException {
+
+	public static void dbExecuteUpdate(String updateStatement)
+			throws SQLException, ClassNotFoundException {
 		Statement statement = null;
 		try {
 			dbConnect();
@@ -87,10 +88,20 @@ public class DBUtil {
 			System.err.println("Problem occurred at executeUpdate operation");
 			throw e;
 		} finally {
-			if(statement != null) {
+			if (statement != null) {
 				statement.close();
 			}
 			dbDisconnect();
 		}
 	}
+
+	@SuppressWarnings("unused")
+	private static void dbClear() throws ClassNotFoundException, SQLException {
+		dbExecuteUpdate("TRUNCATE TABLE person;");
+	}
+
+//	public static void main(String[] args)
+//			throws ClassNotFoundException, SQLException {
+//		dbClear();
+//	}
 }
