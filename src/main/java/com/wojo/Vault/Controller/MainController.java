@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controllers;
+package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -7,7 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 
-public class MainWindowController {
+public class MainController {
 
 	@FXML
 	private AnchorPane mainPanel;

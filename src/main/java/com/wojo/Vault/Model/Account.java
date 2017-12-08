@@ -1,4 +1,4 @@
-package com.wojo.Vault;
+package com.wojo.Vault.Model;
 
 public class Account {
 

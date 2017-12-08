@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controllers;
+package com.wojo.Vault.Controller;
 
 import java.io.IOException;
 
@@ -7,19 +7,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
-public class RootWindowController {
+public class RootController {
 
     @FXML
     private AnchorPane root;
 
     @FXML
     void initialize() {
-    	loadLoginWindowStep1();
+    	loadLoginStep1();
     }
     
 	private void loadMainWindow() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/MainWindow.fxml"));
+				this.getClass().getResource("/View/Main.fxml"));
 		AnchorPane mainPane = null;
 		try {
 			mainPane = loader.load();
@@ -29,9 +29,9 @@ public class RootWindowController {
 		root.getChildren().add(mainPane);
 	}
 	
-	public void loadLoginWindowStep1() {
+	public void loadLoginStep1() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/LoginWindowStep1.fxml"));
+				this.getClass().getResource("/View/LoginStep1.fxml"));
 		AnchorPane pane = null;
 		try {
 			pane = loader.load();
@@ -41,7 +41,7 @@ public class RootWindowController {
 		pane.setLayoutX(225);
 		pane.setLayoutY(100);
 		
-		LoginWindowStep1Controller controller = loader.getController();
+		LoginStep1Controller controller = loader.getController();
 		controller.setRootController(this);
 		setScreen(pane);
 	}

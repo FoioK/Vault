@@ -9,7 +9,7 @@ import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
-	private static final String MAIN_WINDOW_PATH = "/FXML/RootWindow.fxml";
+	private static final String MAIN_WINDOW_PATH = "/View/Root.fxml";
 
 	private static AnchorPane root;
 

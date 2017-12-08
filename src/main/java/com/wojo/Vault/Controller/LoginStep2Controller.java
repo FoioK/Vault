@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controllers;
+package com.wojo.Vault.Controller;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -6,18 +6,18 @@ import java.sql.SQLException;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
-import com.wojo.Vault.Account;
-import com.wojo.Vault.AccountDAO;
-import com.wojo.Vault.DBUtil;
+import com.wojo.Vault.DAO.AccountDAO;
+import com.wojo.Vault.Model.Account;
+import com.wojo.Vault.Util.DBUtil;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
-public class LoginWindowStep2Controller {
+public class LoginStep2Controller {
 
-	private RootWindowController rootController;
+	private RootController rootController;
 
 	@FXML
 	private JFXButton backToStep1;
@@ -31,7 +31,7 @@ public class LoginWindowStep2Controller {
 	@FXML
 	void initialize() {
 		backToStep1.addEventFilter(ActionEvent.ACTION, e -> {
-			rootController.loadLoginWindowStep1();
+			rootController.loadLoginStep1();
 		});
 
 		logInButton.addEventHandler(ActionEvent.ACTION, e -> {
@@ -66,7 +66,7 @@ public class LoginWindowStep2Controller {
 
 	private void loadAccountPane() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/DesktopLeftPane.fxml"));
+				this.getClass().getResource("/View/DesktopLeftPane.fxml"));
 		AnchorPane pane = null;
 		try {
 			pane = loader.load();
@@ -80,7 +80,7 @@ public class LoginWindowStep2Controller {
 		rootController.setScreen(pane);
 	}
 
-	public void setRootController(RootWindowController rootController) {
+	public void setRootController(RootController rootController) {
 		this.rootController = rootController;
 	}
 

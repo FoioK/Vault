@@ -5,6 +5,6 @@
 
 <AnchorPane fx:id="root" prefHeight="900.0" prefWidth="1850.0"
 	xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.wojo.Vault.Controllers.RootWindowController">
+	fx:controller="com.wojo.Vault.Controller.RootController">
 	<!-- TODO Add Nodes -->
 </AnchorPane>

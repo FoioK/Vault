@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
+import com.wojo.Vault.Util.DBUtil;
+
 public class DBUtilTest {
 
 	@Test

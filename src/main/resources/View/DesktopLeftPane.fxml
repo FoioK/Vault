@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="840.0" prefWidth="375.0"
 	style="-fx-background-color: #F2F4F4;" xmlns="http://javafx.com/javafx/8.0.141"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controllers.DesktopLeftPaneController">
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controller.DesktopLeftPaneController">
 	<children>
 		<JFXButton fx:id="logOut" layoutX="42.0" layoutY="751.0"
 			prefHeight="75.0" prefWidth="300.0" text="Wyloguj">

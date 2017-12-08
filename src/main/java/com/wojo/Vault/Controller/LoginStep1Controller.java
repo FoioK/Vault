@@ -1,21 +1,21 @@
-package com.wojo.Vault.Controllers;
+package com.wojo.Vault.Controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.Account;
-import com.wojo.Vault.AccountDAO;
+import com.wojo.Vault.DAO.AccountDAO;
+import com.wojo.Vault.Model.Account;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
-public class LoginWindowStep1Controller {
+public class LoginStep1Controller {
 
-	private RootWindowController rootController;
+	private RootController rootController;
 
 	@FXML
 	private JFXButton goToNextStep;
@@ -40,7 +40,7 @@ public class LoginWindowStep1Controller {
 			
 			if(isLogin) {
 				Account.setLogin(loginField.getText());
-				loadLoginWindowStep2();
+				loadLoginStep2();
 			}
 			else {
 				//TODO badLogin
@@ -53,9 +53,9 @@ public class LoginWindowStep1Controller {
 	}
 
 
-	private void loadLoginWindowStep2() {
+	private void loadLoginStep2() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/LoginWindowStep2.fxml"));
+				this.getClass().getResource("/View/LoginStep2.fxml"));
 		AnchorPane pane = null;
 		try {
 			pane = loader.load();
@@ -65,14 +65,14 @@ public class LoginWindowStep1Controller {
 		pane.setLayoutX(225);
 		pane.setLayoutY(100);
 
-		LoginWindowStep2Controller controller = loader.getController();
+		LoginStep2Controller controller = loader.getController();
 		controller.setRootController(rootController);
 		rootController.setScreen(pane);
 	}
 
 	private void loadAccountCreator() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/AccountCreator.fxml"));
+				this.getClass().getResource("/View/AccountCreator.fxml"));
 		AnchorPane pane = null;
 		try {
 			pane = loader.load();
@@ -87,7 +87,7 @@ public class LoginWindowStep1Controller {
 		rootController.setScreen(pane);
 	}
 
-	public void setRootController(RootWindowController rootController) {
+	public void setRootController(RootController rootController) {
 		this.rootController = rootController;
 	}
 

@@ -13,7 +13,7 @@ public class fxmlWindowLoaderTest extends ApplicationTest {
 	@Test
 	public void rootWindowShoudlBeLoad() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/RootWindow.fxml"));
+				this.getClass().getResource("/View/RootWindow.fxml"));
 		try {
 			AnchorPane root = loader.load();
 		} catch (IOException e) {
@@ -24,7 +24,7 @@ public class fxmlWindowLoaderTest extends ApplicationTest {
 	@Test
 	public void mainWindowShoudlBeLoad() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/MainWindow.fxml"));
+				this.getClass().getResource("/View/MainWindow.fxml"));
 		try {
 			AnchorPane root = loader.load();
 		} catch (IOException e) {
@@ -35,7 +35,7 @@ public class fxmlWindowLoaderTest extends ApplicationTest {
 	@Test
 	public void loginWindowStep1ShoudlBeLoad() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/LoginWindowStep1.fxml"));
+				this.getClass().getResource("/View/LoginWindowStep1.fxml"));
 		try {
 			AnchorPane root = loader.load();
 		} catch (IOException e) {
@@ -46,7 +46,7 @@ public class fxmlWindowLoaderTest extends ApplicationTest {
 	@Test
 	public void loginWindowStep2ShoudlBeLoad() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/LoginWindowStep2.fxml"));
+				this.getClass().getResource("/View/LoginWindowStep2.fxml"));
 		try {
 			AnchorPane root = loader.load();
 		} catch (IOException e) {
@@ -57,7 +57,7 @@ public class fxmlWindowLoaderTest extends ApplicationTest {
 	@Test
 	public void accountCreatorWindowShoudlBeLoad() {
 		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/FXML/AccountCreator.fxml"));
+				this.getClass().getResource("/View/AccountCreator.fxml"));
 		try {
 			AnchorPane root = loader.load();
 		} catch (IOException e) {

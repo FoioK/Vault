@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controllers;
+package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 
 public class DesktopLeftPaneController {
 
-	private RootWindowController rootController;
+	private RootController rootController;
 	
     @FXML
     private JFXButton logOut;
@@ -15,11 +15,11 @@ public class DesktopLeftPaneController {
     @FXML
     void initialize() {
     	logOut.addEventHandler(ActionEvent.ACTION, e -> {
-    		rootController.loadLoginWindowStep1();
+    		rootController.loadLoginStep1();
     	});
     }
 
-	public void setRootController(RootWindowController rootController) {
+	public void setRootController(RootController rootController) {
 		this.rootController = rootController;
 	}
 }

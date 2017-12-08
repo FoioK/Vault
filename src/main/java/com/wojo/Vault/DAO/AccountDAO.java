@@ -1,9 +1,12 @@
-package com.wojo.Vault;
+package com.wojo.Vault.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
+
+import com.wojo.Vault.Model.Account;
+import com.wojo.Vault.Util.DBUtil;
 
 public class AccountDAO {
 

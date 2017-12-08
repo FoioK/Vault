@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controllers;
+package com.wojo.Vault.Controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,14 +9,14 @@ import javax.swing.JOptionPane;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.AccountDAO;
+import com.wojo.Vault.DAO.AccountDAO;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class AccountCreatorController {
 
-	private RootWindowController rootController;
+	private RootController rootController;
 
     @FXML
     private JFXButton backToLoginWindow;
@@ -51,7 +51,7 @@ public class AccountCreatorController {
 	@FXML
 	void initialize() {
 		backToLoginWindow.addEventHandler(ActionEvent.ACTION, e -> {
-			rootController.loadLoginWindowStep1();
+			rootController.loadLoginStep1();
 		});
 		
 		createAccount.addEventHandler(ActionEvent.ACTION, e -> {
@@ -66,7 +66,7 @@ public class AccountCreatorController {
 			}
 			
 			JOptionPane.showMessageDialog(null, "User ID: " + login);
-			rootController.loadLoginWindowStep1();
+			rootController.loadLoginStep1();
 		});
 	}
 
@@ -84,7 +84,7 @@ public class AccountCreatorController {
 		return accountDate;
 	}
 
-	public void setRootController(RootWindowController rootController) {
+	public void setRootController(RootController rootController) {
 		this.rootController = rootController;
 	}
 	
