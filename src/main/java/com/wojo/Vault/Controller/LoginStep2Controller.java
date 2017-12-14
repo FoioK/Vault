@@ -17,71 +17,84 @@ import javafx.scene.layout.AnchorPane;
 
 public class LoginStep2Controller {
 
-	private RootController rootController;
+    private RootController rootController;
 
-	@FXML
-	private JFXButton backToStep1;
+    @FXML
+    private JFXButton backToStep1;
 
-	@FXML
-	private JFXPasswordField passwordFiled;
+    @FXML
+    private JFXPasswordField passwordFiled;
 
-	@FXML
-	private JFXButton logInButton;
+    @FXML
+    private JFXButton logInButton;
 
-	@FXML
-	void initialize() {
-		backToStep1.addEventFilter(ActionEvent.ACTION, e -> {
-			rootController.loadLoginStep1();
-		});
+    @FXML
+    void initialize() {
+        addEventHandlers();
+    }
 
-		logInButton.addEventHandler(ActionEvent.ACTION, e -> {
-			String queryStatementGetPassword = "SELECT idPerson, PASSWORD FROM person WHERE LOGIN = '"
-					+ Account.getLogin() + "';";
-			ResultSet resultSet = null;
-			try {
-				resultSet = DBUtil.dbExecuteQuery(queryStatementGetPassword);
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+    private void addEventHandlers() {
+        backToStep1.addEventFilter(ActionEvent.ACTION, e -> {
+            rootController.loadLoginStep1();
+        });
 
-			int idPerson = 0;
-			String password = "";
-			try {
-				resultSet.next();
-				idPerson = resultSet.getInt(1);
-				password = resultSet.getString(2);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+        logInButton.addEventHandler(ActionEvent.ACTION, e -> {
+            logingProcesStep2();
+        });
+    }
 
-			if (password.equals(passwordFiled.getText())) {
-				AccountDAO.insertPersonDate(idPerson);
+    private void logingProcesStep2() {
+        ResultSet resultSet = getIdPersonAndPassword();
+        int idPerson = 0;
+        String password = "";
+        try {
+            resultSet.next();
+            idPerson = resultSet.getInt(1);
+            password = resultSet.getString(2);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
 
-				loadAccountPane();
-			}
-		});
-	}
+        if (password.equals(passwordFiled.getText())) {
+            AccountDAO.insertPersonDate(idPerson);
+            loadAccountPane();
+        } else {
+            //TODO badPassword
+        }
+    }
 
-	private void loadAccountPane() {
-		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/View/DesktopLeftPane.fxml"));
-		AnchorPane pane = null;
-		try {
-			pane = loader.load();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		pane.setLayoutY(60);
-		
-		DesktopLeftPaneController controller = loader.getController();
-		controller.setRootController(rootController);
-		rootController.setScreen(pane);
-	}
+    private ResultSet getIdPersonAndPassword() {
+        String queryStatementGetPassword = "SELECT idPerson, PASSWORD FROM person WHERE LOGIN = '"
+                + Account.getLogin() + "';";
+        ResultSet resultSet = null;
+        try {
+            resultSet = DBUtil.dbExecuteQuery(queryStatementGetPassword);
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return resultSet;
+    }
 
-	public void setRootController(RootController rootController) {
-		this.rootController = rootController;
-	}
+    private void loadAccountPane() {
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/DesktopLeftPane.fxml"));
+        AnchorPane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        pane.setLayoutY(60);
+
+        DesktopLeftPaneController controller = loader.getController();
+        controller.setRootController(rootController);
+        rootController.setScreen(pane);
+    }
+
+    public void setRootController(RootController rootController) {
+        this.rootController = rootController;
+    }
 
 }

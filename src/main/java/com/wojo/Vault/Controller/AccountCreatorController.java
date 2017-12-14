@@ -50,24 +50,33 @@ public class AccountCreatorController {
 
 	@FXML
 	void initialize() {
+		addEventHandlers();
+	}
+
+	private void addEventHandlers() {
 		backToLoginWindow.addEventHandler(ActionEvent.ACTION, e -> {
 			rootController.loadLoginStep1();
 		});
 		
 		createAccount.addEventHandler(ActionEvent.ACTION, e -> {
-			String login = AccountDAO.generateLogin();
-			List<String> accountDate = getAccountDateList(login);
-			try {
-				AccountDAO.insertAccount(accountDate);
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			
-			JOptionPane.showMessageDialog(null, "User ID: " + login);
-			rootController.loadLoginStep1();
+			createAccountProces();
+			//TODO repeatPassword
 		});
+	}
+
+	private void createAccountProces() {
+		String login = AccountDAO.generateLogin(9);
+		List<String> accountDate = getAccountDateList(login);
+		try {
+			AccountDAO.insertAccountToDB(accountDate);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		JOptionPane.showMessageDialog(null, "User ID: " + login);
+		rootController.loadLoginStep1();
 	}
 
 	private List<String> getAccountDateList(String login) {

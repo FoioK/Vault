@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.wojo</groupId>
-  <artifactId>BankAccountManagement</artifactId>
+  <artifactId>Vault</artifactId>
   <version>0.1 pre-beta</version>
   <packaging>jar</packaging>
 
-  <name>BankAccountManagement</name>
+  <name>Vault</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -31,7 +31,7 @@
     </dependency>
     <dependency>
         <groupId>org.testfx</groupId>
-        <artifactId>testfx-junit</artifactId> <!-- or testfx-junit5 -->
+        <artifactId>testfx-junit</artifactId>
         <version>4.0.8-alpha</version>
         <scope>test</scope>
     </dependency>
@@ -45,5 +45,11 @@
   		<artifactId>fontawesomefx</artifactId>
 	  	<version>8.1</version>
 	</dependency>
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.45</version>
+      </dependency>
+
   </dependencies>
 </project>

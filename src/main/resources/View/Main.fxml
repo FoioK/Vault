@@ -19,7 +19,7 @@
 				<Image url="@../images/background_1850x900.jpg" />
 			</image>
 		</ImageView>
-		<Pane prefHeight="60.0" prefWidth="1850.0"
+		<Pane fx:id="topPane" prefHeight="60.0" prefWidth="1850.0"
 			style="-fx-background-color: #14B1E7;" AnchorPane.leftAnchor="0.0"
 			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<children>

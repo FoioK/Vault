@@ -2,6 +2,7 @@ package com.wojo.Vault.Model;
 
 public class Account {
 
+	private static int idPersonInDatabase;
 	private static String firstName;
 	private static String lastName;
 	private static String personId;
@@ -10,6 +11,14 @@ public class Account {
 	private static String email;
 	private static String login;
 	private static String password;
+
+	public static int getIdPersonInDatabase() {
+		return idPersonInDatabase;
+	}
+
+	public static void setIdPersonInDatabase(int idPersonInDatabase) {
+		Account.idPersonInDatabase = idPersonInDatabase;
+	}
 
 	public static String getFirstName() {
 		return firstName;

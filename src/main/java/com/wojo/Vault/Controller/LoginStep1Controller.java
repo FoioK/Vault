@@ -28,28 +28,40 @@ public class LoginStep1Controller {
 
 	@FXML
 	void initialize() {
+		addEventHandlers();
+	}
+
+
+	private void addEventHandlers() {
 		goToNextStep.addEventHandler(ActionEvent.ACTION, e -> {
-			boolean isLogin = false;
-			try {
-				isLogin = AccountDAO.searchPersonLogin(loginField.getText());
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			
-			if(isLogin) {
-				Account.setLogin(loginField.getText());
-				loadLoginStep2();
-			}
-			else {
-				//TODO badLogin
-			}
+			logingProcesStep1();
 		});
 		
 		openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> {
 			loadAccountCreator();
 		});
+	}
+
+	private void logingProcesStep1() {
+		if(isLoginExsist()) {
+			Account.setLogin(loginField.getText());
+			loadLoginStep2();
+		}
+		else {
+			//TODO badLogin
+		}
+	}
+
+	private boolean isLoginExsist() {
+		boolean isLogin = false;
+		try {
+			isLogin = AccountDAO.searchPersonLogin(loginField.getText());
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return isLogin;
 	}
 
 

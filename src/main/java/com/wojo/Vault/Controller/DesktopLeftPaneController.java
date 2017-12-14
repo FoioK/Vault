@@ -14,10 +14,14 @@ public class DesktopLeftPaneController {
     
     @FXML
     void initialize() {
-    	logOut.addEventHandler(ActionEvent.ACTION, e -> {
+    	addEventHandlers();
+    }
+
+	private void addEventHandlers() {
+		logOut.addEventHandler(ActionEvent.ACTION, e -> {
     		rootController.loadLoginStep1();
     	});
-    }
+	}
 
 	public void setRootController(RootController rootController) {
 		this.rootController = rootController;
