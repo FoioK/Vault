@@ -1,4 +1,5 @@
 /target/
 /tmpDate/
 /.settings/
-/.idea/
+/.project/
+/.classpath/
