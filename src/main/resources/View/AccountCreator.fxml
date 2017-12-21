@@ -12,171 +12,159 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
-	prefWidth="1400.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controller.AccountCreatorController">
-	<children>
-		<Pane prefHeight="130.0" prefWidth="1400.0"
-			style="-fx-background-color: #70d4f6;" AnchorPane.leftAnchor="0.0"
-			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-			<children>
-				<JFXButton fx:id="backToLoginWindow" layoutX="14.0"
-					layoutY="45.0" prefHeight="40.0" prefWidth="40.0" text=" ">
-					<graphic>
-						<FontAwesomeIcon fill="WHITE" glyphStyle="Font Awesome"
-							glyphStyleClass="" iconName="ARROW_LEFT" size="2.2em" />
-					</graphic>
-				</JFXButton>
-			</children>
-		</Pane>
-		<HBox layoutX="75.0" layoutY="130.0" prefHeight="550.0"
-			prefWidth="1250.0" spacing="50.0">
-			<children>
-				<VBox prefHeight="550.0" prefWidth="600.0">
-					<children>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Imię">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXTextField fx:id="firstNameField" prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXTextField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Nazwisko">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXTextField fx:id="lastNameField" prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXTextField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Pesel">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXTextField fx:id="personIdField" prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXTextField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Adress">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXTextField fx:id="adressField" prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXTextField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Numer telefonu">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXTextField fx:id="telefonNumberField" prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXTextField>
-							</children>
-						</HBox>
-					</children>
-				</VBox>
-				<VBox prefHeight="550.0" prefWidth="600.0">
-					<children>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="email">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXTextField fx:id="emailField" prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXTextField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Hasło">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXPasswordField fx:id="passwordField"
-									prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXPasswordField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0"
-							spacing="20.0">
-							<children>
-								<Label alignment="CENTER_RIGHT" prefWidth="200.0" text="Powtórz hasło">
-									<font>
-										<Font size="26.0" />
-									</font>
-								</Label>
-								<JFXPasswordField fx:id="repeatPasswordField"
-									prefWidth="350.0">
-									<font>
-										<Font size="24.0" />
-									</font>
-								</JFXPasswordField>
-							</children>
-						</HBox>
-						<HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
-							<children>
-								<JFXButton fx:id="createAccount" prefWidth="300.0"
-									style="-fx-background-color: #00549E;" text="Utwórz" textFill="WHITE">
-									<font>
-										<Font name="System Bold" size="32.0" />
-									</font>
-									<opaqueInsets>
-										<Insets />
-									</opaqueInsets>
-								</JFXButton>
-							</children>
-						</HBox>
-					</children>
-				</VBox>
-			</children>
-		</HBox>
-	</children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+            prefWidth="1400.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controller.AccountCreatorController">
+    <children>
+        <Pane prefHeight="130.0" prefWidth="1400.0" style="-fx-background-color: #70d4f6;" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <JFXButton fx:id="backToLoginWindow" layoutX="14.0" layoutY="45.0" prefHeight="40.0" prefWidth="40.0"
+                           text=" ">
+                    <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphStyle="Font Awesome" glyphStyleClass="" iconName="ARROW_LEFT"
+                                         size="2.2em"/>
+                    </graphic>
+                </JFXButton>
+            </children>
+        </Pane>
+        <HBox layoutX="75.0" layoutY="130.0" prefHeight="550.0" prefWidth="1250.0" spacing="50.0">
+            <children>
+                <VBox prefHeight="550.0" prefWidth="600.0">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.firstName">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="firstNameField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="625.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.lastName">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="lastNameField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.personId">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="personIdField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.address">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="adressField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.telephonNumber">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="telefonNumberField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox prefHeight="550.0" prefWidth="600.0">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.email">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="emailField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXTextField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.password">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXPasswordField fx:id="passwordField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXPasswordField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.repeatPassword">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </Label>
+                                <JFXPasswordField fx:id="repeatPasswordField" prefWidth="350.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </JFXPasswordField>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <JFXButton fx:id="createAccount" prefWidth="300.0"
+                                           style="-fx-background-color: #00549E;" text="%AccountCreator.createAccount"
+                                           textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="32.0"/>
+                                    </font>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                </JFXButton>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
 </AnchorPane>

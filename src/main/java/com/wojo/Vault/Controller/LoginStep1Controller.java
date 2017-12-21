@@ -1,106 +1,134 @@
 package com.wojo.Vault.Controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.wojo.Vault.DAO.AccountDAO;
 import com.wojo.Vault.Model.Account;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class LoginStep1Controller {
 
-	private RootController rootController;
+    private RootController rootController;
+    private ObservableList<String> languageList = FXCollections.observableArrayList("Language", "PL", "EN");
 
-	@FXML
-	private JFXButton goToNextStep;
-	
-	@FXML
-	private JFXTextField loginField;
+    @FXML
+    private JFXButton goToNextStep;
 
-	@FXML
-	private JFXButton openAccountCreator;
+    @FXML
+    private JFXTextField loginField;
 
-	@FXML
-	void initialize() {
-		addEventHandlers();
-	}
+    @FXML
+    private JFXButton openAccountCreator;
 
+    @FXML
+    private ChoiceBox<String> languageBox;
 
-	private void addEventHandlers() {
-		goToNextStep.addEventHandler(ActionEvent.ACTION, e -> {
-			logingProcesStep1();
-		});
-		
-		openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> {
-			loadAccountCreator();
-		});
-	}
+    @FXML
+    void initialize() {
+        addLanguageBox();
+        addEventHandlers();
+    }
 
-	private void logingProcesStep1() {
-		if(isLoginExsist()) {
-			Account.setLogin(loginField.getText());
-			loadLoginStep2();
-		}
-		else {
-			//TODO badLogin
-		}
-	}
-
-	private boolean isLoginExsist() {
-		boolean isLogin = false;
-		try {
-			isLogin = AccountDAO.searchPersonLogin(loginField.getText());
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		return isLogin;
-	}
+    private void addLanguageBox() {
+        languageBox.setItems(languageList);
+        languageBox.setValue("Language");
+        languageBox.getSelectionModel().selectedItemProperty()
+                .addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                languageBox.setValue(newValue);
+                Locale.setDefault(new Locale(newValue));
+                rootController.loadLoginStep1();
+            }
+        });
+    }
 
 
-	private void loadLoginStep2() {
-		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/View/LoginStep2.fxml"));
-		AnchorPane pane = null;
-		try {
-			pane = loader.load();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		pane.setLayoutX(225);
-		pane.setLayoutY(100);
+    private void addEventHandlers() {
+        goToNextStep.addEventHandler(ActionEvent.ACTION, e -> {
+            loginProcessStep1();
+        });
 
-		LoginStep2Controller controller = loader.getController();
-		controller.setRootController(rootController);
-		rootController.setScreen(pane);
-	}
+        openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> {
+            loadAccountCreator();
+        });
+    }
 
-	private void loadAccountCreator() {
-		FXMLLoader loader = new FXMLLoader(
-				this.getClass().getResource("/View/AccountCreator.fxml"));
-		AnchorPane pane = null;
-		try {
-			pane = loader.load();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		pane.setLayoutX(225);
-		pane.setLayoutY(100);
+    private void loginProcessStep1() {
+        if (isLoginExist()) {
+            Account.setLogin(loginField.getText());
+            loadLoginStep2();
+        } else {
+            //TODO badLogin
+        }
+    }
 
-		AccountCreatorController controller = loader.getController();
-		controller.setRootController(rootController);
-		rootController.setScreen(pane);
-	}
+    private boolean isLoginExist() {
+        boolean isLogin = false;
+        try {
+            isLogin = AccountDAO.searchPersonLogin(loginField.getText());
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return isLogin;
+    }
 
-	public void setRootController(RootController rootController) {
-		this.rootController = rootController;
-	}
+
+    private void loadLoginStep2() {
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/LoginStep2.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        pane.setLayoutX(225);
+        pane.setLayoutY(100);
+
+        LoginStep2Controller controller = loader.getController();
+        controller.setRootController(rootController);
+        rootController.setScreen(pane);
+    }
+
+    private void loadAccountCreator() {
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/AccountCreator.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        pane.setLayoutX(225);
+        pane.setLayoutY(100);
+
+        AccountCreatorController controller = loader.getController();
+        controller.setRootController(rootController);
+        rootController.setScreen(pane);
+    }
+
+    public void setRootController(RootController rootController) {
+        this.rootController = rootController;
+    }
 
 }

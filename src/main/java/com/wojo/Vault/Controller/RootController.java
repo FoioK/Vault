@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class RootController {
 
@@ -20,6 +21,8 @@ public class RootController {
     public void loadLoginStep1() {
     	FXMLLoader loader = new FXMLLoader(
     			this.getClass().getResource("/View/LoginStep1.fxml"));
+		ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+		loader.setResources(languageBundles);
     	AnchorPane pane = null;
     	try {
     		pane = loader.load();

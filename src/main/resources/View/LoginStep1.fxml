@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -11,74 +12,67 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
             prefWidth="1400.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controller.LoginStep1Controller">
     <children>
-        <Pane prefHeight="130.0" prefWidth="1400.0"
-              style="-fx-background-color: #70d4f6;" AnchorPane.leftAnchor="0.0"
+        <Pane prefHeight="130.0" prefWidth="1400.0" style="-fx-background-color: #70d4f6;" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Label layoutX="79.0" layoutY="38.0" text="LOGOWANIE">
+                <HBox layoutX="400.0" layoutY="150.0" prefHeight="200.0" prefWidth="700.0" spacing="20.0">
+                    <children>
+                        <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="250.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0"
+                                       text="%LoginStep1.userIdLabel" textFill="#0b090a">
+                                    <font>
+                                        <Font name="Arial" size="20.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="46.0" prefWidth="350.0" spacing="30.0">
+                            <children>
+                                <JFXTextField fx:id="loginField" focusColor="WHITE" prefHeight="46.0" prefWidth="350.0"
+                                              promptText="%LoginStep1.userIdField"
+                                              style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
+                                              unFocusColor="#cccccc">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </JFXTextField>
+                                <JFXButton fx:id="goToNextStep" prefHeight="46.0" prefWidth="350.0"
+                                           style="-fx-background-color: #00549E;" text="%LoginStep1.goToNextStep"
+                                           textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="20.0"/>
+                                    </font>
+                                </JFXButton>
+                            </children>
+                            <padding>
+                                <Insets bottom="25.0"/>
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Label layoutX="79.0" layoutY="38.0" text="%LoginStep1.panelName">
                     <font>
                         <Font size="37.0"/>
                     </font>
                 </Label>
-                <JFXButton fx:id="openAccountCreator" layoutX="1202.0"
-                           layoutY="38.0" prefHeight="54.0" prefWidth="184.0" text="Utwórz konto"
-                           textFill="WHITE">
+                <JFXButton fx:id="openAccountCreator" layoutX="588.0" layoutY="35.0" prefHeight="60.0" prefWidth="225.0"
+                           text="%LoginStep1.createAccount" textFill="WHITE">
                     <font>
-                        <Font name="System Bold Italic" size="24.0"/>
+                        <Font name="System Bold Italic" size="26.0"/>
                     </font>
                 </JFXButton>
+                <ChoiceBox fx:id="languageBox" layoutX="1286.0" layoutY="45.0" prefHeight="40.0" prefWidth="100.0"
+                           style="-fx-background-color: #70d4f6; -fx-border-color: #70d4f6 #70d4f6 #ffffff #70d4f6;;"/>
             </children>
         </Pane>
-        <VBox alignment="CENTER" layoutX="400.0" layoutY="150.0"
-              prefHeight="200.0" prefWidth="700.0" spacing="20.0">
+        <VBox layoutX="150.0" layoutY="350.0" prefHeight="300.0" prefWidth="1100.0" spacing="15.0">
             <children>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0"
-                      spacing="20.0">
-                    <children>
-                        <Label text="Numer Identyfikacyjny" textFill="#0b090a">
-                            <font>
-                                <Font name="Arial" size="20.0"/>
-                            </font>
-                        </Label>
-                        <JFXTextField fx:id="loginField" focusColor="WHITE"
-                                      prefHeight="46.0" prefWidth="350.0" promptText="  Wpisz numer"
-                                      style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
-                                      unFocusColor="#cccccc">
-                            <font>
-                                <Font size="20.0"/>
-                            </font>
-                        </JFXTextField>
-                    </children>
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                </HBox>
-                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <JFXButton fx:id="goToNextStep" prefHeight="46.0"
-                                   prefWidth="350.0" style="-fx-background-color: #00549E;" text="DALEJ"
-                                   textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="20.0"/>
-                            </font>
-                        </JFXButton>
-                    </children>
-                    <padding>
-                        <Insets right="65.0"/>
-                    </padding>
-                </HBox>
-            </children>
-        </VBox>
-        <VBox layoutX="150.0" layoutY="350.0" prefHeight="300.0"
-              prefWidth="1100.0" spacing="15.0">
-            <children>
-                <Label prefHeight="40.0" prefWidth="1004.0"
-                       text="   Pamiętaj o podstawowych zasadach bezpieczeństwa.">
+                <Label prefHeight="40.0" prefWidth="1004.0" text="%LoginStep1.VBox.label1">
                     <font>
                         <Font size="18.0"/>
                     </font>
@@ -86,19 +80,16 @@
                         <Insets/>
                     </opaqueInsets>
                     <graphic>
-                        <FontAwesomeIcon
-                                glyphStyle="-fx-fill: linear-gradient( #70d4f6 0%, #247cbc 70%, #2c85c1 85%);"
-                                iconName="LOCK" size="2em"/>
+                        <FontAwesomeIcon glyphStyle="-fx-fill: linear-gradient( #70d4f6 0%, #247cbc 70%, #2c85c1 85%);"
+                                         iconName="LOCK" size="2em"/>
                     </graphic>
                 </Label>
-                <Label prefHeight="21.0" prefWidth="992.0"
-                       text="Zanim wprowadzisz na stronie swój Identyfikator użytkownika i Kod Dostępu sprawdź, czy:">
+                <Label prefHeight="21.0" prefWidth="992.0" text="%LoginStep1.VBox.label2">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Label>
-                <Label
-                        text=" adres strony logowania rozpoczyna się od https (oznaczającego bezpieczne połączenie internetowe)">
+                <Label text="%LoginStep1.VBox.label3">
                     <font>
                         <Font size="18.0"/>
                     </font>
@@ -106,8 +97,7 @@
                         <FontAwesomeIcon iconName="CIRCLE_THIN"/>
                     </graphic>
                 </Label>
-                <Label
-                        text=" w pasku adresu lub na pasku stanu w dolnej części ekranu przeglądarki widoczna jest zamknięta kłódka">
+                <Label text="%LoginStep1.VBox.label4">
                     <font>
                         <Font size="18.0"/>
                     </font>
@@ -115,8 +105,7 @@
                         <FontAwesomeIcon iconName="CIRCLE_THIN"/>
                     </graphic>
                 </Label>
-                <Label
-                        text=" certyfikat wystawiony dla witryny jest zgodny z nazwą banku">
+                <Label text="%LoginStep1.VBox.label5">
                     <font>
                         <Font size="18.0"/>
                     </font>
@@ -124,18 +113,12 @@
                         <FontAwesomeIcon iconName="CIRCLE_THIN"/>
                     </graphic>
                 </Label>
-                <Label contentDisplay="RIGHT" prefHeight="27.0" prefWidth="1145.0"
-                       text="Pamiętaj:">
+                <Label contentDisplay="RIGHT" prefHeight="27.0" prefWidth="1145.0" text="%LoginStep1.VBox.label6">
                     <font>
                         <Font size="18.0"/>
                     </font>
                     <graphic>
-                        <Label
-                                text="Bank nie wymaga potwierdzenia danych SMS-em lub mailem ani też instalacji jakichkolwiek aplikacji na telefonach/komputerach użytkowników.">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
+                        <Label prefHeight="25.0" prefWidth="951.0" text="%LoginStep1.VBox.label6.label7"/>
                     </graphic>
                 </Label>
             </children>

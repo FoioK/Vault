@@ -7,6 +7,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     private static final String ROOT_PATH = "/View/Root.fxml";
@@ -17,6 +19,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource(ROOT_PATH));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
         root = loader.load();
 
         Scene scene = new Scene(root);
