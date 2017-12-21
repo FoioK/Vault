@@ -1,15 +1,12 @@
 package com.wojo.Vault.Util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.wojo.Vault.Util.DBUtil;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class DBUtilTest {
 

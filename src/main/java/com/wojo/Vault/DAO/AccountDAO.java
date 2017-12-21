@@ -43,30 +43,6 @@ public class AccountDAO {
         return true;
     }
 
-//	private static int getNextId() throws ClassNotFoundException, SQLException {
-//		ResultSet resultSet = DBUtil
-//				.dbExecuteQuery("SELECT COUNT(idPerson) FROM person");
-//		resultSet.next();
-//		int result = resultSet.getInt(1);
-//		if (!checkId(result)) {
-//			// TODO
-//		}
-//
-//		return result + 1;
-//	}
-//
-//	public static boolean checkId(int id)
-//			throws ClassNotFoundException, SQLException {
-//		String queryStatement = "SELECT COUNT(idPerson) from person WHERE idPerson = '"
-//				+ id + "'";
-//		ResultSet resultSet = DBUtil.dbExecuteQuery(queryStatement);
-//		if (resultSet.next()) {
-//			return resultSet.getInt(1) == 0 ? true : false;
-//		}
-//
-//		return false;
-//	}
-
     public static boolean searchPersonLogin(String login)
             throws ClassNotFoundException, SQLException {
         String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN = '"

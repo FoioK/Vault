@@ -1,6 +1,7 @@
 package com.wojo.Vault;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import org.junit.Test;
@@ -29,6 +30,8 @@ public class FxmlLoaderTest extends ApplicationTest {
     public void loginStep1ShouldBeLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/LoginStep1.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
         AnchorPane root = loader.load();
     }
 
@@ -36,6 +39,8 @@ public class FxmlLoaderTest extends ApplicationTest {
     public void loginStep2ShouldBeLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/LoginStep2.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
         AnchorPane root = loader.load();
     }
 
