@@ -56,7 +56,17 @@ public class RootController {
 		return root.getChildren().add(mainPane);
 	}
 
-	public AnchorPane getRoot() {
-		return root;
+	public void loadDesktopPane() {
+		FXMLLoader loader = new FXMLLoader(
+				this.getClass().getResource("/View/Desktop.fxml"));
+		ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+		loader.setResources(languageBundles);
+		AnchorPane pane = null;
+		try {
+			pane = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		setScreen(pane);
 	}
 }
