@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
-import com.wojo.Vault.DAO.AccountDAO;
-import com.wojo.Vault.Model.Account;
+import com.wojo.Vault.DAO.PersonDAO;
+import com.wojo.Vault.Model.Person;
 import com.wojo.Vault.Util.DBUtil;
 
 import javafx.event.ActionEvent;
@@ -53,7 +53,7 @@ public class LoginStep2Controller {
         }
 
         if (password.equals(passwordFiled.getText())) {
-            AccountDAO.insertPersonDate(idPerson);
+            PersonDAO.insertPersonDate(idPerson);
             loadDesktopPane();
         } else {
             //TODO badPassword
@@ -62,7 +62,7 @@ public class LoginStep2Controller {
 
     private ResultSet getIdPersonAndPassword() {
         String queryStatementGetPassword = "SELECT idPerson, PASSWORD FROM person WHERE LOGIN = '"
-                + Account.getLogin() + "';";
+                + Person.getLogin() + "';";
         ResultSet resultSet = null;
         try {
             resultSet = DBUtil.dbExecuteQuery(queryStatementGetPassword);

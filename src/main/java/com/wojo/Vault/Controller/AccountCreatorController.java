@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.DAO.AccountDAO;
+import com.wojo.Vault.DAO.PersonDAO;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,10 +65,10 @@ public class AccountCreatorController {
 	}
 
 	private void createAccountProces() {
-		String login = AccountDAO.generateLogin(9);
+		String login = PersonDAO.generateLogin(9);
 		List<String> accountDate = getAccountDateList(login);
 		try {
-			AccountDAO.insertAccountToDB(accountDate);
+			PersonDAO.insertAccountToDB(accountDate);
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (SQLException e1) {

@@ -1,6 +1,6 @@
 package com.wojo.Vault.DAO;
 
-import com.wojo.Vault.Model.Account;
+import com.wojo.Vault.Model.Person;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -10,12 +10,12 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class AccountDAOTest {
+public class PersonDAOTest {
 
     @Test
     public void shouldGenerateLoginWith9Char() {
         for (int i = 0; i < 100; i++) {
-            assertEquals(9, AccountDAO.generateLogin(9).length());
+            assertEquals(9, PersonDAO.generateLogin(9).length());
         }
     }
 
@@ -23,7 +23,7 @@ public class AccountDAOTest {
     public void shouldGenerateOnlyUpperCase() {
         String generatedSring = "";
         for (int i = 0; i < 100; i++) {
-            generatedSring = AccountDAO.generateLogin(9);
+            generatedSring = PersonDAO.generateLogin(9);
             assertEquals(generatedSring.toUpperCase(), generatedSring);
         }
     }
@@ -32,7 +32,7 @@ public class AccountDAOTest {
     public void shouldReturnEmptyString() {
         int initValue = Integer.MIN_VALUE;
         while (initValue < 0) {
-            assertEquals("", AccountDAO.generateLogin(initValue));
+            assertEquals("", PersonDAO.generateLogin(initValue));
             initValue += 50;
         }
     }
@@ -43,13 +43,13 @@ public class AccountDAOTest {
         for (int i = 0; i < 8; i++) {
             accountDate.add("ToDelete");
         }
-        assertTrue(AccountDAO.insertAccountToDB(accountDate));
+        assertTrue(PersonDAO.insertAccountToDB(accountDate));
     }
 
     @Test
     public void searchLoginTest() throws SQLException, ClassNotFoundException {
         String testLoginInDB = "ABCDEFGHI";
-        assertTrue(AccountDAO.searchPersonLogin(testLoginInDB));
+        assertTrue(PersonDAO.searchPersonLogin(testLoginInDB));
     }
 
     @Test
@@ -64,22 +64,22 @@ public class AccountDAOTest {
         String testLogin = "ABCDEFGHI";
         String testPassword = "Test";
 
-        AccountDAO.insertPersonDate(testIdPersonInDB);
+        PersonDAO.insertPersonDate(testIdPersonInDB);
 
-        assertEquals(testIdPersonInDB, Account.getIdPersonInDatabase());
-        assertEquals(testFirstName, Account.getFirstName());
-        assertEquals(testLastName, Account.getLastName());
-        assertEquals(testPersonId, Account.getPersonId());
-        assertEquals(testAddress, Account.getAdress());
-        assertEquals(testTelephoneNumber, Account.getTelephonNumber());
-        assertEquals(testEmail, Account.getEmail());
-        assertEquals(testLogin, Account.getLogin());
-        assertEquals(testPassword, Account.getPassword());
+        assertEquals(testIdPersonInDB, Person.getIdPersonInDatabase());
+        assertEquals(testFirstName, Person.getFirstName());
+        assertEquals(testLastName, Person.getLastName());
+        assertEquals(testPersonId, Person.getPersonId());
+        assertEquals(testAddress, Person.getAdress());
+        assertEquals(testTelephoneNumber, Person.getTelephonNumber());
+        assertEquals(testEmail, Person.getEmail());
+        assertEquals(testLogin, Person.getLogin());
+        assertEquals(testPassword, Person.getPassword());
     }
 
     @Test
     public void shouldDeleteTestAccount() {
         String testFirstAndLastName = "ToDelete";
-        assertTrue(AccountDAO.deletePerson(testFirstAndLastName));
+        assertTrue(PersonDAO.deletePerson(testFirstAndLastName));
     }
 }

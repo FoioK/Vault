@@ -26,8 +26,6 @@ public class MainController {
     }
 
     private void exitApplication() {
-//		Stage stage = (Stage) exit.getScene().getWindow();
-//		stage.close();
         Platform.exit();
     }
 }

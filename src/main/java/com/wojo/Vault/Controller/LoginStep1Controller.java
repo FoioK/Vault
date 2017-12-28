@@ -2,8 +2,8 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.DAO.AccountDAO;
-import com.wojo.Vault.Model.Account;
+import com.wojo.Vault.DAO.PersonDAO;
+import com.wojo.Vault.Model.Person;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -69,7 +69,7 @@ public class LoginStep1Controller {
 
     private void loginProcessStep1() {
         if (isLoginExist()) {
-            Account.setLogin(loginField.getText());
+            Person.setLogin(loginField.getText());
             loadLoginStep2();
         } else {
             //TODO badLogin
@@ -79,7 +79,7 @@ public class LoginStep1Controller {
     private boolean isLoginExist() {
         boolean isLogin = false;
         try {
-            isLogin = AccountDAO.searchPersonLogin(loginField.getText());
+            isLogin = PersonDAO.searchPersonLogin(loginField.getText());
         } catch (ClassNotFoundException e1) {
             e1.printStackTrace();
         } catch (SQLException e1) {
