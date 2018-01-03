@@ -1,6 +1,7 @@
 package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.wojo.Vault.Model.Account;
 import com.wojo.Vault.Model.Person;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class PersonDAOTest {
 
@@ -43,7 +44,9 @@ public class PersonDAOTest {
         for (int i = 0; i < 8; i++) {
             accountDate.add("ToDelete");
         }
-        assertTrue(PersonDAO.insertAccountToDB(accountDate));
+        if(PersonDAO.insertPersonToDB(accountDate) < 0) {
+            fail("null idPerson");
+        }
     }
 
     @Test
@@ -70,8 +73,8 @@ public class PersonDAOTest {
         assertEquals(testFirstName, Person.getFirstName());
         assertEquals(testLastName, Person.getLastName());
         assertEquals(testPersonId, Person.getPersonId());
-        assertEquals(testAddress, Person.getAdress());
-        assertEquals(testTelephoneNumber, Person.getTelephonNumber());
+        assertEquals(testAddress, Person.getAddress());
+        assertEquals(testTelephoneNumber, Person.getTelephoneNumber());
         assertEquals(testEmail, Person.getEmail());
         assertEquals(testLogin, Person.getLogin());
         assertEquals(testPassword, Person.getPassword());

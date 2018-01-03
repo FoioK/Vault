@@ -1,16 +1,21 @@
 package com.wojo.Vault.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Person {
 
 	private static int idPersonInDatabase;
 	private static String firstName;
 	private static String lastName;
 	private static String personId;
-	private static String adress;
-	private static String telephonNumber;
+	private static String address;
+	private static String telephoneNumber;
 	private static String email;
 	private static String login;
 	private static String password;
+
+	private static List<Account> accounts = new ArrayList<>();
 
 	public static int getIdPersonInDatabase() {
 		return idPersonInDatabase;
@@ -44,20 +49,20 @@ public class Person {
 		Person.personId = personId;
 	}
 
-	public static String getAdress() {
-		return adress;
+	public static String getAddress() {
+		return address;
 	}
 
-	public static void setAdress(String adress) {
-		Person.adress = adress;
+	public static void setAddress(String address) {
+		Person.address = address;
 	}
 
-	public static String getTelephonNumber() {
-		return telephonNumber;
+	public static String getTelephoneNumber() {
+		return telephoneNumber;
 	}
 
-	public static void setTelephonNumber(String telephonNumber) {
-		Person.telephonNumber = telephonNumber;
+	public static void setTelephoneNumber(String telephoneNumber) {
+		Person.telephoneNumber = telephoneNumber;
 	}
 
 	public static String getEmail() {
@@ -82,6 +87,14 @@ public class Person {
 
 	public static void setPassword(String password) {
 		Person.password = password;
+	}
+
+	public static void addAccount(Account account) {
+		accounts.add(account);
+	}
+
+	public static List<Account> getAccounts() {
+		return accounts;
 	}
 
 }

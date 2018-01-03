@@ -23,10 +23,10 @@ public class PersonDAO {
                 .toString();
     }
 
-    public static boolean insertAccountToDB(List<String> accountDate)
+    public static int insertPersonToDB(List<String> accountDate)
             throws ClassNotFoundException, SQLException {
         if (accountDate.size() < 8) {
-            return false;
+            return -1;
         }
 
         String updateStmt = "INSERT INTO `bankdate`.`person`\r\n"
@@ -40,7 +40,11 @@ public class PersonDAO {
                 + accountDate.get(6) + "',\r\n" + " '" + accountDate.get(7)
                 + "');";
         DBUtil.dbExecuteUpdate(updateStmt);
-        return true;
+        ResultSet resultSet = DBUtil.dbExecuteQuery("SELECT idPerson from person" +
+                " WHERE" +
+                "   login = '"+ accountDate.get(6) +"';");
+        resultSet.next();
+        return resultSet.getInt("idPerson");
     }
 
     public static boolean searchPersonLogin(String login)
@@ -71,14 +75,15 @@ public class PersonDAO {
             Person.setFirstName(resultSet.getString(2));
             Person.setLastName(resultSet.getString(3));
             Person.setPersonId(resultSet.getString(4));
-            Person.setAdress(resultSet.getString(5));
-            Person.setTelephonNumber(resultSet.getString(6));
+            Person.setAddress(resultSet.getString(5));
+            Person.setTelephoneNumber(resultSet.getString(6));
             Person.setEmail(resultSet.getString(7));
             Person.setLogin(resultSet.getString(8));
             Person.setPassword(resultSet.getString(9));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        AccountDAO.insertAccountDate(idPerson);
     }
 
     public static <T> boolean deletePerson(T value) {
