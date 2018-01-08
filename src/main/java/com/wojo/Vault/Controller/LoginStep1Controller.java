@@ -80,8 +80,6 @@ public class LoginStep1Controller {
         boolean isLogin = false;
         try {
             isLogin = PersonDAO.searchPersonLogin(loginField.getText());
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }

@@ -24,7 +24,7 @@ public class PersonDAO {
     }
 
     public static int insertPersonToDB(List<String> accountDate)
-            throws ClassNotFoundException, SQLException {
+            throws SQLException {
         if (accountDate.size() < 8) {
             return -1;
         }
@@ -42,19 +42,24 @@ public class PersonDAO {
         DBUtil.dbExecuteUpdate(updateStmt);
         ResultSet resultSet = DBUtil.dbExecuteQuery("SELECT idPerson from person" +
                 " WHERE" +
-                "   login = '"+ accountDate.get(6) +"';");
-        resultSet.next();
-        return resultSet.getInt("idPerson");
+                "   login = '" + accountDate.get(6) + "';");
+
+        if (resultSet.next()) {
+            return resultSet.getInt("idPerson");
+        }
+        return 0;
     }
 
     public static boolean searchPersonLogin(String login)
-            throws ClassNotFoundException, SQLException {
+            throws SQLException {
         String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN = '"
                 + login + "';";
         ResultSet resulSet = DBUtil.dbExecuteQuery(queryStatement);
-        resulSet.next();
 
-        return resulSet.getInt(1) != 0;
+        if (resulSet.next()) {
+            return resulSet.getInt(1) != 0;
+        }
+        return false;
     }
 
     public static void insertPersonDate(int idPerson) {
@@ -63,23 +68,21 @@ public class PersonDAO {
         ResultSet resultSet = null;
         try {
             resultSet = DBUtil.dbExecuteQuery(queryStatement);
-            resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Person.setIdPersonInDatabase(resultSet.getInt(1));
-            Person.setFirstName(resultSet.getString(2));
-            Person.setLastName(resultSet.getString(3));
-            Person.setPersonId(resultSet.getString(4));
-            Person.setAddress(resultSet.getString(5));
-            Person.setTelephoneNumber(resultSet.getString(6));
-            Person.setEmail(resultSet.getString(7));
-            Person.setLogin(resultSet.getString(8));
-            Person.setPassword(resultSet.getString(9));
+            if (resultSet.next()) {
+                try {
+                    Person.setIdPersonInDatabase(resultSet.getInt("idPerson"));
+                    Person.setFirstName(resultSet.getString("FIRST_NAME"));
+                    Person.setLastName(resultSet.getString("LAST_NAME"));
+                    Person.setPersonId(resultSet.getString("PERSON_ID"));
+                    Person.setAddress(resultSet.getString("ADDRESS"));
+                    Person.setTelephoneNumber(resultSet.getString("TELEPHONE_NUMBER"));
+                    Person.setEmail(resultSet.getString("EMAIL"));
+                    Person.setLogin(resultSet.getString("LOGIN"));
+                    Person.setPassword(resultSet.getString("PASSWORD"));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,7 +94,7 @@ public class PersonDAO {
         if (value instanceof Integer) {
             queryStatement = "DELETE FROM person WHERE idPerson = '" + value + "';";
         } else if (value instanceof String) {
-            queryStatement = "DELETE FROM person WHERE LOGIN = '" + value +"' " +
+            queryStatement = "DELETE FROM person WHERE LOGIN = '" + value + "' " +
                     "OR (FIRST_NAME = '" + value + "' AND LAST_NAME = '" + value + "');";
         } else {
             return false;
@@ -100,8 +103,6 @@ public class PersonDAO {
         try {
             DBUtil.dbExecuteUpdate(queryStatement);
         } catch (SQLException e) {
-            return false;
-        } catch (ClassNotFoundException e) {
             return false;
         }
 

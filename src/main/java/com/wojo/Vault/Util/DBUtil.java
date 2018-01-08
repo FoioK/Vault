@@ -1,66 +1,35 @@
 package com.wojo.Vault.Util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import com.sun.rowset.CachedRowSetImpl;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.*;
+import java.util.Properties;
 
 public class DBUtil {
 
-    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    private static Connection connection = null;
 
-    private static Connection conn = null;
-
-    /**
-     * Connection String: Username=root Password=sqlPassword
-     */
-    private static final String connStr = "jdbc:mysql://localhost:3306/BankDate?useSSL=false";
-
-    public static void dbConnect() throws SQLException, ClassNotFoundException {
-        try {
-            Class.forName(JDBC_DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        }
-
-        try {
-            conn = DriverManager.getConnection(connStr, "root", "sqlPassword");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    public static void dbDisconnect() throws SQLException {
-        try {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
-            }
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    @SuppressWarnings("restriction")
     public static ResultSet dbExecuteQuery(String queryStatement)
-            throws SQLException, ClassNotFoundException {
+            throws SQLException {
+
         Statement statement = null;
         ResultSet resultSet = null;
         CachedRowSetImpl crs = null;
 
         try {
-            dbConnect();
-            statement = conn.createStatement();
+            connection = getConnection();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(queryStatement);
-
             crs = new CachedRowSetImpl();
             crs.populate(resultSet);
         } catch (SQLException e) {
             throw e;
+        } catch (IOException e1) {
+            e1.printStackTrace();
         } finally {
             if (resultSet != null) {
                 resultSet.close();
@@ -74,15 +43,18 @@ public class DBUtil {
     }
 
     public static int dbExecuteUpdate(String updateStatement)
-            throws SQLException, ClassNotFoundException {
+            throws SQLException {
+
         Statement statement = null;
-        int idPerson;
+        int idPerson = 0;
         try {
-            dbConnect();
-            statement = conn.createStatement();
+            connection = getConnection();
+            statement = connection.createStatement();
             idPerson = statement.executeUpdate(updateStatement);
         } catch (SQLException e) {
             throw e;
+        } catch (IOException e1) {
+            e1.printStackTrace();
         } finally {
             if (statement != null) {
                 statement.close();
@@ -90,6 +62,38 @@ public class DBUtil {
             dbDisconnect();
         }
         return idPerson;
+    }
+
+    /**
+     * Gets a connection from the properties specified in the file database.properties.
+     *
+     * @return the database connection
+     */
+    public static Connection getConnection() throws SQLException, IOException {
+        Properties properties = new Properties();
+        String connectionPath = "src/main/resources/Database/database.properties";
+        try (InputStream in = Files.newInputStream(Paths.get(connectionPath))) {
+            properties.load(in);
+        }
+        String drivers = properties.getProperty("jdbc.drivers");
+        if (drivers != null) {
+            System.setProperty("jdbc.drivers", drivers);
+        }
+        String url = properties.getProperty("jdbc.url");
+        String username = properties.getProperty("jdbc.username");
+        String password = properties.getProperty("jdbc.password");
+
+        return DriverManager.getConnection(url, username, password);
+    }
+
+    public static void dbDisconnect() throws SQLException {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 //    @SuppressWarnings("unused")

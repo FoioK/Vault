@@ -25,8 +25,6 @@ public class AccountDAO {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return true;
     }
@@ -38,21 +36,20 @@ public class AccountDAO {
         ResultSet resultSet = null;
         try {
             resultSet = DBUtil.dbExecuteQuery(queryStatement);
-            resultSet.next();
+            if(resultSet.next()){
+                try {
+                    Account account = new Account();
+                    account.setIdAccount(resultSet.getInt("idAccounts"));
+                    account.setIdPerson(resultSet.getInt("idPerson"));
+                    account.setIbanNumber(resultSet.getString("number"));
+                    account.setValue(resultSet.getInt("value"));
+                    Person.addAccount(account);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (SQLException e) {
 //            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-        }
-        try {
-            Account account = new Account();
-            account.setIdAccount(resultSet.getInt(1));
-            account.setIdPerson(resultSet.getInt(2));
-            account.setIbanNumber(resultSet.getString(3));
-            account.setValue(resultSet.getInt(4));
-            Person.addAccount(account);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

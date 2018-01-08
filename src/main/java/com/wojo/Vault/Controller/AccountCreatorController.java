@@ -71,8 +71,6 @@ public class AccountCreatorController {
 		try {
 			int idPerson = PersonDAO.insertPersonToDB(accountDate);
 			createAccountNumber(idPerson, "PL", 26);
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

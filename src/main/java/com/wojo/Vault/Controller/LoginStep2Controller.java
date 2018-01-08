@@ -66,8 +66,6 @@ public class LoginStep2Controller {
         ResultSet resultSet = null;
         try {
             resultSet = DBUtil.dbExecuteQuery(queryStatementGetPassword);
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
