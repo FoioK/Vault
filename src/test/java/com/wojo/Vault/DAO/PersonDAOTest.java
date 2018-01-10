@@ -56,7 +56,7 @@ public class PersonDAOTest {
     }
 
     @Test
-    public void shouldInsertAccountDateToClass() {
+    public void shouldInsertAccountDateToClass() throws SQLException {
         int testIdPersonInDB = 1;
         String testFirstName = "TestAccount";
         String testLastName = "TestAccount";
@@ -81,7 +81,7 @@ public class PersonDAOTest {
     }
 
     @Test
-    public void shouldDeleteTestAccount() {
+    public void shouldDeleteTestAccount() throws SQLException {
         String testFirstAndLastName = "ToDelete";
         assertTrue(PersonDAO.deletePerson(testFirstAndLastName));
     }

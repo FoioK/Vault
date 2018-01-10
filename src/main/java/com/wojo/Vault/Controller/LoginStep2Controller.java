@@ -1,16 +1,13 @@
 package com.wojo.Vault.Controller;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.wojo.Vault.DAO.PersonDAO;
 import com.wojo.Vault.Model.Person;
-import com.wojo.Vault.Util.DBUtil;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
+import java.sql.SQLException;
 
 public class LoginStep2Controller {
 
@@ -40,36 +37,36 @@ public class LoginStep2Controller {
         });
     }
 
-    private void loginProcessStep2() {
-        ResultSet resultSet = getIdPersonAndPassword();
-        int idPerson = 0;
-        String password = "";
+    private boolean loginProcessStep2() {
+        String[] idPersonAndPassword = null;
+        int idPerson;
+        String password;
         try {
-            resultSet.next();
-            idPerson = resultSet.getInt(1);
-            password = resultSet.getString(2);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
+            idPersonAndPassword = PersonDAO.getIdPersonAndPassword(Person.getLogin());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (idPersonAndPassword != null && idPersonAndPassword.length == 2) {
+            idPerson = Integer.valueOf(idPersonAndPassword[0]);
+            password = idPersonAndPassword[1];
+        }
+        else {
+            return false;
+            //TODO error login proces
         }
 
         if (password.equals(passwordFiled.getText())) {
-            PersonDAO.insertPersonDate(idPerson);
+            try {
+                PersonDAO.insertPersonDate(idPerson);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             loadDesktopPane();
+            return true;
         } else {
             //TODO badPassword
+            return false;
         }
-    }
-
-    private ResultSet getIdPersonAndPassword() {
-        String queryStatementGetPassword = "SELECT idPerson, PASSWORD FROM person WHERE LOGIN = '"
-                + Person.getLogin() + "';";
-        ResultSet resultSet = null;
-        try {
-            resultSet = DBUtil.dbExecuteQuery(queryStatementGetPassword);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        return resultSet;
     }
 
     private void loadDesktopPane() {

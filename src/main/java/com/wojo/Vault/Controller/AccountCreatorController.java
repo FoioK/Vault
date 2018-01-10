@@ -17,7 +17,7 @@ import javafx.fxml.FXML;
 
 public class AccountCreatorController {
 
-	private RootController rootController;
+    private RootController rootController;
 
     @FXML
     private JFXButton backToLoginWindow;
@@ -36,7 +36,7 @@ public class AccountCreatorController {
 
     @FXML
     private JFXTextField telefonNumberField;
-    
+
     @FXML
     private JFXTextField emailField;
 
@@ -49,58 +49,62 @@ public class AccountCreatorController {
     @FXML
     private JFXButton createAccount;
 
-	@FXML
-	void initialize() {
-		addEventHandlers();
-	}
+    @FXML
+    void initialize() {
+        addEventHandlers();
+    }
 
-	private void addEventHandlers() {
-		backToLoginWindow.addEventHandler(ActionEvent.ACTION, e -> {
-			rootController.loadLoginStep1();
-		});
-		
-		createAccount.addEventHandler(ActionEvent.ACTION, e -> {
-			createAccountProces();
-			//TODO repeatPassword
-		});
-	}
+    private void addEventHandlers() {
+        backToLoginWindow.addEventHandler(ActionEvent.ACTION, e -> {
+            rootController.loadLoginStep1();
+        });
 
-	private void createAccountProces() {
-		String login = PersonDAO.generateLogin(9);
-		List<String> accountDate = getAccountDateList(login);
-		try {
-			int idPerson = PersonDAO.insertPersonToDB(accountDate);
-			createAccountNumber(idPerson, "PL", 26);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+        createAccount.addEventHandler(ActionEvent.ACTION, e -> {
+            createAccountProces();
+            //TODO repeatPassword
+        });
+    }
 
-		JOptionPane.showMessageDialog(null, "User ID: " + login);
-		rootController.loadLoginStep1();
-	}
+    private void createAccountProces() {
+        String login = PersonDAO.generateLogin(9);
+        List<String> accountDate = getAccountDateList(login);
+        try {
+            int idPerson = PersonDAO.insertPersonToDB(accountDate);
+            createAccountNumber(idPerson, "PL", 26);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
 
-	private void createAccountNumber(int idPerson, String countryCode, int length) {
-		AccountDAO.addNewAccount(idPerson, countryCode, length);
-	}
+        JOptionPane.showMessageDialog(null, "User ID: " + login);
+        rootController.loadLoginStep1();
+    }
 
-	private List<String> getAccountDateList(String login) {
-		List<String> accountDate = new ArrayList<>();
-		accountDate.add(firstNameField.getText());
-		accountDate.add(lastNameField.getText());
-		accountDate.add(personIdField.getText());
-		accountDate.add(adressField.getText());
-		accountDate.add(telefonNumberField.getText());
-		accountDate.add(emailField.getText());
-		accountDate.add(login);
-		accountDate.add(passwordField.getText());
-		
-		return accountDate;
-	}
+    private void createAccountNumber(int idPerson, String countryCode, int length) {
+        try {
+            AccountDAO.addNewAccount(idPerson, countryCode, length);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setRootController(RootController rootController) {
-		this.rootController = rootController;
-	}
-	
+    private List<String> getAccountDateList(String login) {
+        List<String> accountDate = new ArrayList<>();
+        accountDate.add(firstNameField.getText());
+        accountDate.add(lastNameField.getText());
+        accountDate.add(personIdField.getText());
+        accountDate.add(adressField.getText());
+        accountDate.add(telefonNumberField.getText());
+        accountDate.add(emailField.getText());
+        accountDate.add(login);
+        accountDate.add(passwordField.getText());
+
+        return accountDate;
+    }
+
+    public void setRootController(RootController rootController) {
+        this.rootController = rootController;
+    }
+
 //	public static void addTextLimiter(final JFXTextField tf, final int maxLength) {
 //	    tf.textProperty().addListener(new ChangeListener<String>() {
 //	        @Override

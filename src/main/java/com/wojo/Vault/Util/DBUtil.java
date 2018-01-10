@@ -7,29 +7,34 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 public class DBUtil {
 
     private static Connection connection = null;
 
-    public static ResultSet dbExecuteQuery(String queryStatement)
+    public static ResultSet dbExecuteQuery(String queryStatement, List<String> queryDate)
             throws SQLException {
 
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
-        CachedRowSetImpl crs = null;
-
+        CachedRowSetImpl cachedRowSet = null;
         try {
             connection = getConnection();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(queryStatement);
-            crs = new CachedRowSetImpl();
-            crs.populate(resultSet);
+            statement = connection.prepareStatement(queryStatement);
+            if (queryDate != null) {
+                for (int i = 0; i < queryDate.size(); i++) {
+                    statement.setString(i + 1, queryDate.get(i));
+                }
+            }
+            resultSet = statement.executeQuery();
+            cachedRowSet = new CachedRowSetImpl();
+            cachedRowSet.populate(resultSet);
         } catch (SQLException e) {
             throw e;
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             if (resultSet != null) {
                 resultSet.close();
@@ -39,18 +44,23 @@ public class DBUtil {
             }
             dbDisconnect();
         }
-        return crs;
+        return cachedRowSet;
     }
 
-    public static int dbExecuteUpdate(String updateStatement)
+    public static int dbExecuteUpdated(String updateStatement, List<String> updateDate)
             throws SQLException {
 
-        Statement statement = null;
+        PreparedStatement statement = null;
         int idPerson = 0;
         try {
             connection = getConnection();
-            statement = connection.createStatement();
-            idPerson = statement.executeUpdate(updateStatement);
+            statement = connection.prepareStatement(updateStatement);
+            if (updateDate != null) {
+                for (int i = 0; i < updateDate.size(); i++) {
+                    statement.setString(i + 1, updateDate.get(i));
+                }
+            }
+            idPerson = statement.executeUpdate();
         } catch (SQLException e) {
             throw e;
         } catch (IOException e1) {
