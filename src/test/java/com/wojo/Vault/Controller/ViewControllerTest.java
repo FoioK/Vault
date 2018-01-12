@@ -72,8 +72,8 @@ public class ViewControllerTest extends ApplicationTest {
         clickOn("#firstNameField").write("ToDelete");
         clickOn("#lastNameField").write("ToDelete");
         clickOn("#personIdField").write("ToDelete");
-        clickOn("#adressField").write("ToDelete");
-        clickOn("#telefonNumberField").write("ToDelete");
+        clickOn("#addressField").write("ToDelete");
+        clickOn("#telephoneNumberField").write("ToDelete");
         clickOn("#emailField").write("ToDelete");
         clickOn("#passwordField").write("ToDelete");
         clickOn("#repeatPasswordField").write("ToDelete");

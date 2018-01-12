@@ -48,13 +48,8 @@ public class FxmlLoaderTest extends ApplicationTest {
     public void accountCreatorShouldBeLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/AccountCreator.fxml"));
-        AnchorPane root = loader.load();
-    }
-
-    @Test
-    public void DesktopLeftPaneShouldBeLoad() throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/View/DesktopLeftPane.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
         AnchorPane root = loader.load();
     }
 }

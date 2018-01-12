@@ -13,33 +13,33 @@ import static org.junit.Assert.fail;
 
 public class PersonDAOTest {
 
-    @Test
-    public void shouldGenerateLoginWith9Char() {
-        for (int i = 0; i < 100; i++) {
-            assertEquals(9, PersonDAO.generateLogin(9).length());
-        }
-    }
+//    @Test
+//    public void shouldGenerateLoginWith9Char() {
+//        for (int i = 0; i < 100; i++) {
+//            assertEquals(9, PersonDAO.generateLogin(9).length());
+//        }
+//    }
+//
+//    @Test
+//    public void shouldGenerateOnlyUpperCase() {
+//        String generatedString;
+//        for (int i = 0; i < 100; i++) {
+//            generatedString = PersonDAO.generateLogin(9);
+//            assertEquals(generatedString.toUpperCase(), generatedString);
+//        }
+//    }
+//
+//    @Test
+//    public void shouldReturnEmptyString() {
+//        int initValue = Integer.MIN_VALUE;
+//        while (initValue < 0) {
+//            assertEquals("", PersonDAO.generateLogin(initValue));
+//            initValue += 50;
+//        }
+//    }
 
     @Test
-    public void shouldGenerateOnlyUpperCase() {
-        String generatedSring = "";
-        for (int i = 0; i < 100; i++) {
-            generatedSring = PersonDAO.generateLogin(9);
-            assertEquals(generatedSring.toUpperCase(), generatedSring);
-        }
-    }
-
-    @Test
-    public void shouldReturnEmptyString() {
-        int initValue = Integer.MIN_VALUE;
-        while (initValue < 0) {
-            assertEquals("", PersonDAO.generateLogin(initValue));
-            initValue += 50;
-        }
-    }
-
-    @Test
-    public void shouldInsertAccountToDB() throws SQLException, ClassNotFoundException {
+    public void shouldInsertAccountToDB() throws SQLException {
         List<String> accountDate = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             accountDate.add("ToDelete");
@@ -50,7 +50,7 @@ public class PersonDAOTest {
     }
 
     @Test
-    public void searchLoginTest() throws SQLException, ClassNotFoundException {
+    public void searchLoginTest() throws SQLException {
         String testLoginInDB = "ABCDEFGHI";
         assertTrue(PersonDAO.searchPersonLogin(testLoginInDB));
     }

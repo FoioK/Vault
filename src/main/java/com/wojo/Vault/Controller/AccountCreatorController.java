@@ -1,19 +1,18 @@
 package com.wojo.Vault.Controller;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.wojo.Vault.DAO.AccountDAO;
 import com.wojo.Vault.DAO.PersonDAO;
-
+import com.wojo.Vault.Model.Person;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
+import javax.swing.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountCreatorController {
 
@@ -66,7 +65,7 @@ public class AccountCreatorController {
     }
 
     private void createAccountProcess() {
-        String login = PersonDAO.generateLogin(9);
+        String login = Person.generateLogin(9);
         List<String> accountDate = getAccountDateList(login);
         try {
             int idPerson = PersonDAO.insertPersonToDB(accountDate);

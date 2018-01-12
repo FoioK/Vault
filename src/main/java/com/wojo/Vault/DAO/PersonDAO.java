@@ -7,22 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class PersonDAO {
-
-    public static String generateLogin(int length)
-            throws IllegalArgumentException {
-        return length > 0 ? generateRandomString(new Random(), length) : "";
-    }
-
-    private static String generateRandomString(Random random, int length) {
-        return random.ints('0', 'Z').filter(i -> (i < ':' || i > '@'))
-                .mapToObj(i -> (char) i).limit(length)
-                .collect(StringBuilder::new, StringBuilder::append,
-                        StringBuilder::append)
-                .toString();
-    }
 
     public static int insertPersonToDB(List<String> accountDate)
             throws SQLException {
@@ -83,7 +69,8 @@ public class PersonDAO {
             updateStatement = "DELETE FROM person WHERE LOGIN LIKE ? OR " +
                     "(FIRST_NAME LIKE ? AND LAST_NAME LIKE ?)";
             DBUtil.dbExecuteUpdated(updateStatement,
-                    Arrays.asList(String.valueOf(value), String.valueOf(value)));
+                    Arrays.asList(String.valueOf(value), String.valueOf(value),
+                            String.valueOf(value)));
         } else {
             return false;
         }
