@@ -81,7 +81,7 @@
                                         <Font size="26.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="adressField" prefWidth="350.0">
+                                <JFXTextField fx:id="addressField" prefWidth="350.0">
                                     <font>
                                         <Font size="24.0"/>
                                     </font>
@@ -95,7 +95,7 @@
                                         <Font size="26.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="telefonNumberField" prefWidth="350.0">
+                                <JFXTextField fx:id="telephoneNumberField" prefWidth="350.0">
                                     <font>
                                         <Font size="24.0"/>
                                     </font>

@@ -75,7 +75,7 @@ public class PersonDAO {
     }
 
     public static <T> boolean deletePerson(T value) throws SQLException {
-        String updateStatement = null;
+        String updateStatement;
         if (value instanceof Integer) {
             updateStatement = "DELETE FROM person WHERE idPerson = ?";
             DBUtil.dbExecuteQuery(updateStatement, Arrays.asList(String.valueOf(value)));

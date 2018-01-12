@@ -4,43 +4,22 @@ import java.util.Random;
 
 public class Account {
 
-    private int idPerson;
-    private int idAccount;
-    private String ibanNumber;
+//    private static final int ID_PERSON = Person.getIdPersonInDatabase();
+    private final String IBAN_NUMBER;
     private int value;
 
-    public Account(int idPerson, String countryCode, int length) {
-        this.idPerson = idPerson;
-        ibanNumber = generateIBAN(countryCode, length);
+    public Account(String countryCode, int length) {
+        IBAN_NUMBER = generateIBAN(countryCode, length);
     }
 
-    public Account() {
-
+    public Account(String IBAN_NUMBER) {
+        this.IBAN_NUMBER = IBAN_NUMBER;
     }
 
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
+    public String getIBAN_NUMBER() {
+        return IBAN_NUMBER;
     }
 
-    public void setIdPerson(int idPerson) {
-        this.idPerson = idPerson;
-    }
-
-    public void setIbanNumber(String ibanNumber) {
-        this.ibanNumber = ibanNumber;
-    }
-
-    public int getIdAccount() {
-        return idAccount;
-    }
-
-    public int getIdPerson() {
-        return idPerson;
-    }
-
-    public String getIbanNumber() {
-        return ibanNumber;
-    }
     public int getValue() {
         return value;
     }

@@ -73,7 +73,7 @@ public class LoginStep2Controller {
         rootController.loadDesktopPane();
     }
 
-    public void setRootController(RootController rootController) {
+    protected void setRootController(RootController rootController) {
         this.rootController = rootController;
     }
 

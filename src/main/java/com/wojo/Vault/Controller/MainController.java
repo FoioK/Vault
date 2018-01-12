@@ -9,9 +9,6 @@ import javafx.scene.layout.AnchorPane;
 public class MainController {
 
     @FXML
-    private AnchorPane mainPanel;
-
-    @FXML
     private JFXButton exit;
 
     @FXML

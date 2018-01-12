@@ -48,7 +48,8 @@ public class LoginStep1Controller {
         languageBox.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends String> observable
+                    , String oldValue, String newValue) {
                 languageBox.setValue(newValue);
                 Locale.setDefault(new Locale(newValue));
                 rootController.loadLoginStep1();
@@ -125,7 +126,7 @@ public class LoginStep1Controller {
         rootController.setScreen(pane);
     }
 
-    public void setRootController(RootController rootController) {
+    protected void setRootController(RootController rootController) {
         this.rootController = rootController;
     }
 

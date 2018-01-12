@@ -93,8 +93,4 @@ public class Person {
 		accounts.add(account);
 	}
 
-	public static List<Account> getAccounts() {
-		return accounts;
-	}
-
 }

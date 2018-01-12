@@ -32,10 +32,10 @@ public class AccountCreatorController {
     private JFXTextField personIdField;
 
     @FXML
-    private JFXTextField adressField;
+    private JFXTextField addressField;
 
     @FXML
-    private JFXTextField telefonNumberField;
+    private JFXTextField telephoneNumberField;
 
     @FXML
     private JFXTextField emailField;
@@ -60,12 +60,12 @@ public class AccountCreatorController {
         });
 
         createAccount.addEventHandler(ActionEvent.ACTION, e -> {
-            createAccountProces();
+            createAccountProcess();
             //TODO repeatPassword
         });
     }
 
-    private void createAccountProces() {
+    private void createAccountProcess() {
         String login = PersonDAO.generateLogin(9);
         List<String> accountDate = getAccountDateList(login);
         try {
@@ -92,8 +92,8 @@ public class AccountCreatorController {
         accountDate.add(firstNameField.getText());
         accountDate.add(lastNameField.getText());
         accountDate.add(personIdField.getText());
-        accountDate.add(adressField.getText());
-        accountDate.add(telefonNumberField.getText());
+        accountDate.add(addressField.getText());
+        accountDate.add(telephoneNumberField.getText());
         accountDate.add(emailField.getText());
         accountDate.add(login);
         accountDate.add(passwordField.getText());
@@ -101,7 +101,7 @@ public class AccountCreatorController {
         return accountDate;
     }
 
-    public void setRootController(RootController rootController) {
+    protected void setRootController(RootController rootController) {
         this.rootController = rootController;
     }
 

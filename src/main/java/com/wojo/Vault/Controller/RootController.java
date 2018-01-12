@@ -18,7 +18,7 @@ public class RootController {
         loadLoginStep1();
     }
 
-    public void loadLoginStep1() {
+    protected void loadLoginStep1() {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/LoginStep1.fxml"));
         ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
@@ -37,7 +37,7 @@ public class RootController {
         setScreen(pane);
     }
 
-    public <T extends Node> void setScreen(T pane) {
+    protected  <T extends Node> void setScreen(T pane) {
         root.getChildren().clear();
         loadMainWindow();
         root.getChildren().add(pane);
@@ -56,7 +56,7 @@ public class RootController {
         return root.getChildren().add(mainPane);
     }
 
-    public void loadDesktopPane() {
+    protected void loadDesktopPane() {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/Desktop.fxml"));
         ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
