@@ -65,12 +65,17 @@ public class PersonDAO {
         if (value instanceof Integer) {
             updateStatement = "DELETE FROM person WHERE idPerson = ?";
             DBUtil.dbExecuteQuery(updateStatement, Arrays.asList(String.valueOf(value)));
+            AccountDAO.deleteAccount(value);
         } else if (value instanceof String) {
             updateStatement = "DELETE FROM person WHERE LOGIN LIKE ? OR " +
                     "(FIRST_NAME LIKE ? AND LAST_NAME LIKE ?)";
             DBUtil.dbExecuteUpdated(updateStatement,
                     Arrays.asList(String.valueOf(value), String.valueOf(value),
                             String.valueOf(value)));
+            Integer idPerson = PersonDAO.getIdPerson(String.valueOf(value));
+            if(idPerson != 0) {
+                AccountDAO.deleteAccount(idPerson);
+            }
         } else {
             return false;
         }

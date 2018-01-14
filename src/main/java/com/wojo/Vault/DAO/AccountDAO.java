@@ -38,4 +38,9 @@ public class AccountDAO {
             Person.addAccount(account);
         }
     }
+
+    public static <T> void deleteAccount(T value) throws SQLException {
+        String updateStatement = "DELETE FROM accounts WHERE idPerson = ?";
+        DBUtil.dbExecuteUpdated(updateStatement, Arrays.asList(String.valueOf(value)));
+    }
 }
