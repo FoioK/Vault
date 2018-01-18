@@ -18,15 +18,15 @@ public class Person {
 
     private static List<Account> accounts = new ArrayList<>();
 
-    public static String generateLogin(int length)
-            throws IllegalArgumentException {
+    public static String generateLogin(int length) {
         return length > 0 ? generateRandomString(new Random(), length) : "";
     }
 
     private static String generateRandomString(Random random, int length) {
         return random.ints('0', 'Z')
                 .filter(i -> (i < ':' || i > '@'))
-                .mapToObj(i -> (char) i).limit(length)
+                .mapToObj(i -> (char) i)
+                .limit(length)
                 .collect(StringBuilder::new, StringBuilder::append,
                         StringBuilder::append)
                 .toString();
@@ -108,4 +108,11 @@ public class Person {
         accounts.add(account);
     }
 
+    public static List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public static void setAccounts(List<Account> accounts) {
+        Person.accounts = accounts;
+    }
 }

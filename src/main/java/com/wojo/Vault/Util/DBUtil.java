@@ -16,7 +16,6 @@ public class DBUtil {
 
     public static ResultSet dbExecuteQuery(String queryStatement, List<String> queryDate)
             throws SQLException {
-
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         CachedRowSetImpl cachedRowSet = null;
@@ -47,7 +46,7 @@ public class DBUtil {
         return cachedRowSet;
     }
 
-    public static int dbExecuteUpdated(String updateStatement, List<String> updateDate)
+    public static int dbExecuteUpdate(String updateStatement, List<String> updateDate)
             throws SQLException {
 
         PreparedStatement statement = null;
@@ -79,7 +78,7 @@ public class DBUtil {
      *
      * @return the database connection
      */
-    public static Connection getConnection() throws SQLException, IOException {
+    private static Connection getConnection() throws SQLException, IOException {
         Properties properties = new Properties();
         String connectionPath = "src/main/resources/Database/database.properties";
         try (InputStream in = Files.newInputStream(Paths.get(connectionPath))) {
@@ -96,7 +95,7 @@ public class DBUtil {
         return DriverManager.getConnection(url, username, password);
     }
 
-    public static void dbDisconnect() throws SQLException {
+    private static void dbDisconnect() throws SQLException {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();

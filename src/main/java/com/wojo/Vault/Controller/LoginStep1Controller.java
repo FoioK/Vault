@@ -45,16 +45,17 @@ public class LoginStep1Controller {
     private void addLanguageBox() {
         languageBox.setItems(languageList);
         languageBox.setValue("Language");
-        languageBox.getSelectionModel().selectedItemProperty()
+        languageBox.getSelectionModel()
+                .selectedItemProperty()
                 .addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable
-                    , String oldValue, String newValue) {
-                languageBox.setValue(newValue);
-                Locale.setDefault(new Locale(newValue));
-                rootController.loadLoginStep1();
-            }
-        });
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable
+                            , String oldValue, String newValue) {
+                        languageBox.setValue(newValue);
+                        Locale.setDefault(new Locale(newValue));
+                        rootController.loadLoginStep1();
+                    }
+                });
     }
 
 

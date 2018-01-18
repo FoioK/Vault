@@ -10,18 +10,25 @@ import java.util.Arrays;
 
 public class AccountDAO {
 
-    public static void addNewAccount(int idPerson, String countryCode, int length)
+    public static Account addNewAccount(int idPerson, String countryCode, int length)
             throws SQLException {
         Account account = new Account(countryCode, length);
-        insertAccountToDB(account, idPerson);
+        return account.getIBAN_NUMBER().equals("") ?
+                null :
+                insertAccountToDB(account, idPerson) ?
+                        account :
+                        null;
     }
 
     public static boolean insertAccountToDB(Account account, int idPerson) throws SQLException {
+        if(account == null) {
+            return false;
+        }
         String updateStatement = "INSERT INTO accounts " +
                 "(idPerson, number, value) " +
                 "VALUES " +
                 "(?, ?, ?)";
-        DBUtil.dbExecuteUpdated(updateStatement,
+        DBUtil.dbExecuteUpdate(updateStatement,
                 Arrays.asList(String.valueOf(idPerson),
                         String.valueOf(account.getIBAN_NUMBER()),
                         String.valueOf(account.getValue())));
@@ -34,13 +41,13 @@ public class AccountDAO {
                 Arrays.asList(String.valueOf(idPerson)));
         if (resultSet.next()) {
             Account account = new Account(resultSet.getString("number"));
-            account.setValue(resultSet.getInt("value"));
+            account.setValue(resultSet.getString("value"));
             Person.addAccount(account);
         }
     }
 
     public static <T> void deleteAccount(T value) throws SQLException {
         String updateStatement = "DELETE FROM accounts WHERE idPerson = ?";
-        DBUtil.dbExecuteUpdated(updateStatement, Arrays.asList(String.valueOf(value)));
+        DBUtil.dbExecuteUpdate(updateStatement, Arrays.asList(String.valueOf(value)));
     }
 }

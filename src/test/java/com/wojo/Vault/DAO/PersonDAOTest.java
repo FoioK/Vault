@@ -7,82 +7,86 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class PersonDAOTest {
+    /**
+     * Test Person on database
+     */
+    private static final Integer idPerson = 1;
+    private static final String FIRST_NAME = "TestAccount";
+    private static final String LAST_NAME = "TestAccount";
+    private static final String PERSON_ID = "00000000000";
+    private static final String ADDRESS = "TestAccount";
+    private static final String TELEPHONE_NUMBER = "123456789";
+    private static final String EMAIL = "TestAccount";
+    private static final String LOGIN = "ABCDEFGHI";
+    private static final String PASSWORD = "Test";
 
-//    @Test
-//    public void shouldGenerateLoginWith9Char() {
-//        for (int i = 0; i < 100; i++) {
-//            assertEquals(9, PersonDAO.generateLogin(9).length());
-//        }
-//    }
-//
-//    @Test
-//    public void shouldGenerateOnlyUpperCase() {
-//        String generatedString;
-//        for (int i = 0; i < 100; i++) {
-//            generatedString = PersonDAO.generateLogin(9);
-//            assertEquals(generatedString.toUpperCase(), generatedString);
-//        }
-//    }
-//
-//    @Test
-//    public void shouldReturnEmptyString() {
-//        int initValue = Integer.MIN_VALUE;
-//        while (initValue < 0) {
-//            assertEquals("", PersonDAO.generateLogin(initValue));
-//            initValue += 50;
-//        }
-//    }
+    private static final String TEST_VALUE = "ToDelete";
 
     @Test
     public void shouldInsertAccountToDB() throws SQLException {
         List<String> accountDate = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            accountDate.add("ToDelete");
+        int numberOfDate = 8;
+        for (int i = 0; i < numberOfDate; i++) {
+            accountDate.add(TEST_VALUE);
         }
-        if(PersonDAO.insertPersonToDB(accountDate) < 0) {
+        if (PersonDAO.insertPersonToDB(accountDate) < 0) {
             fail("null idPerson");
         }
     }
 
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowException() throws SQLException {
+        PersonDAO.insertPersonToDB(null);
+    }
+
+    @Test
+    public void shouldntInsertPersonToDB() throws SQLException {
+        List<String> accountDate = new ArrayList<>();
+        int badNumberOfDate = 7;
+        for (int i = 0; i < badNumberOfDate; i++) {
+            accountDate.add(TEST_VALUE);
+        }
+        assertEquals(-1, PersonDAO.insertPersonToDB(accountDate));
+    }
+
     @Test
     public void searchLoginTest() throws SQLException {
-        String testLoginInDB = "ABCDEFGHI";
-        assertTrue(PersonDAO.searchPersonLogin(testLoginInDB));
+        assertTrue(PersonDAO.searchPersonLogin(LOGIN));
+    }
+
+    @Test
+    public void shouldReturnFalse() throws SQLException {
+        assertFalse(PersonDAO.searchPersonLogin(null));
     }
 
     @Test
     public void shouldInsertAccountDateToClass() throws SQLException {
-        int testIdPersonInDB = 1;
-        String testFirstName = "TestAccount";
-        String testLastName = "TestAccount";
-        String testPersonId = "00000000000";
-        String testAddress = "TestAccount";
-        String testTelephoneNumber = "123456789";
-        String testEmail = "TestAccount";
-        String testLogin = "ABCDEFGHI";
-        String testPassword = "Test";
+        PersonDAO.insertPersonDate(idPerson);
 
-        PersonDAO.insertPersonDate(testIdPersonInDB);
-
-        assertEquals(testIdPersonInDB, Person.getIdPersonInDatabase());
-        assertEquals(testFirstName, Person.getFirstName());
-        assertEquals(testLastName, Person.getLastName());
-        assertEquals(testPersonId, Person.getPersonId());
-        assertEquals(testAddress, Person.getAddress());
-        assertEquals(testTelephoneNumber, Person.getTelephoneNumber());
-        assertEquals(testEmail, Person.getEmail());
-        assertEquals(testLogin, Person.getLogin());
-        assertEquals(testPassword, Person.getPassword());
+        assertEquals((int) idPerson, Person.getIdPersonInDatabase());
+        assertEquals(FIRST_NAME, Person.getFirstName());
+        assertEquals(LAST_NAME, Person.getLastName());
+        assertEquals(PERSON_ID, Person.getPersonId());
+        assertEquals(ADDRESS, Person.getAddress());
+        assertEquals(TELEPHONE_NUMBER, Person.getTelephoneNumber());
+        assertEquals(EMAIL, Person.getEmail());
+        assertEquals(LOGIN, Person.getLogin());
+        assertEquals(PASSWORD, Person.getPassword());
     }
 
     @Test
     public void shouldDeleteTestAccount() throws SQLException {
-        String testFirstAndLastName = "ToDelete";
+        String testFirstAndLastName = TEST_VALUE;
         assertTrue(PersonDAO.deletePerson(testFirstAndLastName));
+    }
+
+    @Test
+    public void shouldReturnGoodIdPersonAndPassword() throws SQLException {
+        String[] idPersonAndPassword = PersonDAO.getIdPersonAndPassword(LOGIN);
+        assertEquals(String.valueOf(idPerson), idPersonAndPassword[0]);
+        assertEquals(PASSWORD, idPersonAndPassword[1]);
     }
 }

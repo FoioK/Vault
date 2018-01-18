@@ -66,7 +66,10 @@ public class AccountCreatorController {
 
     private void createAccountProcess() {
         String login = Person.generateLogin(9);
-        List<String> accountDate = getAccountDateList(login);
+        List<String> accountDate = null;
+        if(login != null) {
+            accountDate = getAccountDateList(login);
+        }
         try {
             int idPerson = PersonDAO.insertPersonToDB(accountDate);
             createAccountNumber(idPerson, "PL", 26);

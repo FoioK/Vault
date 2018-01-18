@@ -1,11 +1,20 @@
 package com.wojo.Vault.Controller;
 
+import com.wojo.Vault.DAO.PersonDAO;
+import com.wojo.Vault.Util.DBUtil;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 public class ViewControllerTest extends ApplicationTest {
 
@@ -19,6 +28,18 @@ public class ViewControllerTest extends ApplicationTest {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @AfterClass
+    public static void deleteCreatedAccounts() throws SQLException {
+        String queryStatement = "SELECT idPerson FROM person " +
+                "WHERE FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND ADDRESS LIKE ?";
+        ResultSet resultSet = DBUtil.dbExecuteQuery(queryStatement,
+                Arrays.asList(new String[]{"ToDelete", "ToDelete", "ToDelete"}));
+        while (resultSet.next()) {
+            System.out.println(resultSet.getInt("idPerson"));
+            PersonDAO.deletePerson(Integer.valueOf(resultSet.getInt("idPerson")));
+        }
     }
 
     @Test
@@ -79,4 +100,21 @@ public class ViewControllerTest extends ApplicationTest {
         clickOn("#repeatPasswordField").write("ToDelete");
         clickOn("#createAccount");
     }
+
+    @Test
+    public void changeLanguageTest() {
+        clickOn("#languageBox")
+                .moveTo("PL")
+                .clickOn(MouseButton.PRIMARY);
+        clickOn("#languageBox")
+                .moveTo("EN")
+                .clickOn(MouseButton.PRIMARY);
+        clickOn("#languageBox")
+                .moveTo("PL")
+                .clickOn(MouseButton.PRIMARY);
+        clickOn("#languageBox")
+                .moveTo("EN")
+                .clickOn(MouseButton.PRIMARY);
+    }
+
 }

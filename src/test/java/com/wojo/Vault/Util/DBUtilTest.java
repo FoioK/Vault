@@ -1,13 +1,14 @@
 package com.wojo.Vault.Util;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class DBUtilTest {
 
@@ -15,86 +16,97 @@ public class DBUtilTest {
      * TestAccount in database
      * idPeron:1
      * FIRST_NAME:TestAccount
-     * LAST_NAME:TetAccount
+     * LAST_NAME:TestAccount
      * PERSON_ID:00000000000
      * ADDRESS:TestAccount
-     * TELEPHON_NUMBER:123456789
+     * TELEPHONE_NUMBER:123456789
      * EMAIL:TestAccount
      * LOGIN:ABCDEFGHI
      * PASSWORD:Test
      */
+    private static final Integer idPerson = 1;
+    private static final String FIRST_NAME = "TestAccount";
+    private static final String LAST_NAME = "TestAccount";
+    private static final String PERSON_ID = "00000000000";
+    private static final String ADDRESS = "TestAccount";
+    private static final String TELEPHONE_NUMBER = "123456789";
+    private static final String EMAIL = "TestAccount";
+    private static final String LOGIN = "ABCDEFGHI";
+    private static final String PASSWORD = "Test";
 
-    @Ignore
-    @Test
-    public void connectionTest() {
-//        try {
-//            DBUtil.dbConnect();
-//        } catch (ClassNotFoundException e) {
-//            fail("ClassNotFoundException");
-//        } catch (SQLException e) {
-//            fail("SQLException");
-//        }
+
+    @Test(expected = SQLException.class)
+    public void shouldntExecuteQuery() throws SQLException {
+        DBUtil.dbExecuteQuery(null, null);
     }
 
-    @Ignore
+    @Test(expected = SQLException.class)
+    public void shouldntExecuteUpdate() throws SQLException {
+        DBUtil.dbExecuteUpdate(null, null);
+    }
+
     @Test
-    public void disconnectionTest() {
-        try {
-            DBUtil.dbDisconnect();
-        } catch (SQLException e) {
-            fail("SQL Exception");
+    public void executeUpdateTest() throws SQLException {
+        String queryStatementSetNewValue = "UPDATE person " +
+                "SET " +
+                "FIRST_NAME = ?, " +
+                "LAST_NAME = ?, " +
+                "PERSON_ID = ?, " +
+                "ADDRESS = ?, " +
+                "TELEPHONE_NUMBER = ?, " +
+                "EMAIL = ?, " +
+                "LOGIN = ?, " +
+                "PASSWORD = ? " +
+                "WHERE idPerson = ?";
+        List<String> updateDate = new ArrayList<>();
+        String newValue = "NewValue";
+        int listDateSize = 8;
+        for (int i = 0; i < listDateSize; i++) {
+            updateDate.add(newValue);
         }
+        updateDate.add(String.valueOf(idPerson));
+        DBUtil.dbExecuteUpdate(queryStatementSetNewValue, updateDate);
+
+        String queryStatementSetOldValue = "UPDATE person " +
+                "SET " +
+                "FIRST_NAME = ?, " +
+                "LAST_NAME = ?, " +
+                "PERSON_ID = ?, " +
+                "ADDRESS = ?, " +
+                "TELEPHONE_NUMBER = ?, " +
+                "EMAIL = ?, " +
+                "LOGIN = ?, " +
+                "PASSWORD = ? " +
+                "WHERE idPerson = ?";
+        updateDate = Arrays.asList(
+                FIRST_NAME,
+                LAST_NAME,
+                PERSON_ID,
+                ADDRESS,
+                TELEPHONE_NUMBER,
+                EMAIL,
+                LOGIN,
+                PASSWORD,
+                String.valueOf(idPerson)
+        );
+        DBUtil.dbExecuteUpdate(queryStatementSetOldValue, updateDate);
     }
 
-    @Ignore
     @Test
-    public void executeQueryTest() throws SQLException, ClassNotFoundException {
-//        DBUtil.dbExecuteQuery("SELECT * FROM person");
-    }
-
-    @Ignore
-    @Test
-    public void updateQueryTest() throws ClassNotFoundException, SQLException {
-        String queryStatementNewValue = "UPDATE `bankdate`.`person`\n" +
-                "SET\n" +
-                "`FIRST_NAME` = 'TestN',\n" +
-                "`LAST_NAME` = 'TestL',\n" +
-                "`PERSON_ID` = '11111111111',\n" +
-                "`ADDRESS` = 'TestA',\n" +
-                "`TELEPHONE_NUMBER` = '98765432',\n" +
-                "`EMAIL` = 'TestE',\n" +
-                "`PASSWORD` = 'TestP'\n" +
-                "WHERE `idPerson` = '1';";
-//        DBUtil.dbExecuteUpdate(queryStatementNewValue);
-
-        String queryStatementOldValue = "UPDATE `bankdate`.`person`\n" +
-                "SET\n" +
-                "`FIRST_NAME` = 'TestAccount',\n" +
-                "`LAST_NAME` = 'TestAccount',\n" +
-                "`PERSON_ID` = '00000000000',\n" +
-                "`ADDRESS` = 'TestAccount',\n" +
-                "`TELEPHONE_NUMBER` = '123456789',\n" +
-                "`EMAIL` = 'TestAccount',\n" +
-                "`PASSWORD` = 'Test'\n" +
-                "WHERE `idPerson` = '1';";
-//        DBUtil.dbExecuteUpdate(queryStatementOldValue);
-    }
-
-    @Ignore
-    @Test
-    public void shouldReturnCorrectDate() throws ClassNotFoundException, SQLException {
-        String queryStatement = " SELECT * FROM person WHERE idPerson = '1';";
-//        ResultSet resultSet = DBUtil.dbExecuteQuery(queryStatement);
-//        if (resultSet.next()) {
-//            assertEquals(1, resultSet.getInt(1));
-//            assertEquals("TestAccount", resultSet.getString(2));
-//            assertEquals("TestAccount", resultSet.getString(3));
-//            assertEquals("00000000000", resultSet.getString(4));
-//            assertEquals("TestAccount", resultSet.getString(5));
-//            assertEquals("123456789", resultSet.getString(6));
-//            assertEquals("TestAccount", resultSet.getString(7));
-//            assertEquals("ABCDEFGHI", resultSet.getString(8));
-//            assertEquals("Test", resultSet.getString(9));
-//        }
+    public void shouldReturnCorrectDate() throws SQLException {
+        String queryStatement = " SELECT * FROM person WHERE idPerson = ?;";
+        ResultSet resultSet = DBUtil.dbExecuteQuery(
+                queryStatement, Arrays.asList(String.valueOf(idPerson)));
+        if (resultSet.next()) {
+            assertEquals(String.valueOf(idPerson), resultSet.getString("idPerson"));
+            assertEquals(FIRST_NAME, resultSet.getString("FIRST_NAME"));
+            assertEquals(LAST_NAME, resultSet.getString("LAST_NAME"));
+            assertEquals(PERSON_ID, resultSet.getString("PERSON_ID"));
+            assertEquals(ADDRESS, resultSet.getString("ADDRESS"));
+            assertEquals(TELEPHONE_NUMBER, resultSet.getString("TELEPHONE_NUMBER"));
+            assertEquals(EMAIL, resultSet.getString("EMAIL"));
+            assertEquals(LOGIN, resultSet.getString("LOGIN"));
+            assertEquals(PASSWORD, resultSet.getString("PASSWORD"));
+        }
     }
 }

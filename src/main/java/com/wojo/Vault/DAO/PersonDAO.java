@@ -24,7 +24,7 @@ public class PersonDAO {
                 "(?, ?, ?," +
                 "?, ?, ?, " +
                 "?, ?)";
-        DBUtil.dbExecuteUpdated(updateStatement, accountDate);
+        DBUtil.dbExecuteUpdate(updateStatement, accountDate);
         return getIdPerson(accountDate.get(6));
     }
 
@@ -37,6 +37,9 @@ public class PersonDAO {
 
     public static boolean searchPersonLogin(String login)
             throws SQLException {
+        if(login == null) {
+            return false;
+        }
         String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN LIKE ?";
         ResultSet resultSet = DBUtil.dbExecuteQuery(queryStatement, Arrays.asList(login));
         return resultSet.next() ? resultSet.getInt(1) != 0 : false;
@@ -64,16 +67,17 @@ public class PersonDAO {
         String updateStatement;
         if (value instanceof Integer) {
             updateStatement = "DELETE FROM person WHERE idPerson = ?";
-            DBUtil.dbExecuteQuery(updateStatement, Arrays.asList(String.valueOf(value)));
+            System.out.println(String.valueOf(value));
+            DBUtil.dbExecuteUpdate(updateStatement, Arrays.asList(String.valueOf(value)));
             AccountDAO.deleteAccount(value);
         } else if (value instanceof String) {
             updateStatement = "DELETE FROM person WHERE LOGIN LIKE ? OR " +
                     "(FIRST_NAME LIKE ? AND LAST_NAME LIKE ?)";
-            DBUtil.dbExecuteUpdated(updateStatement,
+            DBUtil.dbExecuteUpdate(updateStatement,
                     Arrays.asList(String.valueOf(value), String.valueOf(value),
                             String.valueOf(value)));
             Integer idPerson = PersonDAO.getIdPerson(String.valueOf(value));
-            if(idPerson != 0) {
+            if (idPerson != 0) {
                 AccountDAO.deleteAccount(idPerson);
             }
         } else {
@@ -91,8 +95,7 @@ public class PersonDAO {
             idPersonAndPassword[0] = resultSet.getString("idPerson");
             idPersonAndPassword[1] = resultSet.getString("PASSWORD");
             return idPersonAndPassword;
-        }
-        else {
+        } else {
             return null;
         }
     }
