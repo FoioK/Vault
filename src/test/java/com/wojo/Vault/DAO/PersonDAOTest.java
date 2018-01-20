@@ -64,7 +64,7 @@ public class PersonDAOTest {
 
     @Test
     public void shouldInsertAccountDateToClass() throws SQLException {
-        PersonDAO.insertPersonDate(idPerson);
+        PersonDAO.insertPersonData(idPerson);
 
         assertEquals((int) idPerson, Person.getIdPersonInDatabase());
         assertEquals(FIRST_NAME, Person.getFirstName());

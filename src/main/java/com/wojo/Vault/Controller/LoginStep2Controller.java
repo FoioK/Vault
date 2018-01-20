@@ -6,6 +6,7 @@ import com.wojo.Vault.DAO.PersonDAO;
 import com.wojo.Vault.Model.Person;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import java.sql.SQLException;
 
@@ -23,8 +24,20 @@ public class LoginStep2Controller {
     private JFXButton logInButton;
 
     @FXML
+    private Label badPasswordMessage;
+
+    @FXML
+    private Label badLoginProcessMessage;
+
+    @FXML
     void initialize() {
+        setErrorMessages(false);
         addEventHandlers();
+    }
+
+    private void setErrorMessages(boolean state) {
+        badPasswordMessage.setVisible(false);
+        badLoginProcessMessage.setVisible(false);
     }
 
     private void addEventHandlers() {
@@ -33,14 +46,15 @@ public class LoginStep2Controller {
         });
 
         logInButton.addEventHandler(ActionEvent.ACTION, e -> {
+            setErrorMessages(false);
             loginProcessStep2();
         });
     }
 
     private boolean loginProcessStep2() {
         String[] idPersonAndPassword = null;
-        int idPerson;
-        String password;
+        int idPerson = 0;
+        String password = null;
         try {
             idPersonAndPassword = PersonDAO.getIdPersonAndPassword(Person.getLogin());
         } catch (SQLException e) {
@@ -51,20 +65,25 @@ public class LoginStep2Controller {
             password = idPersonAndPassword[1];
         }
         else {
+            badLoginProcessMessage.setVisible(true);
             return false;
-            //TODO error login proces
         }
 
         if (password.equals(passwordFiled.getText())) {
             try {
-                PersonDAO.insertPersonDate(idPerson);
+                PersonDAO.insertPersonData(idPerson);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             loadDesktopPane();
             return true;
         } else {
-            //TODO badPassword
+            badPasswordMessage.setVisible(true);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return false;
         }
     }

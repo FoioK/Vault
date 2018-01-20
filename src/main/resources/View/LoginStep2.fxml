@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1400.0" style="-fx-background-color: #ffffff;"
-            xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.wojo.Vault.Controller.LoginStep2Controller">
     <children>
         <Pane prefHeight="130.0" prefWidth="1400.0" style="-fx-background-color: #70d4f6;">
@@ -30,15 +30,20 @@
                 </JFXButton>
             </children>
         </Pane>
-        <VBox alignment="CENTER" layoutX="410.0" layoutY="160.0" prefHeight="200.0" prefWidth="700.0" spacing="20.0">
+        <HBox layoutX="400.0" layoutY="150.0" prefHeight="200.0" prefWidth="700.0" spacing="20.0">
             <children>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="250.0">
                     <children>
-                        <Label text="%LoginStep2.passwordLabel" textFill="#0b090a">
+                        <Label alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0"
+                               text="%LoginStep2.passwordLabel" textFill="#0b090a">
                             <font>
                                 <Font name="Arial" size="20.0"/>
                             </font>
                         </Label>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="46.0" prefWidth="350.0">
+                    <children>
                         <JFXPasswordField fx:id="passwordFiled" focusColor="WHITE" prefHeight="46.0" prefWidth="350.0"
                                           promptText="%LoginStep2.passwordField"
                                           style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
@@ -47,33 +52,26 @@
                                 <Font size="20.0"/>
                             </font>
                         </JFXPasswordField>
-                    </children>
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                </HBox>
-                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                    <children>
+                        <Label fx:id="badPasswordMessage" prefHeight="30.0" prefWidth="350.0"
+                               text="%LoginStep2.badPasswordMessage" textFill="#ff1414">
+                            <font>
+                                <Font name="System Italic" size="17.0"/>
+                            </font>
+                        </Label>
                         <JFXButton fx:id="logInButton" prefHeight="46.0" prefWidth="350.0"
                                    style="-fx-background-color: #00549E;" text="%LoginStep2.logInButton"
                                    textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="20.0"/>
                             </font>
-                            <HBox.margin>
-                                <Insets right="40.0"/>
-                            </HBox.margin>
                         </JFXButton>
                     </children>
                     <padding>
-                        <Insets right="65.0"/>
+                        <Insets bottom="25.0"/>
                     </padding>
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                </HBox>
+                </VBox>
             </children>
-        </VBox>
+        </HBox>
         <VBox layoutX="160.0" layoutY="360.0" prefHeight="300.0" prefWidth="1100.0" spacing="15.0">
             <children>
                 <Label prefHeight="40.0" prefWidth="1004.0" text="%LoginStep1.VBox.label1">
@@ -131,5 +129,11 @@
                 </Label>
             </children>
         </VBox>
+        <Label fx:id="badLoginProcessMessage" layoutX="535.0" layoutY="130.0" prefHeight="30.0" prefWidth="350.0"
+               text="%LoginStep2.badLoginProcessMessage" textFill="#ff1414">
+            <font>
+                <Font name="System Italic" size="17.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>

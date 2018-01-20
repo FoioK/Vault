@@ -35,7 +35,7 @@ public class AccountDAO {
         return true;
     }
 
-    public static void insertAccountDate(int idPerson) throws SQLException {
+    public static void insertAccountData(int idPerson) throws SQLException {
         String queryStatement = "SELECT * FROM accounts WHERE idPerson = ?";
         ResultSet resultSet = DBUtil.dbExecuteQuery(queryStatement,
                 Arrays.asList(String.valueOf(idPerson)));

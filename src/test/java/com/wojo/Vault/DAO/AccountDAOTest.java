@@ -69,7 +69,7 @@ public class AccountDAOTest {
 
     @Test
     public void shouldCorrectInsertAccountDateToClass() throws SQLException {
-        AccountDAO.insertAccountDate(testIdPersonInDB);
+        AccountDAO.insertAccountData(testIdPersonInDB);
         assertEquals(testIBNNumber, Person.getAccounts().get(0).getIBAN_NUMBER());
         assertEquals(testValue, Person.getAccounts().get(0).getValue());
     }
@@ -77,7 +77,7 @@ public class AccountDAOTest {
     @Test
     public void shouldntInsertAccountDateToClass() throws SQLException {
         Person.setAccounts(new ArrayList<>());
-        AccountDAO.insertAccountDate(Integer.MIN_VALUE);
+        AccountDAO.insertAccountData(Integer.MIN_VALUE);
         assertEquals(0, Person.getAccounts().size());
     }
 

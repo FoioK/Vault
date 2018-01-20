@@ -10,9 +10,9 @@ import java.util.List;
 
 public class PersonDAO {
 
-    public static int insertPersonToDB(List<String> accountDate)
+    public static int insertPersonToDB(List<String> accountData)
             throws SQLException {
-        if (accountDate.size() < 8) {
+        if (accountData.size() < 8) {
             return -1;
         }
 
@@ -24,8 +24,8 @@ public class PersonDAO {
                 "(?, ?, ?," +
                 "?, ?, ?, " +
                 "?, ?)";
-        DBUtil.dbExecuteUpdate(updateStatement, accountDate);
-        return getIdPerson(accountDate.get(6));
+        DBUtil.dbExecuteUpdate(updateStatement, accountData);
+        return getIdPerson(accountData.get(6));
     }
 
     private static int getIdPerson(String login) throws SQLException {
@@ -45,7 +45,7 @@ public class PersonDAO {
         return resultSet.next() ? resultSet.getInt(1) != 0 : false;
     }
 
-    public static void insertPersonDate(int idPerson) throws SQLException {
+    public static void insertPersonData(int idPerson) throws SQLException {
         String quertyStatement = "SELECT * FROM person WHERE idPerson = ?";
         ResultSet resultSet = DBUtil.dbExecuteQuery(quertyStatement,
                 Arrays.asList(String.valueOf(idPerson)));
@@ -60,7 +60,7 @@ public class PersonDAO {
             Person.setLogin(resultSet.getString("LOGIN"));
             Person.setPassword(resultSet.getString("PASSWORD"));
         }
-        AccountDAO.insertAccountDate(idPerson);
+        AccountDAO.insertAccountData(idPerson);
     }
 
     public static <T> boolean deletePerson(T value) throws SQLException {

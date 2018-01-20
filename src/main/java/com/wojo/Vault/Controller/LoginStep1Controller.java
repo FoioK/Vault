@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -34,12 +35,20 @@ public class LoginStep1Controller {
     private JFXButton openAccountCreator;
 
     @FXML
+    private Label badLoginMessage;
+
+    @FXML
     private ChoiceBox<String> languageBox;
 
     @FXML
     void initialize() {
+        setErrorMessages(false);
         addLanguageBox();
         addEventHandlers();
+    }
+
+    private void setErrorMessages(boolean state) {
+        badLoginMessage.setVisible(state);
     }
 
     private void addLanguageBox() {
@@ -70,11 +79,12 @@ public class LoginStep1Controller {
     }
 
     private void loginProcessStep1() {
+        setErrorMessages(false);
         if (isLoginExist()) {
             Person.setLogin(loginField.getText());
             loadLoginStep2();
         } else {
-            //TODO badLogin
+            badLoginMessage.setVisible(true);
         }
     }
 
@@ -130,5 +140,4 @@ public class LoginStep1Controller {
     protected void setRootController(RootController rootController) {
         this.rootController = rootController;
     }
-
 }

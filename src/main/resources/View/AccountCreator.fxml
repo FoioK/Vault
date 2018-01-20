@@ -32,122 +32,211 @@
             <children>
                 <VBox prefHeight="550.0" prefWidth="600.0">
                     <children>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.firstName">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                               text="%AccountCreator.firstName">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="firstNameField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badFirstNameMessage" alignment="CENTER" prefHeight="30.0"
+                                       prefWidth="400.0" text="%AccountCreator.badFirstNameMessage" textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="firstNameField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXTextField>
                             </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="625.0" spacing="20.0">
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.lastName">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                               text="%AccountCreator.lastName">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="lastNameField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badLastNameMessage" alignment="CENTER" prefHeight="30.0" prefWidth="400.0"
+                                       text="%AccountCreator.badLastNameMessage" textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="lastNameField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXTextField>
                             </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.personId">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                               text="%AccountCreator.personId">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="personIdField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badPersonIdMessage" alignment="CENTER" prefHeight="30.0" prefWidth="400.0"
+                                       text="%AccountCreator.badPersonId" textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="personIdField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXTextField>
                             </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.address">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                               text="%AccountCreator.address">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="addressField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badAddressMessage" alignment="CENTER" prefHeight="30.0" prefWidth="400.0"
+                                       text="%AccountCreator.badAddressMessage" textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="addressField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXTextField>
                             </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.telephonNumber">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                               text="%AccountCreator.telephonNumber">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="telephoneNumberField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badTelephoneNumberMessage" alignment="CENTER" prefHeight="30.0"
+                                       prefWidth="400.0" text="%AccountCreator.badTelephoneNumberMessage"
+                                       textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="telephoneNumberField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXTextField>
                             </children>
-                        </HBox>
+                        </VBox>
                     </children>
                 </VBox>
                 <VBox prefHeight="550.0" prefWidth="600.0">
                     <children>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.email">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.email">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="emailField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badEmailMessage" alignment="CENTER" prefHeight="30.0" prefWidth="400.0"
+                                       text="%AccountCreator.badEmailMessage" textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXTextField fx:id="emailField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXTextField>
                             </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.password">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="200.0"
+                                               text="%AccountCreator.password">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXPasswordField fx:id="passwordField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXPasswordField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badPasswordMessage" alignment="CENTER" prefHeight="30.0" prefWidth="400.0"
+                                       text="%AccountCreator.badPasswordMessage" textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXPasswordField fx:id="passwordField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXPasswordField>
                             </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0" spacing="20.0">
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="100.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="200.0" text="%AccountCreator.repeatPassword">
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="200.0"
+                                               text="%AccountCreator.repeatPassword">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXPasswordField fx:id="repeatPasswordField" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXPasswordField>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="badRepeatPasswordsMessage" alignment="CENTER" prefHeight="30.0"
+                                       prefWidth="400.0" text="%AccountCreator.badRepeatPasswordsMessage"
+                                       textFill="#ff1414">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font name="System Italic" size="17.0"/>
                                     </font>
                                 </Label>
-                                <JFXPasswordField fx:id="repeatPasswordField" prefWidth="350.0">
-                                    <font>
-                                        <Font size="24.0"/>
-                                    </font>
-                                </JFXPasswordField>
                             </children>
-                        </HBox>
+                        </VBox>
                         <HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                             <children>
                                 <JFXButton fx:id="createAccount" prefWidth="300.0"
