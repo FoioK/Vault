@@ -9,220 +9,192 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="900.0" prefWidth="1850.0" style="-fx-background-color: transparent;;"
-            xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.wojo.Vault.Controller.DesktopController">
+<AnchorPane prefHeight="900.0" prefWidth="1850.0" style="-fx-background-color: transparent;;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wojo.Vault.Controller.DesktopController">
     <children>
         <Pane prefHeight="900.0" prefWidth="375.0" style="-fx-background-color: #fff;">
             <children>
-                <JFXButton alignment="BASELINE_LEFT" prefHeight="60.0" prefWidth="375.0" text="%Desktop.dashBoard"
-                           textFill="#00549e">
+                <JFXButton fx:id="dashboard" alignment="BASELINE_LEFT" prefHeight="60.0" prefWidth="375.0" text="%Desktop.dashBoard" textFill="#00549e">
                     <font>
-                        <Font size="22.0"/>
+                        <Font size="22.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" layoutY="660.0" prefHeight="60.0" prefWidth="375.0"
-                           text="%Desktop.message" textFill="#00549e">
+                <JFXButton alignment="BASELINE_LEFT" layoutY="660.0" prefHeight="60.0" prefWidth="375.0" text="%Desktop.message" textFill="#00549e">
                     <font>
-                        <Font size="20.0"/>
+                        <Font size="20.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" layoutY="720.0" prefHeight="60.0" prefWidth="375.0"
-                           text="%Desktop.settings" textFill="#00549e">
+                <JFXButton alignment="BASELINE_LEFT" layoutY="720.0" prefHeight="60.0" prefWidth="375.0" text="%Desktop.settings" textFill="#00549e">
                     <font>
-                        <Font size="20.0"/>
+                        <Font size="20.0" />
                     </font>
                 </JFXButton>
-                <JFXButton fx:id="logOut" alignment="BASELINE_LEFT" layoutY="780.0" prefHeight="60.0" prefWidth="375.0"
-                           text="%Desktop.logOut" textFill="#00549e">
+                <JFXButton fx:id="logOut" alignment="BASELINE_LEFT" layoutY="780.0" prefHeight="60.0" prefWidth="375.0" text="%Desktop.logOut" textFill="#00549e">
                     <font>
-                        <Font size="20.0"/>
+                        <Font size="20.0" />
                     </font>
                 </JFXButton>
-                <ScrollPane hbarPolicy="NEVER" layoutY="60.0" prefHeight="600.0" prefWidth="375.0"
-                            style="-fx-background-color: #F2F4F4;">
+                <ScrollPane hbarPolicy="NEVER" layoutY="60.0" prefHeight="600.0" prefWidth="375.0" style="-fx-background-color: #F2F4F4;">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="660.0" prefWidth="375.0">
                             <children>
                                 <Label prefHeight="50.0" prefWidth="375.0" text="%Desktop.yourApp">
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <font>
-                                        <Font size="18.0"/>
+                                        <Font size="18.0" />
                                     </font>
                                 </Label>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="50.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.accounts" textAlignment="RIGHT">
+                                <JFXButton fx:id="accountsLeft" alignment="BASELINE_LEFT" layoutY="50.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.accounts" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="UNIVERSITY"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="UNIVERSITY" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="115.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.payments" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="115.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.payments" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="EXCHANGE"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="EXCHANGE" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="180.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.loans" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="180.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.loans" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="MONEY"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="MONEY" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="245.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.deposits" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="245.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.deposits" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="DATABASE"
-                                                         size="1.2em"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="DATABASE" size="1.2em" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="310.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.topUps" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="310.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.topUps" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="MOBILE"
-                                                         size="2em"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="MOBILE" size="2em" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="375.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.calendar" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="375.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.calendar" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="CALENDAR"
-                                                         size="1.1em"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="CALENDAR" size="1.1em" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="440.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.cashflow" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="440.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.cashflow" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="SPINNER"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="SPINNER" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton alignment="BASELINE_LEFT" layoutY="505.0" prefHeight="65.0" prefWidth="375.0"
-                                           text="%Desktop.geolocation" textAlignment="RIGHT">
+                                <JFXButton alignment="BASELINE_LEFT" layoutY="505.0" prefHeight="65.0" prefWidth="375.0" text="%Desktop.geolocation" textAlignment="RIGHT">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets/>
+                                        <Insets />
                                     </opaqueInsets>
                                     <graphic>
-                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="GLOBE"/>
+                                        <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="GLOBE" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton layoutX="15.0" layoutY="580.0" prefHeight="70.0" prefWidth="325.0"
-                                           style="-fx-background-color: #00549e;" text="%Desktop.moreApp"
-                                           textFill="WHITE">
+                                <JFXButton layoutX="15.0" layoutY="580.0" prefHeight="70.0" prefWidth="325.0" style="-fx-background-color: #00549e;" text="%Desktop.moreApp" textFill="WHITE">
                                     <font>
-                                        <Font size="22.0"/>
+                                        <Font size="22.0" />
                                     </font>
                                     <graphic>
-                                        <FontAwesomeIcon iconName="PLUS_CIRCLE"/>
+                                        <FontAwesomeIcon iconName="PLUS_CIRCLE" />
                                     </graphic>
                                 </JFXButton>
                             </children>
                         </AnchorPane>
                     </content>
                 </ScrollPane>
-                <Label fx:id="fullName" alignment="BASELINE_LEFT" layoutX="15.0" layoutY="840.0" prefHeight="60.0"
-                       prefWidth="350.0" text="  ">
+                <Label fx:id="fullName" alignment="BASELINE_LEFT" layoutX="15.0" layoutY="840.0" prefHeight="60.0" prefWidth="350.0" text="  ">
                     <font>
-                        <Font size="20.0"/>
+                        <Font size="20.0" />
                     </font>
                 </Label>
             </children>
         </Pane>
-        <AnchorPane layoutX="375.0" prefHeight="900.0" prefWidth="1475.0">
+        <AnchorPane fx:id="mainPane" layoutX="375.0" prefHeight="900.0" prefWidth="1475.0">
             <children>
-                <JFXButton alignment="TOP_LEFT" layoutX="52.0" layoutY="120.0" prefHeight="320.0" prefWidth="320.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.cashflow" textFill="#00549e">
+                <JFXButton alignment="TOP_LEFT" layoutX="52.0" layoutY="120.0" prefHeight="320.0" prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.cashflow" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="TOP_LEFT" layoutX="52.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.topUps" textFill="#00549e">
+                <JFXButton alignment="TOP_LEFT" layoutX="52.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.topUps" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="TOP_LEFT" layoutX="402.0" layoutY="120.0" prefHeight="320.0" prefWidth="670.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.accounts" textFill="#00549e">
+                <JFXButton fx:id="accountsCenter" alignment="TOP_LEFT" layoutX="402.0" layoutY="120.0" prefHeight="320.0" prefWidth="670.0" style="-fx-background-color: #ffff;" text="%Desktop.accounts" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="TOP_LEFT" layoutX="1102.0" layoutY="120.0" prefHeight="320.0" prefWidth="320.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.loans" textFill="#00549e">
+                <JFXButton alignment="TOP_LEFT" layoutX="1102.0" layoutY="120.0" prefHeight="320.0" prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.loans" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="TOP_LEFT" layoutX="402.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.payments" textFill="#00549e">
+                <JFXButton alignment="TOP_LEFT" layoutX="402.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.payments" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="TOP_LEFT" layoutX="752.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.calendar" textFill="#00549e">
+                <JFXButton alignment="TOP_LEFT" layoutX="752.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.calendar" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
-                <JFXButton alignment="TOP_LEFT" layoutX="1102.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0"
-                           style="-fx-background-color: #ffff;" text="%Desktop.deposits" textFill="#00549e">
+                <JFXButton alignment="TOP_LEFT" layoutX="1102.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.deposits" textFill="#00549e">
                     <font>
-                        <Font size="26.0"/>
-                    </font>
-                </JFXButton>
-                <JFXButton fx:id="exit" layoutX="1419.0" layoutY="8.0" prefHeight="35.0" prefWidth="35.0" text="X">
-                    <font>
-                        <Font size="20.0"/>
+                        <Font size="26.0" />
                     </font>
                 </JFXButton>
             </children>
         </AnchorPane>
+        <JFXButton fx:id="exit" layoutX="1794.0" layoutY="8.0" prefHeight="35.0" prefWidth="35.0" text="X">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </JFXButton>
     </children>
 </AnchorPane>

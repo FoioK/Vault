@@ -6,20 +6,37 @@ import com.wojo.Vault.Model.Person;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class DesktopController {
 
     private RootController rootController;
 
     @FXML
-    private JFXButton exit;
-
-    @FXML
     private JFXButton logOut;
 
     @FXML
+    private JFXButton accountsLeft;
+
+    @FXML
     private Label fullName;
+
+    @FXML
+    private AnchorPane mainPane;
+
+    @FXML
+    private JFXButton accountsCenter;
+
+    @FXML
+    private JFXButton exit;
+
+    @FXML
+    private JFXButton dashboard;
 
     @FXML
     public void initialize() {
@@ -27,15 +44,47 @@ public class DesktopController {
     }
 
     private void addEventHandlers() {
+        dashboard.addEventHandler(ActionEvent.ACTION, e -> {
+            rootController.loadDesktopPane();
+        });
+
+        accountsLeft.addEventHandler(ActionEvent.ACTION, e -> {
+            goToAccounts();
+        });
+
+        accountsCenter.addEventHandler(ActionEvent.ACTION, e -> {
+            goToAccounts();
+        });
+
         exit.addEventHandler(ActionEvent.ACTION, e -> {
             exitApplication();
         });
 
-        logOut.addEventHandler(ActionEvent.ACTION, e-> {
+        logOut.addEventHandler(ActionEvent.ACTION, e -> {
             logOutAction();
         });
 
         fullName.setText(Person.getFirstName() + " " + Person.getLastName());
+    }
+
+    private void goToAccounts() {
+        mainPane.setVisible(false);
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/Accounts.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        pane.setLayoutX(375);
+        pane.setLayoutY(60);
+
+        AccountsController controller = loader.getController();
+        controller.setRootController(rootController);
+        rootController.addPane(pane);
     }
 
     private void exitApplication() {

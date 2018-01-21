@@ -43,6 +43,10 @@ public class RootController {
         root.getChildren().add(pane);
     }
 
+    protected <T extends Node> void addPane(T pane) {
+        root.getChildren().add(pane);
+    }
+
     private boolean loadMainWindow() {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/Main.fxml"));
