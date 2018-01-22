@@ -18,25 +18,31 @@ public class DesktopController {
     private RootController rootController;
 
     @FXML
+    private JFXButton dashboard;
+
+    @FXML
     private JFXButton logOut;
 
     @FXML
     private JFXButton accountsLeft;
 
     @FXML
+    private JFXButton paymentsLeft;
+
+    @FXML
     private Label fullName;
 
     @FXML
-    private AnchorPane mainPane;
+    protected AnchorPane mainPane;
 
     @FXML
     private JFXButton accountsCenter;
 
     @FXML
-    private JFXButton exit;
+    private JFXButton paymentsCenter;
 
     @FXML
-    private JFXButton dashboard;
+    private JFXButton exit;
 
     @FXML
     public void initialize() {
@@ -54,6 +60,14 @@ public class DesktopController {
 
         accountsCenter.addEventHandler(ActionEvent.ACTION, e -> {
             goToAccounts();
+        });
+
+        paymentsLeft.addEventHandler(ActionEvent.ACTION, e -> {
+            goToPayments();
+        });
+
+        paymentsCenter.addEventHandler(ActionEvent.ACTION, e -> {
+            goToPayments();
         });
 
         exit.addEventHandler(ActionEvent.ACTION, e -> {
@@ -83,6 +97,27 @@ public class DesktopController {
         pane.setLayoutY(60);
 
         AccountsController controller = loader.getController();
+        controller.setRootController(rootController);
+        controller.setDesktopController(this);
+        rootController.addPane(pane);
+    }
+
+    protected void goToPayments() {
+        mainPane.setVisible(false);
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/Payments.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        pane.setLayoutX(375);
+        pane.setLayoutY(60);
+
+        PaymentsController controller = loader.getController();
         controller.setRootController(rootController);
         rootController.addPane(pane);
     }
