@@ -1,6 +1,7 @@
-package com.wojo.Vault.DAO;
+package com.wojo.Vault.Database.DAO;
 
-import com.wojo.Vault.Model.Person;
+import com.wojo.Vault.Database.DAO.Impl.PersonDAOImpl;
+import com.wojo.Vault.Database.Model.Person;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class PersonDAOTest {
+public class PersonDAOImplTest {
     /**
      * Test Person on database
      */
@@ -25,6 +26,8 @@ public class PersonDAOTest {
 
     private static final String TEST_VALUE = "ToDelete";
 
+    private PersonDAO personDAO = new PersonDAOImpl();
+
     @Test
     public void shouldInsertAccountToDB() throws SQLException {
         List<String> accountDate = new ArrayList<>();
@@ -32,14 +35,14 @@ public class PersonDAOTest {
         for (int i = 0; i < numberOfDate; i++) {
             accountDate.add(TEST_VALUE);
         }
-        if (PersonDAO.insertPersonToDB(accountDate) < 0) {
+        if (personDAO.insertPersonToDB(accountDate) < 0) {
             fail("null idPerson");
         }
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowException() throws SQLException {
-        PersonDAO.insertPersonToDB(null);
+        personDAO.insertPersonToDB(null);
     }
 
     @Test
@@ -49,22 +52,22 @@ public class PersonDAOTest {
         for (int i = 0; i < badNumberOfDate; i++) {
             accountDate.add(TEST_VALUE);
         }
-        assertEquals(-1, PersonDAO.insertPersonToDB(accountDate));
+        assertEquals(-1, personDAO.insertPersonToDB(accountDate));
     }
 
     @Test
     public void searchLoginTest() throws SQLException {
-        assertTrue(PersonDAO.searchPersonLogin(LOGIN));
+        assertTrue(personDAO.searchPersonLogin(LOGIN));
     }
 
     @Test
     public void shouldReturnFalse() throws SQLException {
-        assertFalse(PersonDAO.searchPersonLogin(null));
+        assertFalse(personDAO.searchPersonLogin(null));
     }
 
     @Test
     public void shouldInsertAccountDateToClass() throws SQLException {
-        PersonDAO.insertPersonData(idPerson);
+        personDAO.insertPersonData(idPerson);
 
         assertEquals((int) idPerson, Person.getIdPersonInDatabase());
         assertEquals(FIRST_NAME, Person.getFirstName());
@@ -80,12 +83,12 @@ public class PersonDAOTest {
     @Test
     public void shouldDeleteTestAccount() throws SQLException {
         String testFirstAndLastName = TEST_VALUE;
-        assertTrue(PersonDAO.deletePerson(testFirstAndLastName));
+        assertTrue(personDAO.deletePerson(testFirstAndLastName));
     }
 
     @Test
     public void shouldReturnGoodIdPersonAndPassword() throws SQLException {
-        String[] idPersonAndPassword = PersonDAO.getIdPersonAndPassword(LOGIN);
+        String[] idPersonAndPassword = personDAO.getIdPersonAndPassword(LOGIN);
         assertEquals(String.valueOf(idPerson), idPersonAndPassword[0]);
         assertEquals(PASSWORD, idPersonAndPassword[1]);
     }

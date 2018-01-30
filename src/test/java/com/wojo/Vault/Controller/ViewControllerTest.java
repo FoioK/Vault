@@ -1,8 +1,9 @@
 package com.wojo.Vault.Controller;
 
-import com.wojo.Vault.DAO.PersonDAO;
-import com.wojo.Vault.Util.DBUtil;
-import javafx.application.Platform;
+import com.wojo.Vault.Database.DAO.Impl.PersonDAOImpl;
+import com.wojo.Vault.Database.DBManager;
+import com.wojo.Vault.Service.PersonService;
+import com.wojo.Vault.Service.impl.PersonServiceImpl;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,13 +33,14 @@ public class ViewControllerTest extends ApplicationTest {
 
     @AfterClass
     public static void deleteCreatedAccounts() throws SQLException {
+        PersonService personService = new PersonServiceImpl();
         String queryStatement = "SELECT idPerson FROM person " +
                 "WHERE FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND ADDRESS LIKE ?";
-        ResultSet resultSet = DBUtil.dbExecuteQuery(queryStatement,
+        ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement,
                 Arrays.asList(new String[]{"ToDelete", "ToDelete", "ToDelete"}));
         while (resultSet.next()) {
             System.out.println(resultSet.getInt("idPerson"));
-            PersonDAO.deletePerson(Integer.valueOf(resultSet.getInt("idPerson")));
+            personService.deletePerson(Integer.valueOf(resultSet.getInt("idPerson")));
         }
     }
 
@@ -99,6 +101,7 @@ public class ViewControllerTest extends ApplicationTest {
         clickOn("#passwordField").write("ToDelete");
         clickOn("#repeatPasswordField").write("ToDelete");
         clickOn("#createAccount");
+        //TODO zły test nie tworzy konta :x
     }
 
     @Test

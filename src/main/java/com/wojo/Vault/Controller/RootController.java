@@ -3,6 +3,7 @@ package com.wojo.Vault.Controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -37,13 +38,13 @@ public class RootController {
         setScreen(pane);
     }
 
-    protected  <T extends Node> void setScreen(T pane) {
+    protected  <T extends Parent> void setScreen(T pane) {
         root.getChildren().clear();
         loadMainWindow();
         root.getChildren().add(pane);
     }
 
-    protected <T extends Node> void addPane(T pane) {
+    protected <T extends Parent> void addPane(T pane) {
         root.getChildren().add(pane);
     }
 

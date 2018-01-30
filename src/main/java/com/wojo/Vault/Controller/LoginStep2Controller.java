@@ -2,15 +2,15 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
-import com.wojo.Vault.DAO.PersonDAO;
-import com.wojo.Vault.Model.Person;
+import com.wojo.Vault.Service.PersonService;
+import com.wojo.Vault.Service.impl.PersonServiceImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import java.sql.SQLException;
-
 public class LoginStep2Controller {
+
+    private PersonService personService = new PersonServiceImpl();
 
     private RootController rootController;
 
@@ -46,45 +46,16 @@ public class LoginStep2Controller {
         });
 
         logInButton.addEventHandler(ActionEvent.ACTION, e -> {
-            setErrorMessages(false);
             loginProcessStep2();
         });
     }
 
-    private boolean loginProcessStep2() {
-        String[] idPersonAndPassword = null;
-        int idPerson = 0;
-        String password = null;
-        try {
-            idPersonAndPassword = PersonDAO.getIdPersonAndPassword(Person.getLogin());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (idPersonAndPassword != null && idPersonAndPassword.length == 2) {
-            idPerson = Integer.valueOf(idPersonAndPassword[0]);
-            password = idPersonAndPassword[1];
-        }
-        else {
-            badLoginProcessMessage.setVisible(true);
-            return false;
-        }
-
-        if (password.equals(passwordFiled.getText())) {
-            try {
-                PersonDAO.insertPersonData(idPerson);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    private void loginProcessStep2() {
+        setErrorMessages(false);
+        if (personService.loginStep2Process(passwordFiled.getText())) {
             loadDesktopPane();
-            return true;
         } else {
-            badPasswordMessage.setVisible(true);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return false;
+            badLoginProcessMessage.setVisible(true);
         }
     }
 

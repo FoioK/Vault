@@ -1,7 +1,8 @@
-package com.wojo.Vault.DAO;
+package com.wojo.Vault.Database.DAO;
 
-import com.wojo.Vault.Model.Account;
-import com.wojo.Vault.Model.Person;
+import com.wojo.Vault.Database.DAO.Impl.AccountDAOImpl;
+import com.wojo.Vault.Database.Model.Account;
+import com.wojo.Vault.Database.Model.Person;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class AccountDAOTest {
+public class AccountDAOImplTest {
 
     /**
      * Test Accounts on database
@@ -24,14 +25,17 @@ public class AccountDAOTest {
     private static final int NUMBER_PLUS_COUNTRY_CODE_LENGTH = 28;
     private static final int testIdPersonToDelete = -1;
 
+    private AccountDAO accountDAO = new AccountDAOImpl();
+
     @AfterClass
     public static void deleteTestAccounts() throws SQLException {
-        AccountDAO.deleteAccount(testIdPersonToDelete);
+        AccountDAO accountCleaner = new AccountDAOImpl();
+        accountCleaner.deleteAccount(testIdPersonToDelete);
     }
 
     @Test
     public void shouldCorrectCreateAccount() throws SQLException {
-        Account account = AccountDAO
+        Account account = accountDAO
                 .addNewAccount(testIdPersonToDelete, PL_COUNTRY_CODE, NUMBER_LENGTH);
         assertEquals("0", account.getValue());
         assertEquals(NUMBER_PLUS_COUNTRY_CODE_LENGTH, account.getIBAN_NUMBER().length());
@@ -40,7 +44,7 @@ public class AccountDAOTest {
     @Test(expected = NullPointerException.class)
     public void shouldntCreateObjectWithBadCountryCode() throws SQLException {
         String badCountryCode = "PL1";
-        AccountDAO
+        accountDAO
                 .addNewAccount(testIdPersonToDelete, badCountryCode, NUMBER_LENGTH)
                 .toString();
     }
@@ -48,7 +52,7 @@ public class AccountDAOTest {
     @Test(expected = NullPointerException.class)
     public void shouldntCreateObjectWithBadLength() throws SQLException {
         int badNumberLength = 0;
-        AccountDAO
+        accountDAO
                 .addNewAccount(testIdPersonToDelete, PL_COUNTRY_CODE, badNumberLength)
                 .toString();
     }
@@ -56,7 +60,7 @@ public class AccountDAOTest {
     @Test
     public void shouldCorrectInsertAccountToDB() throws SQLException {
         assertTrue(
-                AccountDAO.insertAccountToDB(
+                accountDAO.insertAccountToDB(
                         new Account(PL_COUNTRY_CODE, NUMBER_LENGTH),
                         testIdPersonToDelete)
         );
@@ -64,12 +68,12 @@ public class AccountDAOTest {
 
     @Test
     public void shouldntInsertAccountToDB() throws SQLException {
-        assertFalse(AccountDAO.insertAccountToDB(null, testIdPersonToDelete));
+        assertFalse(accountDAO.insertAccountToDB(null, testIdPersonToDelete));
     }
 
     @Test
     public void shouldCorrectInsertAccountDateToClass() throws SQLException {
-        AccountDAO.insertAccountData(testIdPersonInDB);
+        accountDAO.insertAccountData(testIdPersonInDB);
         assertEquals(testIBNNumber, Person.getAccounts().get(0).getIBAN_NUMBER());
         assertEquals(testValue, Person.getAccounts().get(0).getValue());
     }
@@ -77,12 +81,12 @@ public class AccountDAOTest {
     @Test
     public void shouldntInsertAccountDateToClass() throws SQLException {
         Person.setAccounts(new ArrayList<>());
-        AccountDAO.insertAccountData(Integer.MIN_VALUE);
+        accountDAO.insertAccountData(Integer.MIN_VALUE);
         assertEquals(0, Person.getAccounts().size());
     }
 
     @Test
     public void shouldDeleteAccounts() throws SQLException {
-        AccountDAO.deleteAccount(Integer.valueOf(testIdPersonToDelete));
+        accountDAO.deleteAccount(Integer.valueOf(testIdPersonToDelete));
     }
 }

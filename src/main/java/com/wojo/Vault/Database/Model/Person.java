@@ -1,8 +1,7 @@
-package com.wojo.Vault.Model;
+package com.wojo.Vault.Database.Model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Person {
 
@@ -15,22 +14,7 @@ public class Person {
     private static String email;
     private static String login;
     private static String password;
-
     private static List<Account> accounts = new ArrayList<>();
-
-    public static String generateLogin(int length) {
-        return length > 0 ? generateRandomString(new Random(), length) : "";
-    }
-
-    private static String generateRandomString(Random random, int length) {
-        return random.ints('0', 'Z')
-                .filter(i -> (i < ':' || i > '@'))
-                .mapToObj(i -> (char) i)
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::append,
-                        StringBuilder::append)
-                .toString();
-    }
 
     public static int getIdPersonInDatabase() {
         return idPersonInDatabase;

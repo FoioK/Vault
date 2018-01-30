@@ -1,4 +1,4 @@
-package com.wojo.Vault.Util;
+package com.wojo.Vault.Database;
 
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class DBUtilTest {
+public class DBManagerTest {
 
     /**
      * TestAccount in database
@@ -37,12 +37,12 @@ public class DBUtilTest {
 
     @Test(expected = SQLException.class)
     public void shouldntExecuteQuery() throws SQLException {
-        DBUtil.dbExecuteQuery(null, null);
+        DBManager.dbExecuteQuery(null, null);
     }
 
     @Test(expected = SQLException.class)
     public void shouldntExecuteUpdate() throws SQLException {
-        DBUtil.dbExecuteUpdate(null, null);
+        DBManager.dbExecuteUpdate(null, null);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class DBUtilTest {
             updateDate.add(newValue);
         }
         updateDate.add(String.valueOf(idPerson));
-        DBUtil.dbExecuteUpdate(queryStatementSetNewValue, updateDate);
+        DBManager.dbExecuteUpdate(queryStatementSetNewValue, updateDate);
 
         String queryStatementSetOldValue = "UPDATE person " +
                 "SET " +
@@ -89,13 +89,13 @@ public class DBUtilTest {
                 PASSWORD,
                 String.valueOf(idPerson)
         );
-        DBUtil.dbExecuteUpdate(queryStatementSetOldValue, updateDate);
+        DBManager.dbExecuteUpdate(queryStatementSetOldValue, updateDate);
     }
 
     @Test
     public void shouldReturnCorrectDate() throws SQLException {
         String queryStatement = " SELECT * FROM person WHERE idPerson = ?;";
-        ResultSet resultSet = DBUtil.dbExecuteQuery(
+        ResultSet resultSet = DBManager.dbExecuteQuery(
                 queryStatement, Arrays.asList(String.valueOf(idPerson)));
         if (resultSet.next()) {
             assertEquals(String.valueOf(idPerson), resultSet.getString("idPerson"));

@@ -2,8 +2,9 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.DAO.PersonDAO;
-import com.wojo.Vault.Model.Person;
+import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Service.PersonService;
+import com.wojo.Vault.Service.impl.PersonServiceImpl;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,11 +17,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginStep1Controller {
+
+    private PersonService personService = new PersonServiceImpl();
 
     private RootController rootController;
     private ObservableList<String> languageList = FXCollections.observableArrayList("Language", "PL", "EN");
@@ -67,7 +69,6 @@ public class LoginStep1Controller {
                 });
     }
 
-
     private void addEventHandlers() {
         goToNextStep.addEventHandler(ActionEvent.ACTION, e -> {
             loginProcessStep1();
@@ -80,24 +81,18 @@ public class LoginStep1Controller {
 
     private void loginProcessStep1() {
         setErrorMessages(false);
-        if (isLoginExist()) {
-            Person.setLogin(loginField.getText());
+        String login = loginField.getText();
+        if (isLoginExist(login)) {
+            Person.setLogin(login);
             loadLoginStep2();
         } else {
             badLoginMessage.setVisible(true);
         }
     }
 
-    private boolean isLoginExist() {
-        boolean isLogin = false;
-        try {
-            isLogin = PersonDAO.searchPersonLogin(loginField.getText());
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        return isLogin;
+    private boolean isLoginExist(String login) {
+        return personService.searchPersonLogin(login);
     }
-
 
     private void loadLoginStep2() {
         FXMLLoader loader = new FXMLLoader(

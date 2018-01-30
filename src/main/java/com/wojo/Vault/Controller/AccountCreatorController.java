@@ -3,9 +3,11 @@ package com.wojo.Vault.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.DAO.AccountDAO;
-import com.wojo.Vault.DAO.PersonDAO;
-import com.wojo.Vault.Model.Person;
+import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Service.AccountService;
+import com.wojo.Vault.Service.PersonService;
+import com.wojo.Vault.Service.impl.AccountServiceImpl;
+import com.wojo.Vault.Service.impl.PersonServiceImpl;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,12 +16,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import javax.swing.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountCreatorController {
 
+    private PersonService personService = new PersonServiceImpl();
+    private AccountService accountService = new AccountServiceImpl();
     private RootController rootController;
 
     @FXML
@@ -122,12 +125,12 @@ public class AccountCreatorController {
         field.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.length() < 1) {
+                if (newValue.length() < 1) {
                     field.setText("");
                     return;
                 }
                 char c = newValue.charAt(newValue.length() - 1);
-                if(c < '0' || c > '9') {
+                if (c < '0' || c > '9') {
                     setText((T) field);
                 }
             }
@@ -138,12 +141,12 @@ public class AccountCreatorController {
         field.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.length() < 1) {
+                if (newValue.length() < 1) {
                     field.setText("");
                     return;
                 }
                 char c = newValue.charAt(newValue.length() - 1);
-                if((c < 'A' || c > 'z') && (c < 'a' || c > 'Z')) {
+                if ((c < 'A' || c > 'z') && (c < 'a' || c > 'Z')) {
                     setText((T) field);
                 }
             }
@@ -183,8 +186,8 @@ public class AccountCreatorController {
 
     private void createAccountProcess() {
         setErrorMessages(false);
-        if(checkData()) {
-            if(isPasswordsEqual()) {
+        if (checkData()) {
+            if (isPasswordsEqual()) {
                 createAccount();
                 return;
             }
@@ -194,31 +197,31 @@ public class AccountCreatorController {
 
     private boolean checkData() {
         boolean isCorrect = true;
-        if(firstNameField.getText().equals("")) {
+        if (firstNameField.getText().equals("")) {
             badFirstNameMessage.setVisible(true);
             isCorrect = false;
         }
-        if(lastNameField.getText().equals("")) {
+        if (lastNameField.getText().equals("")) {
             badLastNameMessage.setVisible(true);
             isCorrect = false;
         }
-        if(personIdField.getText().equals("")) {
+        if (personIdField.getText().equals("")) {
             badPersonIdMessage.setVisible(true);
             isCorrect = false;
         }
-        if(addressField.getText().equals("")) {
+        if (addressField.getText().equals("")) {
             badAddressMessage.setVisible(true);
             isCorrect = false;
         }
-        if(telephoneNumberField.getText().equals("")) {
+        if (telephoneNumberField.getText().equals("")) {
             badTelephoneNumberMessage.setVisible(true);
             isCorrect = false;
         }
-        if(emailField.getText().equals("")) {
+        if (emailField.getText().equals("")) {
             badEmailMessage.setVisible(true);
             isCorrect = false;
         }
-        if(passwordField.getText().equals("")) {
+        if (passwordField.getText().equals("")) {
             badPasswordMessage.setVisible(true);
             isCorrect = false;
         }
@@ -230,28 +233,23 @@ public class AccountCreatorController {
     }
 
     private void createAccount() {
-        String login = Person.generateLogin(9);
+        String login = personService.generateLogin(9);
         List<String> accountData = null;
-        if(login != null) {
+        if (login != null) {
             accountData = getAccountDataList(login);
         }
-        try {
-            int idPerson = PersonDAO.insertPersonToDB(accountData);
-            createAccountNumber(idPerson, "PL", 26);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
+        int idPerson = personService.insertPersonToDB(accountData);
+        if (idPerson <= 0) {
+            //TODO throw wyjątek -> błędne dane podczas tworzenia konta
         }
+        createAccountNumber(idPerson, "PL", 26);
 
         JOptionPane.showMessageDialog(null, "User ID: " + login);
         rootController.loadLoginStep1();
     }
 
     private void createAccountNumber(int idPerson, String countryCode, int length) {
-        try {
-            AccountDAO.addNewAccount(idPerson, countryCode, length);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        accountService.addNewAccount(idPerson, countryCode, length);
     }
 
     private List<String> getAccountDataList(String login) {
@@ -271,6 +269,4 @@ public class AccountCreatorController {
     protected void setRootController(RootController rootController) {
         this.rootController = rootController;
     }
-
-    volatile int a = 5;
 }

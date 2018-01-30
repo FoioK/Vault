@@ -1,5 +1,6 @@
-package com.wojo.Vault.Model;
+package com.wojo.Vault.Database.Model;
 
+import com.wojo.Vault.Database.Model.Generators.PersonDataGenerator;
 import org.junit.Test;
 
 import java.util.stream.IntStream;
@@ -15,7 +16,7 @@ public class PersonTest {
     @Test
     public void shouldGenerateLoginWith9Char() {
         assertTrue(IntStream.range(0, NUMBER_OF_TESTS)
-                .mapToObj(value -> Person.generateLogin(LOGIN_LENGTH))
+                .mapToObj(value -> PersonDataGenerator.generateLogin(LOGIN_LENGTH))
                 .filter(value -> (value.length() == LOGIN_LENGTH))
                 .count() == NUMBER_OF_TESTS);
     }
@@ -23,7 +24,7 @@ public class PersonTest {
     @Test
     public void shouldGenerateOnlyUpperCase() {
         assertTrue(IntStream.range(0, NUMBER_OF_TESTS)
-                .mapToObj(value -> Person.generateLogin(LOGIN_LENGTH))
+                .mapToObj(value -> PersonDataGenerator.generateLogin(LOGIN_LENGTH))
                 .filter(value -> value.equals(value.toUpperCase()))
                 .count() == NUMBER_OF_TESTS);
     }
@@ -33,7 +34,7 @@ public class PersonTest {
         int initValue = Integer.MIN_VALUE;
         int stepValue = 25;
         while (initValue < 0) {
-            assertEquals("", Person.generateLogin(initValue));
+            assertEquals("", PersonDataGenerator.generateLogin(initValue));
             initValue += stepValue;
         }
     }
