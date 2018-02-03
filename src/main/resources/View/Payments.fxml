@@ -5,7 +5,9 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="840.0" prefWidth="1100.0" style="-fx-background-color: transparent;"
@@ -34,69 +36,136 @@
                         </JFXButton>
                     </children>
                 </Pane>
-                <Label alignment="CENTER_RIGHT" layoutX="100.0" layoutY="240.0" prefHeight="50.0" prefWidth="300.0"
-                       text="%Desktop.Payments.recipientName">
-                    <font>
-                        <Font size="24.0"/>
-                    </font>
-                </Label>
-                <JFXTextField focusColor="#00549e" layoutX="430.0" layoutY="240.0" prefHeight="50.0" prefWidth="500.0"
-                              promptText="%Desktop.Payments.recipientName" style="-fx-prompt-text-fill: gray;"
-                              unFocusColor="#cccccc">
-                    <font>
-                        <Font size="22.0"/>
-                    </font>
-                </JFXTextField>
-                <Label alignment="CENTER_RIGHT" layoutX="100.0" layoutY="310.0" prefHeight="50.0" prefWidth="300.0"
-                       text="%Desktop.Payments.recipientAccountName">
-                    <font>
-                        <Font size="24.0"/>
-                    </font>
-                </Label>
-                <JFXTextField focusColor="#00549e" layoutX="430.0" layoutY="310.0" prefHeight="50.0" prefWidth="450.0"
-                              promptText="%Desktop.Payments.recipientAccountName" style="-fx-prompt-text-fill: gray;"
-                              unFocusColor="#cccccc">
-                    <font>
-                        <Font size="22.0"/>
-                    </font>
-                </JFXTextField>
-                <Label alignment="CENTER_RIGHT" layoutX="100.0" layoutY="380.0" prefHeight="60.0" prefWidth="300.0"
-                       text="%Desktop.Payments.amountName">
-                    <font>
-                        <Font size="26.0"/>
-                    </font>
-                </Label>
-                <JFXTextField focusColor="#00549e" layoutX="430.0" layoutY="380.0" prefHeight="60.0" prefWidth="200.0"
-                              promptText="   0" style="-fx-prompt-text-fill: gray;" unFocusColor="#cccccc">
-                    <font>
-                        <Font size="26.0"/>
-                    </font>
-                </JFXTextField>
-                <Label layoutX="650.0" layoutY="380.0" prefHeight="60.0" prefWidth="150.0" text="PLN">
-                    <font>
-                        <Font size="26.0"/>
-                    </font>
-                </Label>
-                <Label alignment="CENTER_RIGHT" layoutX="100.0" layoutY="450.0" prefHeight="50.0" prefWidth="300.0"
-                       text="%Desktop.Payments.titleName">
-                    <font>
-                        <Font size="24.0"/>
-                    </font>
-                </Label>
-                <JFXTextField focusColor="#00549e" layoutX="430.0" layoutY="450.0" prefHeight="50.0" prefWidth="450.0"
-                              promptText="%Desktop.Payments.titleName" style="-fx-prompt-text-fill: gray;"
-                              unFocusColor="#cccccc">
-                    <font>
-                        <Font size="22.0"/>
-                    </font>
-                </JFXTextField>
-                <JFXButton layoutX="425.0" layoutY="570.0" prefHeight="55.0" prefWidth="200.0"
+                <HBox layoutY="220.0" prefHeight="80.0" prefWidth="1050.0" spacing="25.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="300.0"
+                               text="%Desktop.Payments.recipientName">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
+                        </Label>
+                        <VBox>
+                            <children>
+                                <JFXTextField fx:id="recipientName" focusColor="#00549e" prefHeight="50.0"
+                                              prefWidth="500.0" promptText="%Desktop.Payments.recipientName"
+                                              style="-fx-prompt-text-fill: gray;" unFocusColor="#cccccc">
+                                    <font>
+                                        <Font size="22.0"/>
+                                    </font>
+                                </JFXTextField>
+                                <Label fx:id="badRecipientNameMessage" alignment="CENTER" prefHeight="30.0"
+                                       prefWidth="400.0" text="%Desktop.Payments.badRecipientNameMessage"
+                                       textFill="#ff1414">
+                                    <font>
+                                        <Font name="System Italic" size="17.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox layoutY="300.0" prefHeight="80.0" prefWidth="1050.0" spacing="25.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="300.0"
+                               text="%Desktop.Payments.recipientAccountName">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
+                        </Label>
+                        <VBox>
+                            <children>
+                                <JFXTextField fx:id="recipientAccountNumber" focusColor="#00549e" prefHeight="50.0"
+                                              prefWidth="450.0" promptText="%Desktop.Payments.recipientAccountName"
+                                              style="-fx-prompt-text-fill: gray;" unFocusColor="#cccccc">
+                                    <font>
+                                        <Font size="22.0"/>
+                                    </font>
+                                </JFXTextField>
+                                <Label fx:id="badRecipientNumberMessage" alignment="CENTER" prefHeight="30.0"
+                                       prefWidth="400.0" text="%Desktop.Payments.badRecipientNumberMessage"
+                                       textFill="#ff1414">
+                                    <font>
+                                        <Font name="System Italic" size="17.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox layoutY="380.0" prefHeight="80.0" prefWidth="1050.0" spacing="25.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="300.0"
+                               text="%Desktop.Payments.amountName">
+                            <font>
+                                <Font size="26.0"/>
+                            </font>
+                        </Label>
+                        <VBox prefWidth="220.0">
+                            <children>
+                                <JFXTextField fx:id="paymentValue" alignment="CENTER" focusColor="#00549e"
+                                              prefHeight="60.0" prefWidth="220.0" promptText="0"
+                                              style="-fx-prompt-text-fill: gray;" unFocusColor="#cccccc">
+                                    <font>
+                                        <Font size="26.0"/>
+                                    </font>
+                                </JFXTextField>
+                                <Label fx:id="badPaymentValueMessage" alignment="CENTER" prefHeight="30.0"
+                                       prefWidth="400.0" text="%Desktop.Payments.badPaymentValueMessage"
+                                       textFill="#ff1414">
+                                    <font>
+                                        <Font name="System Italic" size="17.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <Label prefHeight="60.0" prefWidth="150.0" text="PLN">
+                            <font>
+                                <Font size="26.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox layoutY="460.0" prefHeight="80.0" prefWidth="1050.0" spacing="25.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="300.0"
+                               text="%Desktop.Payments.titleName">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
+                        </Label>
+                        <VBox>
+                            <children>
+                                <JFXTextField fx:id="title" focusColor="#00549e" prefHeight="50.0" prefWidth="450.0"
+                                              promptText="%Desktop.Payments.titleName"
+                                              style="-fx-prompt-text-fill: gray;" unFocusColor="#cccccc">
+                                    <font>
+                                        <Font size="22.0"/>
+                                    </font>
+                                </JFXTextField>
+                                <Label fx:id="badTitleMessage" alignment="CENTER" prefHeight="30.0" prefWidth="400.0"
+                                       text="%Desktop.Payments.badTitleMessage" textFill="#ff1414">
+                                    <font>
+                                        <Font name="System Italic" size="17.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <JFXButton fx:id="sendTransfer" layoutX="425.0" layoutY="570.0" prefHeight="55.0" prefWidth="200.0"
                            style="-fx-background-color: #00549E;" text="%Desktop.Payments.sendTransfer"
                            textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="20.0"/>
                     </font>
                 </JFXButton>
+                <Label fx:id="badSendTransferMessage" alignment="CENTER" layoutX="325.0" layoutY="625.0"
+                       prefHeight="30.0" prefWidth="400.0" text="%Desktop.Payments.badSendTransferMessage"
+                       textFill="#ff1414">
+                    <font>
+                        <Font name="System Italic" size="17.0"/>
+                    </font>
+                </Label>
             </children>
         </Pane>
     </children>

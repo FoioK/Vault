@@ -3,17 +3,14 @@ package com.wojo.Vault.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Filters.TextFieldFilter;
 import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PersonService;
 import com.wojo.Vault.Service.impl.AccountServiceImpl;
 import com.wojo.Vault.Service.impl.PersonServiceImpl;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -81,86 +78,32 @@ public class AccountCreatorController {
 
     @FXML
     void initialize() {
-        initTextLimiter();
+        initTextLimiters();
         setErrorMessages(false);
         addEventHandlers();
     }
 
-    private void initTextLimiter() {
-        addTextLengthLimiter(firstNameField, 25);
-        addTextTypeString(firstNameField);
+    private void initTextLimiters() {
+        TextFieldFilter.lengthLimiter(firstNameField, 25);
+        TextFieldFilter.typeString(firstNameField);
 
-        addTextLengthLimiter(lastNameField, 25);
-        addTextTypeString(firstNameField);
+        TextFieldFilter.lengthLimiter(lastNameField, 25);
+        TextFieldFilter.typeString(lastNameField);
 
-        addTextLengthLimiter(personIdField, 11);
-        addTextTypeInteger(personIdField);
+        TextFieldFilter.lengthLimiter(personIdField, 11);
+        TextFieldFilter.typeInteger(personIdField);
 
-        addTextLengthLimiter(addressField, 40);
+        TextFieldFilter.lengthLimiter(addressField, 40);
 
-        addTextLengthLimiter(telephoneNumberField, 9);
-        addTextTypeInteger(telephoneNumberField);
+        //TODO split entered text
+        TextFieldFilter.lengthLimiter(telephoneNumberField, 9);
+        TextFieldFilter.typeInteger(telephoneNumberField);
 
-        addTextLengthLimiter(emailField, 30);
-        addTextTypeString(emailField);
+        TextFieldFilter.lengthLimiter(emailField, 30);
 
-        addTextLengthLimiter(passwordField, 30);
+        TextFieldFilter.lengthLimiter(passwordField, 30);
 
-        addTextLengthLimiter(repeatPasswordField, 30);
-    }
-
-    private static <T extends TextField> void addTextLengthLimiter(final T tf, final int maxLength) {
-        tf.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
-                if (tf.getText().length() > maxLength) {
-                    String s = tf.getText().substring(0, maxLength);
-                    tf.setText(s);
-                }
-            }
-        });
-    }
-
-    private static <T extends TextField> void addTextTypeInteger(final T field) {
-        field.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.length() < 1) {
-                    field.setText("");
-                    return;
-                }
-                char c = newValue.charAt(newValue.length() - 1);
-                if (c < '0' || c > '9') {
-                    setText((T) field);
-                }
-            }
-        });
-    }
-
-    private static <T extends TextField> void addTextTypeString(final T field) {
-        field.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.length() < 1) {
-                    field.setText("");
-                    return;
-                }
-                char c = newValue.charAt(newValue.length() - 1);
-                if ((c < 'A' || c > 'z') && (c < 'a' || c > 'Z')) {
-                    setText((T) field);
-                }
-            }
-        });
-    }
-
-    private static <T extends TextField> void setText(T field) {
-        try {
-            String s = field.getText().substring(0, field.getText().length() - 1);
-            field.setText(s);
-        } catch (StringIndexOutOfBoundsException e) {
-            field.setText("");
-            throw e;
-        }
+        TextFieldFilter.lengthLimiter(repeatPasswordField, 30);
     }
 
     private void setErrorMessages(boolean state) {

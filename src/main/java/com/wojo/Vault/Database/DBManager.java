@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class DBManager {
@@ -46,7 +48,7 @@ public class DBManager {
         return cachedRowSet;
     }
 
-    public static int dbExecuteUpdate(String updateStatement, List<String> updateDate)
+    public static int dbExecuteUpdate(String updateStatement, List<String> updateData)
             throws SQLException {
 
         PreparedStatement statement = null;
@@ -54,9 +56,9 @@ public class DBManager {
         try {
             connection = getConnection();
             statement = connection.prepareStatement(updateStatement);
-            if (updateDate != null) {
-                for (int i = 0; i < updateDate.size(); i++) {
-                    statement.setString(i + 1, updateDate.get(i));
+            if (updateData != null) {
+                for (int i = 0; i < updateData.size(); i++) {
+                    statement.setString(i + 1, updateData.get(i));
                 }
             }
             idPerson = statement.executeUpdate();
@@ -71,6 +73,65 @@ public class DBManager {
             dbDisconnect();
         }
         return idPerson;
+    }
+
+    public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
+            throws SQLException {
+        try {
+            connection = getConnection();
+            connection.setAutoCommit(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<PreparedStatement> preparedStatements = new ArrayList<>();
+        try {
+            dataToUpdate.entrySet()
+                    .stream()
+                    .forEach(data -> {
+                        PreparedStatement statement = executeStatement(data);
+                        preparedStatements.add(statement);
+                        if (statement == null) {
+                            data.setValue(null);
+                        }
+                    });
+        } finally {
+            if (dataToUpdate.entrySet()
+                    .stream()
+                    .filter(data -> data.getValue() != null)
+                    .count() == dataToUpdate.size()) {
+                connection.commit();
+            }
+            preparedStatements.forEach(statement -> {
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            dbDisconnect();
+        }
+        return true;
+    }
+
+    private static PreparedStatement executeStatement(Map.Entry data) {
+        String updateStatement = (String) data.getValue();
+        List<Object> updateData = (List<Object>) data.getKey();
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement(updateStatement);
+            if (updateData != null) {
+                for (int i = 0; i < updateData.size(); i++) {
+                    statement.setObject(i + 1, updateData.get(i));
+                }
+            }
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return statement;
     }
 
     /**

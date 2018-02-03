@@ -5,6 +5,7 @@ import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Person;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -47,7 +48,8 @@ public class AccountDAOImpl implements AccountDAO {
             resultSet = DBManager.dbExecuteQuery(queryStatement,
                     Arrays.asList(String.valueOf(idPerson)));
             if (resultSet.next()) {
-                Account account = new Account(resultSet.getString("number"));
+                Account account = new Account(resultSet.getInt("idAccount"),
+                        resultSet.getString("number"));
                 account.setValue(resultSet.getString("value"));
                 Person.addAccount(account);
             }
@@ -63,5 +65,34 @@ public class AccountDAOImpl implements AccountDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Integer searchAccount(String accountNumber) {
+        String queryStatement = "SELECT idAccount FROM accounts " +
+                "WHERE SUBSTRING(number, 3, 26) = ?";
+        ResultSet resultSet;
+        try {
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(accountNumber));
+            return resultSet.next() ? resultSet.getInt("idAccount") : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public BigDecimal getAccountValue(String idAccount) {
+        String queryStatement = "SELECT value FROM accounts " +
+                "WHERE idAccount = ?";
+        ResultSet resultSet;
+        try {
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(idAccount));
+            return resultSet.next() ?
+                    new BigDecimal(resultSet.getString("value")) : null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
