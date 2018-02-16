@@ -1,20 +1,21 @@
-package com.wojo.Vault.Database.Model;
+package com.wojo.Vault.Database.Model.Generators;
 
-import com.wojo.Vault.Database.Model.Generators.AccountDataGenerator;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class AccountTest {
+public class AccountDataGeneratorTest {
     private static final String PL_COUNTRY_CODE = "PL";
     private static final int NUMBER_OF_ATTEMPTS = 100;
     private static final int NUMBER_LENGTH = 26;
+
+    AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
 
     @Test
     public void shouldGenerateIBANWith26Char() {
         for (int i = 0; i < NUMBER_OF_ATTEMPTS; i++) {
             assertEquals(NUMBER_LENGTH,
-                    AccountDataGenerator
+                    accountDataGenerator
                             .generateIBAN(PL_COUNTRY_CODE, NUMBER_LENGTH)
                             .substring(2)
                             .length());
@@ -25,7 +26,7 @@ public class AccountTest {
     public void shouldGenerateOnlyNumber() {
         for (int i = 0; i < NUMBER_OF_ATTEMPTS; i++) {
             assertEquals(NUMBER_LENGTH,
-                    AccountDataGenerator.generateIBAN(PL_COUNTRY_CODE, NUMBER_LENGTH)
+                    accountDataGenerator.generateIBAN(PL_COUNTRY_CODE, NUMBER_LENGTH)
                             .substring(2)
                             .chars()
                             .mapToObj(item -> (char) item)
@@ -38,7 +39,7 @@ public class AccountTest {
     public void shouldGenerateCorrectCountryCode() {
         for (int i = 0; i < NUMBER_OF_ATTEMPTS; i++) {
             assertEquals(PL_COUNTRY_CODE,
-                    AccountDataGenerator.generateIBAN(PL_COUNTRY_CODE, NUMBER_LENGTH)
+                    accountDataGenerator.generateIBAN(PL_COUNTRY_CODE, NUMBER_LENGTH)
                             .substring(0, 2));
         }
     }
@@ -47,7 +48,7 @@ public class AccountTest {
     public void shouldReturnEmptyString() {
         int initValue = Integer.MIN_VALUE;
         while (initValue < 0) {
-            assertEquals("", AccountDataGenerator.generateIBAN(PL_COUNTRY_CODE, initValue));
+            assertEquals("", accountDataGenerator.generateIBAN(PL_COUNTRY_CODE, initValue));
             initValue += 25;
         }
 
@@ -55,13 +56,13 @@ public class AccountTest {
         String badCountryCode2 = "ABC";
         String badCountryCode3 = "2L";
         String badCountryCode4 = "";
-        assertEquals("", AccountDataGenerator
+        assertEquals("", accountDataGenerator
                 .generateIBAN(badCountryCode, NUMBER_LENGTH));
-        assertEquals("", AccountDataGenerator
+        assertEquals("", accountDataGenerator
                 .generateIBAN(badCountryCode2, NUMBER_LENGTH));
-        assertEquals("", AccountDataGenerator
+        assertEquals("", accountDataGenerator
                 .generateIBAN(badCountryCode3, NUMBER_LENGTH));
-        assertEquals("", AccountDataGenerator
+        assertEquals("", accountDataGenerator
                 .generateIBAN(badCountryCode4, NUMBER_LENGTH));
     }
 }

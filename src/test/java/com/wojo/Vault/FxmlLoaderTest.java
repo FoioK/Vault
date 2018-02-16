@@ -1,14 +1,12 @@
 package com.wojo.Vault;
 
-import java.io.IOException;
-import java.util.ResourceBundle;
-
-import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
+import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class FxmlLoaderTest extends ApplicationTest {
 
@@ -48,6 +46,33 @@ public class FxmlLoaderTest extends ApplicationTest {
     public void accountCreatorShouldBeLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 this.getClass().getResource("/View/AccountCreator.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane root = loader.load();
+    }
+
+    @Test
+    public void desktopShouldBeLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/Desktop.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane root = loader.load();
+    }
+
+    @Test
+    public void accountsShouldBeLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/Accounts.fxml"));
+        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
+        loader.setResources(languageBundles);
+        AnchorPane root = loader.load();
+    }
+
+    @Test
+    public void paymentsShouldBeLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                this.getClass().getResource("/View/Payments.fxml"));
         ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
         loader.setResources(languageBundles);
         AnchorPane root = loader.load();
