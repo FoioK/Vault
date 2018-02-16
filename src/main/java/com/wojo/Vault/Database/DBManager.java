@@ -16,6 +16,10 @@ public class DBManager {
 
     private static Connection connection = null;
 
+    private static final String ORIGINAL_CONNECTION_PATH = "src/main/resources/Database/database.properties";
+    private static final String TEST_CONNECTION_PATH = "src/main/resources/Database/databaseTest.properties";
+    private static String connectionPath = ORIGINAL_CONNECTION_PATH;
+
     public static ResultSet dbExecuteQuery(String queryStatement, List<String> queryDate)
             throws SQLException {
         PreparedStatement statement = null;
@@ -52,7 +56,7 @@ public class DBManager {
             throws SQLException {
 
         PreparedStatement statement = null;
-        int idPerson = 0;
+        int updateRows = 0;
         try {
             connection = getConnection();
             statement = connection.prepareStatement(updateStatement);
@@ -61,7 +65,7 @@ public class DBManager {
                     statement.setString(i + 1, updateData.get(i));
                 }
             }
-            idPerson = statement.executeUpdate();
+            updateRows = statement.executeUpdate();
         } catch (SQLException e) {
             throw e;
         } catch (IOException e1) {
@@ -72,7 +76,7 @@ public class DBManager {
             }
             dbDisconnect();
         }
-        return idPerson;
+        return updateRows;
     }
 
     public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
@@ -141,7 +145,6 @@ public class DBManager {
      */
     private static Connection getConnection() throws SQLException, IOException {
         Properties properties = new Properties();
-        String connectionPath = "src/main/resources/Database/database.properties";
         try (InputStream in = Files.newInputStream(Paths.get(connectionPath))) {
             properties.load(in);
         }
@@ -166,8 +169,11 @@ public class DBManager {
         }
     }
 
-//    @SuppressWarnings("unused")
-//    private static void dbClear() throws ClassNotFoundException, SQLException {
-//        dbExecuteUpdate("TRUNCATE TABLE person;");
-//    }
+    public static void setOriginalConnectionPath() {
+        connectionPath = ORIGINAL_CONNECTION_PATH;
+    }
+
+    public static void setTestConnectionPath() {
+        connectionPath = TEST_CONNECTION_PATH;
+    }
 }

@@ -28,7 +28,7 @@
                                                  wrappingWidth="35.0"/>
                             </graphic>
                         </Label>
-                        <JFXButton fx:id="exit" layoutX="996.0" layoutY="14.0" prefHeight="35.0" prefWidth="35.0"
+                        <JFXButton fx:id="backToDesktopPane" layoutX="996.0" layoutY="14.0" prefHeight="35.0" prefWidth="35.0"
                                    text="X" textFill="WHITE">
                             <font>
                                 <Font size="20.0"/>

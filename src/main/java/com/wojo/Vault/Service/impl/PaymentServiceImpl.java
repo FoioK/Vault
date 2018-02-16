@@ -25,37 +25,51 @@ public class PaymentServiceImpl implements PaymentService {
         //TODO getId active account
         Integer activeAccountId = 0;
         Account senderAccount = Person.getAccounts().get(activeAccountId);
-        Integer recipientIdAccount = accountDAO.searchAccount(recipientNumber);
-        if (recipientIdAccount != 0) {
-            dataToUpdate.putAll(getTransferInsideData(senderAccount, String.valueOf(recipientIdAccount), value));
-        } else {
-            dataToUpdate.putAll(getTransferOutsideData(senderAccount, value));
+        Integer recipientIdAccount = accountDAO.searchAccountByNumber(recipientNumber);
+        try {
+            if (recipientIdAccount != 0) {
+                dataToUpdate.putAll(getTransferInsideData(senderAccount, String.valueOf(recipientIdAccount), value));
+            } else {
+                dataToUpdate.putAll(getTransferOutsideData(senderAccount, value));
+            }
+            dataToUpdate.putAll(getInsertPaymentData(senderAccount, String.valueOf(recipientIdAccount)
+                    , recipient, title, value));
+        } catch (NullPointerException e) {
+            return false;
         }
-        dataToUpdate.putAll(getInsertPaymentData(senderAccount, String.valueOf(recipientIdAccount)
-                , recipient, title, value));
-
         return dataToUpdate.size() != 0 && paymentDAO.sendTransfer(dataToUpdate);
     }
 
-    private Map<List<Object>, String> getTransferInsideData(Account senderAccount, String recipientIdAccount
+    public Map<List<Object>, String> getTransferInsideData(Account senderAccount, String recipientIdAccount
             , BigDecimal value) {
+        if (senderAccount == null) {
+            return null;
+        }
         String senderIdAccount = String.valueOf(senderAccount.getIdAccount());
         BigDecimal recipientValue = accountDAO.getAccountValue(recipientIdAccount);
         BigDecimal senderValue = accountDAO.getAccountValue(senderIdAccount);
 
-        return paymentDAO.getTransferInsideData(recipientIdAccount, senderIdAccount
-                , recipientValue.add(value), senderValue.subtract(value));
+        return senderValue.subtract(value).compareTo(BigDecimal.ZERO) < 0 ? null :
+                paymentDAO.getTransferInsideData(recipientIdAccount, senderIdAccount
+                        , recipientValue.add(value), senderValue.subtract(value));
     }
 
-    private Map<List<Object>, String> getTransferOutsideData(Account senderAccount, BigDecimal value) {
+    public Map<List<Object>, String> getTransferOutsideData(Account senderAccount, BigDecimal value) {
+        if (senderAccount == null) {
+            return null;
+        }
         String senderIdAccount = String.valueOf(senderAccount.getIdAccount());
         BigDecimal senderValue = accountDAO.getAccountValue(senderIdAccount);
 
-        return paymentDAO.getTransferOutsideData(senderIdAccount, senderValue.subtract(value));
+        return senderValue.subtract(value).compareTo(BigDecimal.ZERO) < 0 ? null :
+                paymentDAO.getTransferOutsideData(senderIdAccount, senderValue.subtract(value));
     }
 
-    private Map<List<Object>, String> getInsertPaymentData(Account senderAccount, String recipientIdAccount
+    public Map<List<Object>, String> getInsertPaymentData(Account senderAccount, String recipientIdAccount
             , String recipient, String title, BigDecimal value) {
+        if (senderAccount == null) {
+            return null;
+        }
         String senderIdAccount = String.valueOf(senderAccount.getIdAccount());
         String sender = Person.getFirstName() + " " + Person.getLastName();
 

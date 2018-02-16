@@ -18,7 +18,7 @@ public class PaymentsController {
 
 
     @FXML
-    private JFXButton exit;
+    private JFXButton backToDesktopPane;
 
     @FXML
     private JFXTextField recipientName;
@@ -59,7 +59,6 @@ public class PaymentsController {
 
     private void initTextLimiters() {
         TextFieldFilter.lengthLimiter(recipientName, 75);
-        TextFieldFilter.typeString(recipientName);
 
         //TODO split entered text
         TextFieldFilter.lengthLimiter(recipientAccountNumber, 26);
@@ -88,7 +87,7 @@ public class PaymentsController {
             }
         });
 
-        exit.addEventHandler(ActionEvent.ACTION, e -> {
+        backToDesktopPane.addEventHandler(ActionEvent.ACTION, e -> {
             loadDesktopPane();
         });
     }
@@ -98,7 +97,7 @@ public class PaymentsController {
         return checkData() && sendTransfer();
     }
 
-    private boolean checkData() {
+    public boolean checkData() {
         boolean isCorrect = true;
         if (recipientName.getText().equals("")) {
             badRecipientNameMessage.setVisible(true);

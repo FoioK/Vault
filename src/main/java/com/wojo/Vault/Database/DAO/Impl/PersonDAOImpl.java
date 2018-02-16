@@ -19,10 +19,10 @@ public class PersonDAOImpl implements PersonDAO {
             return false;
         }
         String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN LIKE ?";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(login));
-            return resultSet.next() ? resultSet.getInt(1) != 0 : false;
+            return resultSet.next() && resultSet.getInt(1) != 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -30,9 +30,10 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     public String[] getIdPersonAndPassword(String login) {
+        //TODO zapezpieczyc NullPointerException w miejscach użycia metody
         String queryStatement = "SELECT idPerson, PASSWORD FROM person " +
                 "WHERE LOGIN LIKE ?";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         String[] idPersonAndPassword = new String[2];
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(login));
@@ -49,11 +50,11 @@ public class PersonDAOImpl implements PersonDAO {
         return null;
     }
 
-    public void insertPersonData(Integer idPerson) {
-        String quertyStatement = "SELECT * FROM person WHERE idPerson = ?";
-        ResultSet resultSet = null;
+    public boolean insertPersonData(Integer idPerson) {
+        String queryStatement = "SELECT * FROM person WHERE idPerson = ?";
+        ResultSet resultSet;
         try {
-            resultSet = DBManager.dbExecuteQuery(quertyStatement,
+            resultSet = DBManager.dbExecuteQuery(queryStatement,
                     Arrays.asList(String.valueOf(idPerson)));
             if (resultSet.next()) {
                 Person.setIdPersonInDatabase(resultSet.getInt("idPerson"));
@@ -66,10 +67,15 @@ public class PersonDAOImpl implements PersonDAO {
                 Person.setLogin(resultSet.getString("LOGIN"));
                 Person.setPassword(resultSet.getString("PASSWORD"));
                 accountDAO.insertAccountData(idPerson);
+                return true;
+            }
+            else {
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public int insertPersonToDB(List<String> accountData) {
@@ -94,10 +100,10 @@ public class PersonDAOImpl implements PersonDAO {
         return 0;
     }
 
-    public int getIdPerson(String login) {
+    private int getIdPerson(String login) {
         String updateStatement = "SELECT idPerson FROM person " +
                 "WHERE LOGIN LIKE ?";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(updateStatement, Arrays.asList(login));
             return resultSet.next() ? resultSet.getInt("idPerson") : 0;
@@ -119,7 +125,7 @@ public class PersonDAOImpl implements PersonDAO {
             }
             accountDAO.deleteAccount(value);
             return true;
-        } else if (value instanceof String) {
+        } else if (value instanceof String && ((String) value).length() != 0) {
             updateStatement = "DELETE FROM person WHERE LOGIN LIKE ? OR " +
                     "(FIRST_NAME LIKE ? AND LAST_NAME LIKE ?)";
             Integer idPerson = 0;

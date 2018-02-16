@@ -3,11 +3,6 @@ package com.wojo.Vault.Controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
-
-import java.io.IOException;
-import java.util.ResourceBundle;
 
 public class AccountsController {
 
@@ -15,7 +10,7 @@ public class AccountsController {
     private DesktopController desktopController;
 
     @FXML
-    private JFXButton exit;
+    private JFXButton backToDesktopPane;
 
     @FXML
     private JFXButton newTransfer;
@@ -26,7 +21,7 @@ public class AccountsController {
     }
 
     private void addEventHandlers() {
-        exit.addEventHandler(ActionEvent.ACTION, e -> {
+        backToDesktopPane.addEventHandler(ActionEvent.ACTION, e -> {
             rootController.loadDesktopPane();
         });
 

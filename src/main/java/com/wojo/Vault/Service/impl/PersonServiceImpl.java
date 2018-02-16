@@ -14,7 +14,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public String generateLogin(int length) {
-        return PersonDataGenerator.generateLogin(length);
+        return new PersonDataGenerator().generateLogin(length);
     }
 
     @Override

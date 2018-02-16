@@ -8,11 +8,9 @@ public interface PersonDAO {
 
     String[] getIdPersonAndPassword(String login);
 
-    void insertPersonData(Integer idPerson);
+    boolean insertPersonData(Integer idPerson);
 
     int insertPersonToDB(List<String> accountData);
-
-    int getIdPerson(String login);
 
     <T> boolean deletePerson(T value);
 }

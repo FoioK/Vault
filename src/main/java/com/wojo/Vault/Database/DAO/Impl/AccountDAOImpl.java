@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class AccountDAOImpl implements AccountDAO {
 
     public Account addNewAccount(Integer idPerson, String countryCode, int length) {
-        Account account = new Account(countryCode, length);
+        Account account = new Account(countryCode, length, new BigDecimal("0"));
         return account.getIBAN_NUMBER().equals("") ?
                 null :
                 insertAccountToDB(account, idPerson) ?
@@ -43,14 +43,14 @@ public class AccountDAOImpl implements AccountDAO {
 
     public void insertAccountData(Integer idPerson) {
         String queryStatement = "SELECT * FROM accounts WHERE idPerson = ?";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement,
                     Arrays.asList(String.valueOf(idPerson)));
             if (resultSet.next()) {
                 Account account = new Account(resultSet.getInt("idAccount"),
-                        resultSet.getString("number"));
-                account.setValue(resultSet.getString("value"));
+                        resultSet.getString("number"), new BigDecimal("0"));
+                account.setValue(new BigDecimal(resultSet.getString("value")));
                 Person.addAccount(account);
             }
         } catch (SQLException e) {
@@ -58,17 +58,18 @@ public class AccountDAOImpl implements AccountDAO {
         }
     }
 
-    public <T> void deleteAccount(T value) {
+    public <T> Integer deleteAccount(T value) {
         String updateStatement = "DELETE FROM accounts WHERE idPerson = ?";
         try {
-            DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(String.valueOf(value)));
+            return DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(String.valueOf(value)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
     @Override
-    public Integer searchAccount(String accountNumber) {
+    public Integer searchAccountByNumber(String accountNumber) {
         String queryStatement = "SELECT idAccount FROM accounts " +
                 "WHERE SUBSTRING(number, 3, 26) = ?";
         ResultSet resultSet;
@@ -89,10 +90,10 @@ public class AccountDAOImpl implements AccountDAO {
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(idAccount));
             return resultSet.next() ?
-                    new BigDecimal(resultSet.getString("value")) : null;
+                    new BigDecimal(resultSet.getString("value")) : BigDecimal.ZERO;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return BigDecimal.ZERO;
     }
 }

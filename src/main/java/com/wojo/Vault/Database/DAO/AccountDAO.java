@@ -12,9 +12,9 @@ public interface AccountDAO {
 
     void insertAccountData(Integer idPerson);
 
-    <T> void deleteAccount(T value);
+    <T> Integer deleteAccount(T value);
 
-    Integer searchAccount(String accountNumber);
+    Integer searchAccountByNumber(String accountNumber);
     
     BigDecimal getAccountValue(String idAccount);
 }

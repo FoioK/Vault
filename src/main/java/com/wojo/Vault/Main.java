@@ -1,6 +1,8 @@
 package com.wojo.Vault;
 
+import com.wojo.Vault.Database.DBManager;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

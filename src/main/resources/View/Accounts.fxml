@@ -22,7 +22,7 @@
                                 <FontAwesomeIcon fill="#15b0e6" iconName="UNIVERSITY" lineSpacing="10.0" size="0.8em" wrappingWidth="35.0" />
                             </graphic>
                         </Label>
-                        <JFXButton fx:id="exit" layoutX="996.0" layoutY="14.0" prefHeight="35.0" prefWidth="35.0" text="X" textFill="WHITE">
+                        <JFXButton fx:id="backToDesktopPane" layoutX="996.0" layoutY="14.0" prefHeight="35.0" prefWidth="35.0" text="X" textFill="WHITE">
                             <font>
                                 <Font size="20.0" />
                             </font>
