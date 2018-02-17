@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="840.0" prefWidth="1100.0" style="-fx-background-color: transparent;"
+            xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.wojo.Vault.Controller.PaymentsHistoryController">
+    <children>
+        <ScrollPane layoutX="25.0" layoutY="40.0" prefHeight="800.0" prefWidth="1050.0">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="795.0" prefWidth="1030.0">
+                    <children>
+                        <Pane prefHeight="150.0" prefWidth="1050.0" style="-fx-background-color: #70d4f6;">
+                            <children>
+                                <JFXButton fx:id="backToAccountsPane" layoutX="976.0" layoutY="14.0" prefHeight="35.0"
+                                           prefWidth="35.0" text="X" textFill="WHITE">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </JFXButton>
+                                <Label layoutX="14.0" layoutY="31.0" lineSpacing="10.0"
+                                       text="%Desktop.PaymentsHistory.panelName">
+                                    <font>
+                                        <Font size="36.0"/>
+                                    </font>
+                                    <graphic>
+                                        <FontAwesomeIcon fill="#15b0e6" iconName="UNIVERSITY" lineSpacing="10.0"
+                                                         size="0.8em" wrappingWidth="35.0"/>
+                                    </graphic>
+                                </Label>
+                                <Label layoutX="15.0" layoutY="95.0" prefHeight="30.0" prefWidth="100.0"
+                                       text="%Desktop.PaymentsHistory.numberName">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </Label>
+                                <Label fx:id="numberPrettyPaint" layoutX="115.0" layoutY="95.0" prefHeight="30.0"
+                                       prefWidth="450.0">
+                                    <font>
+                                        <Font size="24.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </Pane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>
