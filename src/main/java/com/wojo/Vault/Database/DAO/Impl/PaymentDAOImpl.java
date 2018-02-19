@@ -2,8 +2,10 @@ package com.wojo.Vault.Database.DAO.Impl;
 
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.DBManager;
+import com.wojo.Vault.Database.Model.Payment;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -57,5 +59,34 @@ public class PaymentDAOImpl implements PaymentDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<Payment> getAllPayment(Integer idAccount) {
+        List<Payment> allPayments = new ArrayList<>();
+        String queryStatement = "SELECT * FROM payments " +
+                "WHERE idAccount = ? OR recipientIdAccount = ?";
+        try {
+            ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement
+                    , Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+            while (resultSet.next()) {
+                Payment payment = new Payment(
+                        resultSet.getInt("idPayment"),
+                resultSet.getInt("idAccount"),
+                resultSet.getString("recipientName"),
+                resultSet.getString("senderName"),
+                resultSet.getString("title"),
+                resultSet.getBigDecimal("paymentValue"),
+                resultSet.getTimestamp("date")
+                );
+                allPayments.add(payment);
+            }
+            Collections.sort(allPayments, Comparator.comparing(Payment::getDate));
+            Collections.reverse(allPayments);
+            return allPayments;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
