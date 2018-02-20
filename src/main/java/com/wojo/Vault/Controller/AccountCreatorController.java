@@ -79,7 +79,7 @@ public class AccountCreatorController {
     @FXML
     void initialize() {
         initTextLimiters();
-        setErrorMessages(false);
+        setErrorMessages();
         addEventHandlers();
     }
 
@@ -106,29 +106,25 @@ public class AccountCreatorController {
         TextFieldFilter.lengthLimiter(repeatPasswordField, 30);
     }
 
-    private void setErrorMessages(boolean state) {
-        badFirstNameMessage.setVisible(state);
-        badLastNameMessage.setVisible(state);
-        badPersonIdMessage.setVisible(state);
-        badAddressMessage.setVisible(state);
-        badTelephoneNumberMessage.setVisible(state);
-        badEmailMessage.setVisible(state);
-        badPasswordMessage.setVisible(state);
-        badRepeatPasswordsMessage.setVisible(state);
+    private void setErrorMessages() {
+        badFirstNameMessage.setVisible(false);
+        badLastNameMessage.setVisible(false);
+        badPersonIdMessage.setVisible(false);
+        badAddressMessage.setVisible(false);
+        badTelephoneNumberMessage.setVisible(false);
+        badEmailMessage.setVisible(false);
+        badPasswordMessage.setVisible(false);
+        badRepeatPasswordsMessage.setVisible(false);
     }
 
     private void addEventHandlers() {
-        backToLoginWindow.addEventHandler(ActionEvent.ACTION, e -> {
-            rootController.loadLoginStep1();
-        });
+        backToLoginWindow.addEventHandler(ActionEvent.ACTION, e -> rootController.loadLoginStep1());
 
-        createAccount.addEventHandler(ActionEvent.ACTION, e -> {
-            createAccountProcess();
-        });
+        createAccount.addEventHandler(ActionEvent.ACTION, e -> createAccountProcess());
     }
 
     private void createAccountProcess() {
-        setErrorMessages(false);
+        setErrorMessages();
         if (checkData()) {
             if (isPasswordsEqual()) {
                 createAccount();

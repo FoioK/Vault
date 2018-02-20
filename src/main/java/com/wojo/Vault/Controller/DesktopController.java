@@ -1,16 +1,15 @@
 package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.wojo.Vault.Controller.Loader.ViewLoader;
 import com.wojo.Vault.Database.Model.Person;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-
-import java.io.IOException;
-import java.util.ResourceBundle;
 
 public class DesktopController {
 
@@ -49,76 +48,55 @@ public class DesktopController {
     }
 
     private void addEventHandlers() {
-        dashboard.addEventHandler(ActionEvent.ACTION, e -> {
-            rootController.loadDesktopPane();
-        });
+        dashboard.addEventHandler(ActionEvent.ACTION, e -> rootController.loadDesktopPane());
 
-        accountsLeft.addEventHandler(ActionEvent.ACTION, e -> {
-            goToAccounts();
-        });
+        accountsLeft.addEventHandler(ActionEvent.ACTION, e -> goToAccounts());
 
-        accountsCenter.addEventHandler(ActionEvent.ACTION, e -> {
-            goToAccounts();
-        });
+        accountsCenter.addEventHandler(ActionEvent.ACTION, e -> goToAccounts());
 
-        paymentsLeft.addEventHandler(ActionEvent.ACTION, e -> {
-            goToPayments();
-        });
+        paymentsLeft.addEventHandler(ActionEvent.ACTION, e -> goToPayments());
 
-        paymentsCenter.addEventHandler(ActionEvent.ACTION, e -> {
-            goToPayments();
-        });
+        paymentsCenter.addEventHandler(ActionEvent.ACTION, e -> goToPayments());
 
-        exit.addEventHandler(ActionEvent.ACTION, e -> {
-            exitApplication();
-        });
+        exit.addEventHandler(ActionEvent.ACTION, e -> exitApplication());
 
-        logOut.addEventHandler(ActionEvent.ACTION, e -> {
-            logOutAction();
-        });
+        logOut.addEventHandler(ActionEvent.ACTION, e -> logOutAction());
 
         fullName.setText(Person.getFirstName() + " " + Person.getLastName());
     }
 
-    private void goToAccounts() {
-        mainPane.setVisible(false);
-        FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/View/Accounts.fxml"));
-        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
-        loader.setResources(languageBundles);
-        AnchorPane pane = null;
-        try {
-            pane = loader.load();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        pane.setLayoutX(375);
-        pane.setLayoutY(60);
+    private static final String ACCOUNTS_VIEW = "Accounts";
+    private static final String PAYMENTS_VIEW = "Payments";
+    private static final String PAYMENTS_HISTORY_VIEW = "PaymentsHistory";
 
+    protected void goToAccounts() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNTS_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         AccountsController controller = loader.getController();
         controller.setRootController(rootController);
         controller.setDesktopController(this);
-        rootController.addPane(pane);
+        mainPaneSetScreen(pane);
     }
 
     protected void goToPayments() {
-        mainPane.setVisible(false);
-        FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/View/Payments.fxml"));
-        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
-        loader.setResources(languageBundles);
-        AnchorPane pane = null;
-        try {
-            pane = loader.load();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        pane.setLayoutX(375);
-        pane.setLayoutY(60);
-
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), PAYMENTS_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         PaymentsController controller = loader.getController();
         controller.setRootController(rootController);
-        rootController.addPane(pane);
+        mainPaneSetScreen(pane);
+    }
+
+    protected void goToPaymentsHistory() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), PAYMENTS_HISTORY_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
+        PaymentsHistoryController controller = loader.getController();
+        controller.setRootController(this);
+        mainPaneSetScreen(pane);
+    }
+
+    private <T extends Parent> void mainPaneSetScreen(T pane) {
+        mainPane.getChildren().clear();
+        mainPane.getChildren().add(pane);
     }
 
     private void exitApplication() {

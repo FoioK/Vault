@@ -53,7 +53,7 @@ public class PaymentsController {
     @FXML
     void initialize() {
         initTextLimiters();
-        setErrorMessage(false);
+        setErrorMessage();
         addEventHandlers();
     }
 
@@ -70,12 +70,12 @@ public class PaymentsController {
         TextFieldFilter.lengthLimiter(title, 75);
     }
 
-    private void setErrorMessage(boolean state) {
-        badRecipientNameMessage.setVisible(state);
-        badRecipientNumberMessage.setVisible(state);
-        badPaymentValueMessage.setVisible(state);
-        badTitleMessage.setVisible(state);
-        badSendTransferMessage.setVisible(state);
+    private void setErrorMessage() {
+        badRecipientNameMessage.setVisible(false);
+        badRecipientNumberMessage.setVisible(false);
+        badPaymentValueMessage.setVisible(false);
+        badTitleMessage.setVisible(false);
+        badSendTransferMessage.setVisible(false);
     }
 
     private void addEventHandlers() {
@@ -87,17 +87,15 @@ public class PaymentsController {
             }
         });
 
-        backToDesktopPane.addEventHandler(ActionEvent.ACTION, e -> {
-            loadDesktopPane();
-        });
+        backToDesktopPane.addEventHandler(ActionEvent.ACTION, e -> loadDesktopPane());
     }
 
     private boolean sendTransferProcess() {
-        setErrorMessage(false);
+        setErrorMessage();
         return checkData() && sendTransfer();
     }
 
-    public boolean checkData() {
+    private boolean checkData() {
         boolean isCorrect = true;
         if (recipientName.getText().equals("")) {
             badRecipientNameMessage.setVisible(true);

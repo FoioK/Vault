@@ -32,7 +32,7 @@ public class PaymentsHistoryController {
     private static final Integer HEADER_PANE_HEIGHT = 150;
     private static final Integer PAYMENT_ROW_HEIGHT = 100;
 
-    private RootController rootController;
+    private DesktopController desktopController;
 
     private PaymentService paymentService = new PaymentServiceImpl();
     private List<Payment> allPayments = new ArrayList<>();
@@ -42,8 +42,7 @@ public class PaymentsHistoryController {
         numberPrettyPaint.setText(getFormatAccountNumber());
         allPayments = getPaymentsList();
 
-        backToAccountsPane.addEventHandler(ActionEvent.ACTION, e ->
-                rootController.loadDesktopPane());
+        backToAccountsPane.addEventHandler(ActionEvent.ACTION, e -> desktopController.goToAccounts());
 
         showPaymentsHistoryProcess();
     }
@@ -113,7 +112,7 @@ public class PaymentsHistoryController {
         pane.getChildren().add(value);
     }
 
-    public void setRootController(RootController rootController) {
-        this.rootController = rootController;
+    public void setRootController(DesktopController rootController) {
+        this.desktopController = rootController;
     }
 }

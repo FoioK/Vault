@@ -16,22 +16,28 @@ public class AccountsController {
     private JFXButton newTransfer;
 
     @FXML
+    private JFXButton history;
+
+
+    @FXML
     void initialize() {
         addEventHandlers();
     }
 
     private void addEventHandlers() {
-        backToDesktopPane.addEventHandler(ActionEvent.ACTION, e -> {
-            rootController.loadDesktopPane();
-        });
+        backToDesktopPane.addEventHandler(ActionEvent.ACTION, e -> rootController.loadDesktopPane());
 
-        newTransfer.addEventHandler(ActionEvent.ACTION, e -> {
-            loadPayments();
-        });
+        newTransfer.addEventHandler(ActionEvent.ACTION, e -> loadPayments());
+
+        history.addEventHandler(ActionEvent.ACTION, e -> loadPaymentsHistory());
     }
 
     private void loadPayments() {
         desktopController.goToPayments();
+    }
+
+    private void loadPaymentsHistory() {
+        desktopController.goToPaymentsHistory();
     }
 
     public void setRootController(RootController rootController) {

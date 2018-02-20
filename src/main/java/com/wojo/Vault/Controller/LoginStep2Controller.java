@@ -31,27 +31,23 @@ public class LoginStep2Controller {
 
     @FXML
     void initialize() {
-        setErrorMessages(false);
+        setErrorMessages();
         addEventHandlers();
     }
 
-    private void setErrorMessages(boolean state) {
+    private void setErrorMessages() {
         badPasswordMessage.setVisible(false);
         badLoginProcessMessage.setVisible(false);
     }
 
     private void addEventHandlers() {
-        backToStep1.addEventFilter(ActionEvent.ACTION, e -> {
-            rootController.loadLoginStep1();
-        });
+        backToStep1.addEventFilter(ActionEvent.ACTION, e -> rootController.loadLoginStep1());
 
-        logInButton.addEventHandler(ActionEvent.ACTION, e -> {
-            loginProcessStep2();
-        });
+        logInButton.addEventHandler(ActionEvent.ACTION, e -> loginProcessStep2());
     }
 
     private void loginProcessStep2() {
-        setErrorMessages(false);
+        setErrorMessages();
         if (personService.loginStep2Process(passwordFiled.getText())) {
             loadDesktopPane();
         } else {

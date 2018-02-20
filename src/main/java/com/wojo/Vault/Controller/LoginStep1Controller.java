@@ -2,11 +2,9 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Controller.Loader.ViewLoader;
 import com.wojo.Vault.Service.PersonService;
 import com.wojo.Vault.Service.impl.PersonServiceImpl;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,9 +14,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
-import java.io.IOException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class LoginStep1Controller {
 
@@ -44,13 +40,13 @@ public class LoginStep1Controller {
 
     @FXML
     void initialize() {
-        setErrorMessages(false);
+        setErrorMessagesVisibleFalse();
         addLanguageBox();
         addEventHandlers();
     }
 
-    private void setErrorMessages(boolean state) {
-        badLoginMessage.setVisible(state);
+    private void setErrorMessagesVisibleFalse() {
+        badLoginMessage.setVisible(false);
     }
 
     private void addLanguageBox() {
@@ -58,32 +54,24 @@ public class LoginStep1Controller {
         languageBox.setValue("Language");
         languageBox.getSelectionModel()
                 .selectedItemProperty()
-                .addListener(new ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observable
-                            , String oldValue, String newValue) {
-                        languageBox.setValue(newValue);
-                        Locale.setDefault(new Locale(newValue));
-                        rootController.loadLoginStep1();
-                    }
+                .addListener((observable, oldValue, newValue) -> {
+                    languageBox.setValue(newValue);
+                    Locale.setDefault(new Locale(newValue));
+                    rootController.loadLoginStep1();
                 });
     }
 
     private void addEventHandlers() {
-        goToNextStep.addEventHandler(ActionEvent.ACTION, e -> {
-            loginProcessStep1();
-        });
+        goToNextStep.addEventHandler(ActionEvent.ACTION, e -> loginProcessStep1());
 
-        openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> {
-            loadAccountCreator();
-        });
+        openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> loadAccountCreator());
     }
 
     private void loginProcessStep1() {
-        setErrorMessages(false);
+        setErrorMessagesVisibleFalse();
         String login = loginField.getText();
         if (isLoginExist(login)) {
-            Person.setLogin(login);
+            personService.setPeronLogin(login);
             loadLoginStep2();
         } else {
             badLoginMessage.setVisible(true);
@@ -94,39 +82,20 @@ public class LoginStep1Controller {
         return personService.searchPersonLogin(login);
     }
 
-    private void loadLoginStep2() {
-        FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/View/LoginStep2.fxml"));
-        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
-        loader.setResources(languageBundles);
-        AnchorPane pane = null;
-        try {
-            pane = loader.load();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        pane.setLayoutX(225);
-        pane.setLayoutY(100);
+    private static final String LOGIN_STEP2_VIEW = "LoginStep2";
+    private static final String ACCOUNT_CREATOR_VIEW = "AccountCreator";
 
+    private void loadLoginStep2() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), LOGIN_STEP2_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 225, 100);
         LoginStep2Controller controller = loader.getController();
         controller.setRootController(rootController);
         rootController.setScreen(pane);
     }
 
     private void loadAccountCreator() {
-        FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/View/AccountCreator.fxml"));
-        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
-        loader.setResources(languageBundles);
-        AnchorPane pane = null;
-        try {
-            pane = loader.load();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        pane.setLayoutX(225);
-        pane.setLayoutY(100);
-
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNT_CREATOR_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 225, 100);
         AccountCreatorController controller = loader.getController();
         controller.setRootController(rootController);
         rootController.setScreen(pane);

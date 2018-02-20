@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
 
 public class MainController {
 
@@ -17,9 +16,7 @@ public class MainController {
     }
 
     private void addEventHandlers() {
-        exit.addEventHandler(ActionEvent.ACTION, e -> {
-            exitApplication();
-        });
+        exit.addEventHandler(ActionEvent.ACTION, e -> exitApplication());
     }
 
     private void exitApplication() {
