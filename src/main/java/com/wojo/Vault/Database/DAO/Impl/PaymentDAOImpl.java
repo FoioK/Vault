@@ -70,14 +70,18 @@ public class PaymentDAOImpl implements PaymentDAO {
             ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement
                     , Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
             while (resultSet.next()) {
+                BigDecimal value = resultSet.getInt("idAccount") == idAccount ?
+                        resultSet.getBigDecimal("paymentValue").negate() :
+                        resultSet.getBigDecimal("paymentValue");
+
                 Payment payment = new Payment(
                         resultSet.getInt("idPayment"),
-                resultSet.getInt("idAccount"),
-                resultSet.getString("recipientName"),
-                resultSet.getString("senderName"),
-                resultSet.getString("title"),
-                resultSet.getBigDecimal("paymentValue"),
-                resultSet.getTimestamp("date")
+                        resultSet.getInt("idAccount"),
+                        resultSet.getString("recipientName"),
+                        resultSet.getString("senderName"),
+                        resultSet.getString("title"),
+                        value,
+                        resultSet.getTimestamp("date")
                 );
                 allPayments.add(payment);
             }

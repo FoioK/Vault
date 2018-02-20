@@ -12,9 +12,9 @@
             xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.wojo.Vault.Controller.PaymentsHistoryController">
     <children>
-        <ScrollPane layoutX="25.0" layoutY="40.0" prefHeight="800.0" prefWidth="1050.0">
+        <ScrollPane hbarPolicy="NEVER" layoutX="25.0" layoutY="40.0" prefHeight="800.0" prefWidth="1050.0">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="795.0" prefWidth="1030.0">
+                <AnchorPane fx:id="scrollPane" minHeight="0.0" minWidth="0.0" prefHeight="795.0" prefWidth="1030.0">
                     <children>
                         <Pane prefHeight="150.0" prefWidth="1050.0" style="-fx-background-color: #70d4f6;">
                             <children>
@@ -46,6 +46,19 @@
                                         <Font size="24.0"/>
                                     </font>
                                 </Label>
+                            </children>
+                        </Pane>
+                        <Pane layoutY="150.0" prefHeight="100.0" prefWidth="1050.0"
+                              style="-fx-background-color: ffffff;">
+                            <children>
+                                <Label alignment="CENTER" layoutX="85.0" layoutY="40.0" prefHeight="30.0"
+                                       prefWidth="100.0" text="%Desktop.PaymentsHistory.dateName"/>
+                                <Label alignment="CENTER" layoutX="405.0" layoutY="15.0" prefHeight="30.0"
+                                       prefWidth="300.0" text="%Desktop.PaymentsHistory.recipientOrSenderName"/>
+                                <Label alignment="CENTER" layoutX="505.0" layoutY="55.0" prefHeight="30.0"
+                                       prefWidth="100.0" text="%Desktop.PaymentsHistory.titleName"/>
+                                <Label alignment="CENTER" layoutX="870.0" layoutY="40.0" prefHeight="30.0"
+                                       prefWidth="100.0" text="%Desktop.PaymentsHistory.amountName"/>
                             </children>
                         </Pane>
                     </children>
