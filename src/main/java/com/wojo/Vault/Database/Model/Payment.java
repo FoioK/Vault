@@ -14,10 +14,11 @@ public class Payment {
     private Date date;
 
     public Payment(Integer idPayment, Integer idAccount, String recipientName,
-                   String title, BigDecimal paymentValue, Date date) {
+                   String senderName, String title, BigDecimal paymentValue, Date date) {
         this.idPayment = idPayment;
         this.idAccount = idAccount;
         this.recipientName = recipientName;
+        this.senderName = senderName;
         this.title = title;
         this.paymentValue = paymentValue;
         this.date = date;
