@@ -2,10 +2,18 @@ package com.wojo.Vault.Service.impl;
 
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
+import com.wojo.Vault.Database.Model.Payment;
+import com.wojo.Vault.Database.Model.Person;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertEquals;
 
 public class PaymentServiceImplTest {
 
@@ -51,5 +59,39 @@ public class PaymentServiceImplTest {
         String title = "title";
         paymentService.getInsertPaymentData(null, RECIPIENT_ID_ACCOUNT
                 , recipient, title, BigDecimal.TEN).size();
+    }
+
+    @Test
+    public void shouldReturnFormattedNumber() {
+        String accountNumber = "PL12345678901234567890123496";
+        String formattedAccountNumber = "12 3456 7890 1234 5678 9012 3496";
+
+        Account account = new Account();
+        account.setIBAN_NUMBER(accountNumber);
+        Person.setAccounts(Collections.singletonList(account));
+
+        assertEquals(formattedAccountNumber, paymentService.getFormatAccountNumber());
+    }
+
+    @Test
+    public void formattedNumberShouldHaveLength32() {
+        Person.setAccounts(Collections.singletonList(new Account("PL", 26, BigDecimal.ZERO)));
+        assertEquals(32, paymentService.getFormatAccountNumber().length());
+    }
+
+    private static final Integer ID_ACCOUNT = 3;
+
+    @Test
+    public void shouldReturnSortedPayments() {
+        Account account = new Account();
+        account.setIdAccount(ID_ACCOUNT);
+        Person.setAccounts(Collections.singletonList(account));
+
+        List<Payment> allPayments = paymentService.getAllPayment();
+        for (int i = 0; i < allPayments.size() - 1; i++) {
+            Date dateFirst = allPayments.get(i).getDate();
+            Date dateSecond = allPayments.get(i + 1).getDate();
+            assertTrue(dateFirst.compareTo(dateSecond) >= 0);
+        }
     }
 }

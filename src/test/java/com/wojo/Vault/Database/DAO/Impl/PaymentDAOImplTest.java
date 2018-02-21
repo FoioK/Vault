@@ -2,14 +2,12 @@ package com.wojo.Vault.Database.DAO.Impl;
 
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.DBManager;
+import com.wojo.Vault.Database.Model.Payment;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -37,8 +35,7 @@ public class PaymentDAOImplTest {
 
         int expectedDataSize = 2;
         assertEquals(expectedDataSize, transferInsideData.size());
-        transferInsideData.entrySet().forEach(index -> {
-            List<Object> data = index.getKey();
+        transferInsideData.forEach((data, updateStatement) -> {
             if (Objects.equals(data.get(idIndexOnList), recipientIdAccount)) {
                 assertEquals(recipientNewValue, data.get(valueIndexOnList));
             } else {
@@ -46,8 +43,7 @@ public class PaymentDAOImplTest {
                 assertEquals(senderNewValue, data.get(valueIndexOnList));
             }
 
-            String updateStatement = index.getValue();
-            assertFalse(updateStatement.equals(null));
+            assertFalse(updateStatement == null);
             assertTrue(updateStatement.length() != 0);
         });
     }
@@ -65,13 +61,11 @@ public class PaymentDAOImplTest {
 
         int expectedDataSize = 1;
         assertEquals(expectedDataSize, transferOutsideData.size());
-        transferOutsideData.entrySet().forEach(index -> {
-            List<Object> data = index.getKey();
+        transferOutsideData.forEach((data, updateStatement) -> {
             assertEquals(senderNewValue, data.get(valueIndexOnList));
             assertEquals(senderIdAccount, data.get(idIndexOnList));
 
-            String updateStatement = index.getValue();
-            assertFalse(updateStatement.equals(null));
+            assertFalse(updateStatement == null);
             assertTrue(updateStatement.length() != 0);
         });
     }
@@ -80,8 +74,8 @@ public class PaymentDAOImplTest {
     public void shouldReturnCorrectInsertPaymentData() {
         String senderIdAccount = 1 + "";
         String recipientIdAccount = 2 + "";
-        String recipient = "Jan";
-        String sender = "Andrzej";
+        String recipient = "John";
+        String sender = "Andrej";
         String title = "Test";
         BigDecimal value = BigDecimal.valueOf(700);
 
@@ -98,8 +92,7 @@ public class PaymentDAOImplTest {
 
         int expectedDataSize = 1;
         assertEquals(expectedDataSize, insertPaymentData.size());
-        insertPaymentData.entrySet().forEach(index -> {
-            List<Object> data = index.getKey();
+        insertPaymentData.forEach((data, updateStatement) -> {
             assertEquals(senderIdAccount, data.get(senderIdAccountIndexOnList));
             assertEquals(recipientIdAccount, data.get(recipientIdAccountIndexOnList));
             assertEquals(recipient, data.get(recipientIndexOnList));
@@ -108,9 +101,81 @@ public class PaymentDAOImplTest {
             assertEquals(value, data.get(valueIndexOnList));
             assertTrue(Math.abs(new Date().getTime() - ((Date) data.get(dataIndexOnList)).getTime()) < 500);
 
-            String updateStatement = index.getValue();
-            assertFalse(updateStatement.equals(null));
+            assertFalse(updateStatement == null);
             assertTrue(updateStatement.length() != 0);
+        });
+    }
+
+    private static final Integer FIRST_ID_ACCOUNT = 3;
+    private static final String FIRST_NAME = "First Name";
+
+    private static final Integer SECOND_ID_ACCOUNT = 4;
+    private static final String SECOND_NAME = "Second Name";
+
+    private static final String TITLE = "Test title";
+    private static final BigDecimal ACCOUNT_VALUE = BigDecimal.valueOf(50000);
+    private static final BigDecimal PAYMENT_VALUE = BigDecimal.valueOf(300);
+
+    @Test
+    public void shouldSendPaymentFromFirstToSecondAccount() {
+        Map<List<Object>, String> dataToUpdate = new HashMap<>(3);
+
+        String updateAccountsStatement = "UPDATE accounts " +
+                "SET value = ? " +
+                "WHERE idAccount = ?";
+        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.subtract(PAYMENT_VALUE), FIRST_ID_ACCOUNT)
+                , updateAccountsStatement);
+        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.add(PAYMENT_VALUE), SECOND_ID_ACCOUNT)
+                , updateAccountsStatement);
+
+        String updatePaymentsStatement = "INSERT INTO payments " +
+                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?)";
+        dataToUpdate.put(Arrays.asList(FIRST_ID_ACCOUNT, SECOND_ID_ACCOUNT, SECOND_NAME, FIRST_NAME
+                , TITLE, PAYMENT_VALUE, new Date()), updatePaymentsStatement);
+
+        assertTrue(paymentDAO.sendTransfer(dataToUpdate));
+    }
+
+    @Test
+    public void shouldSendPaymentFromSecondToFirstAccount() {
+        Map<List<Object>, String> dataToUpdate = new HashMap<>(3);
+
+        String updateAccountsStatement = "UPDATE accounts " +
+                "SET value = ? " +
+                "WHERE idAccount = ?";
+        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.add(PAYMENT_VALUE), FIRST_ID_ACCOUNT)
+                , updateAccountsStatement);
+        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.subtract(PAYMENT_VALUE), SECOND_ID_ACCOUNT)
+                , updateAccountsStatement);
+
+        String updatePaymentsStatement = "INSERT INTO payments " +
+                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?)";
+        dataToUpdate.put(Arrays.asList(SECOND_ID_ACCOUNT, FIRST_ID_ACCOUNT, FIRST_NAME, SECOND_NAME
+                , TITLE, PAYMENT_VALUE, new Date()), updatePaymentsStatement);
+
+        assertTrue(paymentDAO.sendTransfer(dataToUpdate));
+    }
+
+    @Test
+    public void shouldGetPaymentsHistoryForFirstAccount() {
+        List<Payment> firstAccountPayments = paymentDAO.getAllPayment(FIRST_ID_ACCOUNT);
+
+        firstAccountPayments.forEach(payment -> {
+               if (payment.getIdAccount().equals(FIRST_ID_ACCOUNT)) {
+                   assertEquals(SECOND_NAME ,payment.getRecipientName());
+                   assertEquals(FIRST_NAME ,payment.getSenderName());
+                    assertEquals(PAYMENT_VALUE.negate(), payment.getPaymentValue());
+               }
+               else {
+                   assertEquals(FIRST_NAME, payment.getRecipientName());
+                   assertEquals(SECOND_NAME ,payment.getSenderName());
+                   assertEquals(PAYMENT_VALUE, payment.getPaymentValue());
+               }
+               assertEquals(TITLE, payment.getTitle());
         });
     }
 }
