@@ -36,8 +36,6 @@ public class DBManager {
             resultSet = statement.executeQuery();
             cachedRowSet = new CachedRowSetImpl();
             cachedRowSet.populate(resultSet);
-        } catch (SQLException e) {
-            throw e;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -66,8 +64,6 @@ public class DBManager {
                 }
             }
             updateRows = statement.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
         } catch (IOException e1) {
             e1.printStackTrace();
         } finally {
@@ -90,7 +86,6 @@ public class DBManager {
         List<PreparedStatement> preparedStatements = new ArrayList<>();
         try {
             dataToUpdate.entrySet()
-                    .stream()
                     .forEach(data -> {
                         PreparedStatement statement = executeStatement(data);
                         preparedStatements.add(statement);
@@ -119,9 +114,9 @@ public class DBManager {
         return true;
     }
 
-    private static PreparedStatement executeStatement(Map.Entry data) {
-        String updateStatement = (String) data.getValue();
-        List<Object> updateData = (List<Object>) data.getKey();
+    private static PreparedStatement executeStatement(Map.Entry<List<Object>, String> data) {
+        String updateStatement = data.getValue();
+        List<Object> updateData = data.getKey();
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(updateStatement);
@@ -160,12 +155,8 @@ public class DBManager {
     }
 
     private static void dbDisconnect() throws SQLException {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (Exception e) {
-            throw e;
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
         }
     }
 

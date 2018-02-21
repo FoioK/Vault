@@ -85,7 +85,7 @@ public class PaymentDAOImpl implements PaymentDAO {
                 );
                 allPayments.add(payment);
             }
-            Collections.sort(allPayments, Comparator.comparing(Payment::getDate));
+            allPayments.sort(Comparator.comparing(Payment::getDate));
             Collections.reverse(allPayments);
             return allPayments;
         } catch (SQLException e) {

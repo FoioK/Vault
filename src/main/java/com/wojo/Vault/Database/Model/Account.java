@@ -3,18 +3,15 @@ package com.wojo.Vault.Database.Model;
 import com.wojo.Vault.Database.Model.Generators.AccountDataGenerator;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class Account {
 
     private Integer idAccount;
-    private final String IBAN_NUMBER;
+    private String IBAN_NUMBER;
     private BigDecimal value;
-    private List<Payment> paymentList;
-
-    private AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
 
     public Account(String countryCode, int length, BigDecimal value) {
+        AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
         IBAN_NUMBER = accountDataGenerator.generateIBAN(countryCode, length);
         this.value = value;
     }
@@ -39,6 +36,10 @@ public class Account {
 
     public String getIBAN_NUMBER() {
         return IBAN_NUMBER;
+    }
+
+    public void setIBAN_NUMBER(String IBAN_NUMBER) {
+        this.IBAN_NUMBER = IBAN_NUMBER;
     }
 
     public BigDecimal getValue() {

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class AccountDAOImpl implements AccountDAO {
 
@@ -46,7 +47,7 @@ public class AccountDAOImpl implements AccountDAO {
         ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement,
-                    Arrays.asList(String.valueOf(idPerson)));
+                    Collections.singletonList(String.valueOf(idPerson)));
             if (resultSet.next()) {
                 Account account = new Account(resultSet.getInt("idAccount"),
                         resultSet.getString("number"), new BigDecimal("0"));
@@ -61,7 +62,7 @@ public class AccountDAOImpl implements AccountDAO {
     public <T> Integer deleteAccount(T value) {
         String updateStatement = "DELETE FROM accounts WHERE idPerson = ?";
         try {
-            return DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(String.valueOf(value)));
+            return DBManager.dbExecuteUpdate(updateStatement, Collections.singletonList(String.valueOf(value)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,7 +75,7 @@ public class AccountDAOImpl implements AccountDAO {
                 "WHERE SUBSTRING(number, 3, 26) = ?";
         ResultSet resultSet;
         try {
-            resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(accountNumber));
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(accountNumber));
             return resultSet.next() ? resultSet.getInt("idAccount") : 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +89,7 @@ public class AccountDAOImpl implements AccountDAO {
                 "WHERE idAccount = ?";
         ResultSet resultSet;
         try {
-            resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(idAccount));
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(idAccount));
             return resultSet.next() ?
                     new BigDecimal(resultSet.getString("value")) : BigDecimal.ZERO;
         } catch (SQLException e) {

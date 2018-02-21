@@ -8,6 +8,7 @@ import com.wojo.Vault.Database.DBManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PersonDAOImpl implements PersonDAO {
@@ -21,7 +22,7 @@ public class PersonDAOImpl implements PersonDAO {
         String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN LIKE ?";
         ResultSet resultSet;
         try {
-            resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(login));
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
             return resultSet.next() && resultSet.getInt(1) != 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -36,7 +37,7 @@ public class PersonDAOImpl implements PersonDAO {
         ResultSet resultSet;
         String[] idPersonAndPassword = new String[2];
         try {
-            resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList(login));
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
             if (resultSet.next()) {
                 idPersonAndPassword[0] = resultSet.getString("idPerson");
                 idPersonAndPassword[1] = resultSet.getString("PASSWORD");
@@ -55,7 +56,7 @@ public class PersonDAOImpl implements PersonDAO {
         ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement,
-                    Arrays.asList(String.valueOf(idPerson)));
+                    Collections.singletonList(String.valueOf(idPerson)));
             if (resultSet.next()) {
                 Person.setIdPersonInDatabase(resultSet.getInt("idPerson"));
                 Person.setFirstName(resultSet.getString("FIRST_NAME"));
@@ -105,7 +106,7 @@ public class PersonDAOImpl implements PersonDAO {
                 "WHERE LOGIN LIKE ?";
         ResultSet resultSet;
         try {
-            resultSet = DBManager.dbExecuteQuery(updateStatement, Arrays.asList(login));
+            resultSet = DBManager.dbExecuteQuery(updateStatement, Collections.singletonList(login));
             return resultSet.next() ? resultSet.getInt("idPerson") : 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,7 +120,7 @@ public class PersonDAOImpl implements PersonDAO {
             updateStatement = "DELETE FROM person WHERE idPerson = ?";
             System.out.println(String.valueOf(value));
             try {
-                DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(String.valueOf(value)));
+                DBManager.dbExecuteUpdate(updateStatement, Collections.singletonList(String.valueOf(value)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

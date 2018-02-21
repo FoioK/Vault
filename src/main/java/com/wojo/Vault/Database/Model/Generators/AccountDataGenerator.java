@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class AccountDataGenerator {
 
-    AccountDAO accountDAO = new AccountDAOImpl();
+    private AccountDAO accountDAO = new AccountDAOImpl();
 
     public String generateIBAN(String countryCode, int length) {
         return countryCode.length() == 2 ?

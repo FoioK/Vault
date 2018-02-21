@@ -91,7 +91,7 @@ public class PaymentServiceImpl implements PaymentService {
             part += " ";
             formatNumber.append(part);
         });
-        return formatNumber.toString().substring(2);
+        return formatNumber.toString().substring(2, formatNumber.toString().length() - 1);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (allPayments == null || allPayments.size() == 0) {
             return new ArrayList<>();
         }
-        Collections.sort(allPayments, Comparator.comparing(Payment::getDate));
+        allPayments.sort(Comparator.comparing(Payment::getDate));
         Collections.reverse(allPayments);
         return allPayments;
     }
