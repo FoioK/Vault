@@ -23,6 +23,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public void setPeronLogin(String login) {
+        Person.setLogin(login);
+    }
+
+    @Override
     public boolean loginStep2Process(String password) {
         String[] idPersonAndPassword = personDAO.getIdPersonAndPassword(Person.getLogin());
         if (idPersonAndPassword == null || idPersonAndPassword.length != 2) {

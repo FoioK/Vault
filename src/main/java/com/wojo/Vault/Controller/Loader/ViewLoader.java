@@ -22,12 +22,8 @@ public class ViewLoader {
         Pane pane = null;
         try {
             pane = loader.load();
-            if (layoutX > 0) {
-                pane.setLayoutX(layoutX);
-            }
-            if (layoutY > 0) {
-                pane.setLayoutY(layoutY);
-            }
+            pane.setLayoutX(layoutX);
+            pane.setLayoutY(layoutY);
         } catch (IOException e1) {
             e1.printStackTrace();
         }
