@@ -95,4 +95,18 @@ public class ViewControllerTest extends ApplicationTest {
         clickOn("#newTransfer");
         sleep(50);
     }
+
+    @Test
+    public void loadPaymentsHistoryAndBackTest() {
+        clickOn("#loginField").write("ABCDEFGHI");
+        clickOn("#goToNextStep");
+        clickOn("#passwordFiled").write("Test");
+        clickOn("#logInButton");
+
+        clickOn("#accountsLeft");
+        clickOn("#history");
+        sleep(50);
+        clickOn("#backToAccountsPane");
+        sleep(50);
+    }
 }

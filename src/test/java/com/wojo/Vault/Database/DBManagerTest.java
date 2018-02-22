@@ -51,14 +51,14 @@ public class DBManagerTest {
     public void queryWithWrongSizeOfTheDataList() throws SQLException {
         String queryStatement = "SELECT idPerson FROM bankdata.person " +
                 "WHERE LOGIN = ? AND PASSWORD = ?";
-        ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement, Arrays.asList("Login"));
+        DBManager.dbExecuteQuery(queryStatement, Collections.singletonList("Login"));
     }
 
     @Test
     public void shouldReturnCorrectDate() throws SQLException {
         String queryStatement = "SELECT * FROM person WHERE idPerson = ?;";
         ResultSet resultSet = DBManager.dbExecuteQuery(
-                queryStatement, Arrays.asList(String.valueOf(idPerson)));
+                queryStatement, Collections.singletonList(String.valueOf(idPerson)));
         if (resultSet.next()) {
             assertEquals(String.valueOf(idPerson), resultSet.getString("idPerson"));
             assertEquals(FIRST_NAME, resultSet.getString("FIRST_NAME"));
@@ -80,7 +80,7 @@ public class DBManagerTest {
     @Test(expected = SQLException.class)
     public void updateWithWrongSizeOfTheDataList() throws SQLException {
         String queryStatement = "UPDATE person SET EMAIL = ? WHERE idPerson = ?";
-        assertEquals(1, DBManager.dbExecuteUpdate(queryStatement, Arrays.asList("Email")));
+        assertEquals(1, DBManager.dbExecuteUpdate(queryStatement, Collections.singletonList("Email")));
     }
 
     @Test

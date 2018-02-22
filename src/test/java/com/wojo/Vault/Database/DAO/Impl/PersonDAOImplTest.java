@@ -118,8 +118,7 @@ public class PersonDAOImplTest {
 
     @Test
     public void shouldDeleteByFirstAndLastName() {
-        String testFirstAndLastName = TEST_VALUE;
-        assertTrue(personDAO.deletePerson(testFirstAndLastName));
+        assertTrue(personDAO.deletePerson(TEST_VALUE));
     }
 
     @Test

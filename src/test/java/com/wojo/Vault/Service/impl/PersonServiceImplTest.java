@@ -16,7 +16,7 @@ public class PersonServiceImplTest {
 
     private static final String BAD_PASSWORD = "badPassword";
 
-    PersonService personService = new PersonServiceImpl();
+    private PersonService personService = new PersonServiceImpl();
 
     @BeforeClass
     public static void setConnectionTestPath() {

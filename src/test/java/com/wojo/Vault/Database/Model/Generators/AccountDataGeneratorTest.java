@@ -9,7 +9,7 @@ public class AccountDataGeneratorTest {
     private static final int NUMBER_OF_ATTEMPTS = 100;
     private static final int NUMBER_LENGTH = 26;
 
-    AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
+    private AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
 
     @Test
     public void shouldGenerateIBANWith26Char() {
