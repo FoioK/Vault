@@ -2,7 +2,9 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.wojo.Vault.Database.Model.Payment;
+import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PaymentService;
+import com.wojo.Vault.Service.impl.AccountServiceImpl;
 import com.wojo.Vault.Service.impl.PaymentServiceImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,6 +36,7 @@ public class PaymentsHistoryController {
 
     private DesktopController desktopController;
 
+    private AccountService accountService = new AccountServiceImpl();
     private PaymentService paymentService = new PaymentServiceImpl();
     private List<Payment> allPayments = new ArrayList<>();
 
@@ -48,7 +51,7 @@ public class PaymentsHistoryController {
     }
 
     private String getFormatAccountNumber() {
-        return paymentService.getFormatAccountNumber();
+        return accountService.getFormatAccountNumber();
     }
 
     private List<Payment> getPaymentsList() {

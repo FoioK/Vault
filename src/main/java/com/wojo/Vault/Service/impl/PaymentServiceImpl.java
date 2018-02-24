@@ -81,22 +81,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public String getFormatAccountNumber() {
-        List<String> formatNumberInParts = Arrays.asList(Person.getAccounts()
-                .get(activeAccountId)
-                .getIBAN_NUMBER()
-                .split(String.format("(?<=\\G.{%1$d})", 4)));
-        StringBuilder formatNumber = new StringBuilder();
-        formatNumberInParts.forEach(part -> {
-            part += " ";
-            formatNumber.append(part);
-        });
-        return formatNumber.toString().substring(2, formatNumber.toString().length() - 1);
-    }
-
-    @Override
     public List<Payment> getAllPayment() {
-        Integer activeAccountId = 0;
         Integer idAccount = Person.getAccounts().get(activeAccountId).getIdAccount();
         List<Payment> allPayments = paymentDAO.getAllPayment(idAccount);
         if (allPayments == null || allPayments.size() == 0) {

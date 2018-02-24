@@ -19,7 +19,5 @@ public interface PaymentService {
     Map<List<Object>, String> getInsertPaymentData(Account senderAccount, String recipientIdAccount
             , String recipient, String title, BigDecimal value);
 
-    String getFormatAccountNumber();
-
     List<Payment> getAllPayment();
 }
