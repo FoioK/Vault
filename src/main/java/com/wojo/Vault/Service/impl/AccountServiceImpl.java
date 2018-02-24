@@ -6,6 +6,7 @@ import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Service.AccountService;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,5 +39,11 @@ public class AccountServiceImpl implements AccountService {
             formatNumber.append(part);
         });
         return formatNumber.toString().substring(2, formatNumber.toString().length() - 1);
+    }
+
+    @Override
+    public BigDecimal getAccountValue() {
+        String idAccount = Person.getAccounts().get(activeAccountId).getIdAccount() + "";
+        return accountDAO.getAccountValue(idAccount);
     }
 }

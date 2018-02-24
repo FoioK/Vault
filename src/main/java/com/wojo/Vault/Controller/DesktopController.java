@@ -2,7 +2,12 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.Database.Model.Payment;
 import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Service.AccountService;
+import com.wojo.Vault.Service.PaymentService;
+import com.wojo.Vault.Service.impl.AccountServiceImpl;
+import com.wojo.Vault.Service.impl.PaymentServiceImpl;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,10 +15,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 public class DesktopController {
 
     private RootController rootController;
+
+    private AccountService accountService = new AccountServiceImpl();
+    private PaymentService paymentService = new PaymentServiceImpl();
 
     @FXML
     private JFXButton dashboard;
@@ -43,8 +52,18 @@ public class DesktopController {
     private JFXButton exit;
 
     @FXML
+    private Label accountsNumber;
+
+    @FXML
+    private Label recentDeposit;
+
+    @FXML
+    private Label recentDebit;
+
+    @FXML
     public void initialize() {
         addEventHandlers();
+        setLabelsText();
     }
 
     private void addEventHandlers() {
@@ -61,8 +80,26 @@ public class DesktopController {
         exit.addEventHandler(ActionEvent.ACTION, e -> exitApplication());
 
         logOut.addEventHandler(ActionEvent.ACTION, e -> logOutAction());
+    }
 
+    private void setLabelsText() {
         fullName.setText(Person.getFirstName() + " " + Person.getLastName());
+
+        setAccountsLabel();
+    }
+
+    private void setAccountsLabel() {
+        accountsNumber.setText(accountService.getFormatAccountNumber());
+
+        Payment deposit = paymentService.getRecentDeposit();
+        if (deposit != null) {
+            recentDeposit.setText(deposit.getSenderName() + " " + deposit.getPaymentValue() + " PLN");
+        }
+        Payment debit = paymentService.getRecentDebit();
+        if (debit != null) {
+            recentDebit.setText(debit.getRecipientName() + " " + debit.getPaymentValue() + " PLN");
+            recentDebit.setTextFill(Color.RED);
+        }
     }
 
     private static final String ACCOUNTS_VIEW = "Accounts";

@@ -137,7 +137,7 @@
                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
                                     <children>
                                         <Label alignment="CENTER_RIGHT" prefWidth="225.0"
-                                               text="%AccountCreator.telephonNumber">
+                                               text="%AccountCreator.telephoneNumber">
                                             <font>
                                                 <Font size="26.0"/>
                                             </font>

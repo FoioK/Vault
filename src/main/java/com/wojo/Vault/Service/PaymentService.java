@@ -20,4 +20,10 @@ public interface PaymentService {
             , String recipient, String title, BigDecimal value);
 
     List<Payment> getAllPayment();
+
+    List<Payment> getLastThreePayment();
+
+    Payment getRecentDeposit();
+
+    Payment getRecentDebit();
 }

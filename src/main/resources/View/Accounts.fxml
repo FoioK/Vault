@@ -47,8 +47,7 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label layoutX="14.0" layoutY="80.0" prefHeight="25.0" prefWidth="400.0"
-                               text="70 0000 1111 2222 3333 4444 5555">
+                        <Label fx:id="number" layoutX="14.0" layoutY="80.0" prefHeight="25.0" prefWidth="400.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
@@ -59,8 +58,8 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" layoutX="736.0" layoutY="45.0" prefHeight="35.0"
-                               prefWidth="200.0" text="973,25">
+                        <Label fx:id="value" alignment="CENTER_RIGHT" layoutX="736.0" layoutY="45.0" prefHeight="35.0"
+                               prefWidth="200.0">
                             <font>
                                 <Font name="System Bold" size="22.0"/>
                             </font>
@@ -78,19 +77,19 @@
                             </font>
                         </Label>
                         <Line endX="1050.0" layoutY="180.0" stroke="#c3c9c9"/>
-                        <Label alignment="CENTER" layoutX="20.0" layoutY="180.0" prefHeight="40.0" prefWidth="200.0"
-                               text="19.01.2018">
+                        <Label fx:id="firstDate" alignment="CENTER" layoutX="20.0" layoutY="180.0" prefHeight="40.0"
+                               prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label layoutX="275.0" layoutY="180.0" prefHeight="40.0" prefWidth="500.0" text="Tytuł 1">
+                        <Label fx:id="firstTitle" layoutX="275.0" layoutY="180.0" prefHeight="40.0" prefWidth="500.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" layoutX="800.0" layoutY="180.0" prefHeight="40.0"
-                               prefWidth="150.0" text="-375" textFill="#e11e1e">
+                        <Label fx:id="firstAmount" alignment="CENTER_RIGHT" layoutX="800.0" layoutY="180.0"
+                               prefHeight="40.0" prefWidth="150.0">
                             <font>
                                 <Font name="System Bold" size="18.0"/>
                             </font>
@@ -101,20 +100,19 @@
                             </font>
                         </Label>
                         <Line endX="1050.0" layoutY="220.0" stroke="#c3c9c9"/>
-                        <Label alignment="CENTER" layoutX="20.0" layoutY="220.0" prefHeight="40.0" prefWidth="200.0"
-                               text="19.01.2018">
+                        <Label fx:id="secondDate" alignment="CENTER" layoutX="20.0" layoutY="220.0" prefHeight="40.0"
+                               prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label layoutX="275.0" layoutY="220.0" prefHeight="40.0" prefWidth="500.0"
-                               text="Bardzo fany tytuł 2">
+                        <Label fx:id="secondTitle" layoutX="275.0" layoutY="220.0" prefHeight="40.0" prefWidth="500.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" layoutX="800.0" layoutY="220.0" prefHeight="40.0"
-                               prefWidth="150.0" text="-500" textFill="#e11e1e">
+                        <Label fx:id="secondAmount" alignment="CENTER_RIGHT" layoutX="800.0" layoutY="220.0"
+                               prefHeight="40.0" prefWidth="150.0">
                             <font>
                                 <Font name="System Bold" size="18.0"/>
                             </font>
@@ -125,20 +123,19 @@
                             </font>
                         </Label>
                         <Line endX="1050.0" layoutY="260.0" stroke="#c3c9c9"/>
-                        <Label alignment="CENTER" layoutX="20.0" layoutY="260.0" prefHeight="40.0" prefWidth="200.0"
-                               text="19.01.2018">
+                        <Label fx:id="thirdDate" alignment="CENTER" layoutX="20.0" layoutY="260.0" prefHeight="40.0"
+                               prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label layoutX="275.0" layoutY="260.0" prefHeight="40.0" prefWidth="500.0"
-                               text="Jeszcze fajniejszy tytuł 3">
+                        <Label fx:id="thirdTitle" layoutX="275.0" layoutY="260.0" prefHeight="40.0" prefWidth="500.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" layoutX="800.0" layoutY="260.0" prefHeight="40.0"
-                               prefWidth="150.0" text="3700">
+                        <Label fx:id="thirdAmount" alignment="CENTER_RIGHT" layoutX="800.0" layoutY="260.0"
+                               prefHeight="40.0" prefWidth="150.0">
                             <font>
                                 <Font name="System Bold" size="18.0"/>
                             </font>

@@ -91,4 +91,30 @@ public class PaymentServiceImpl implements PaymentService {
         Collections.reverse(allPayments);
         return allPayments;
     }
+
+    @Override
+    public List<Payment> getLastThreePayment() {
+        List<Payment> allPayments = this.getAllPayment();
+        return allPayments.size() > 3 ? allPayments.subList(0, 3) : allPayments;
+    }
+
+    @Override
+    public Payment getRecentDeposit() {
+        return this.getAllPayment()
+                .stream()
+                .filter(payment -> payment.getPaymentValue()
+                        .compareTo(BigDecimal.ZERO) > 0)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public Payment getRecentDebit() {
+        return this.getAllPayment()
+                .stream()
+                .filter(payment -> payment.getPaymentValue()
+                        .compareTo(BigDecimal.ZERO) < 0)
+                .findFirst()
+                .orElse(null);
+    }
 }
