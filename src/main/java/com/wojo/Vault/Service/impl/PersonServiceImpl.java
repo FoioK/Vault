@@ -6,6 +6,7 @@ import com.wojo.Vault.Database.Model.Generators.PersonDataGenerator;
 import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Service.PersonService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonServiceImpl implements PersonService {
@@ -34,6 +35,7 @@ public class PersonServiceImpl implements PersonService {
             return false;
         }
         if (idPersonAndPassword[1].equals(password)) {
+            Person.setAccounts(new ArrayList<>());
             personDAO.insertPersonData(Integer.valueOf(idPersonAndPassword[0]));
             return true;
         }

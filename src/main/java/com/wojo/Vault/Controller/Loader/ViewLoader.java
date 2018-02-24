@@ -12,9 +12,8 @@ public class ViewLoader {
 
     public static FXMLLoader loadView(Class aClass, String viewName) {
         FXMLLoader loader = new FXMLLoader(
-                aClass.getClass().getResource("/View/" + viewName + ".fxml"));
-        ResourceBundle languageBundles = ResourceBundle.getBundle(BUNDLES_PATH);
-        loader.setResources(languageBundles);
+                aClass.getResource("/View/" + viewName + ".fxml"));
+        loader.setResources(ResourceBundle.getBundle(BUNDLES_PATH));
         return loader;
     }
 

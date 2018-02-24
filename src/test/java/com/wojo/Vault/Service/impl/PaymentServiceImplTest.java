@@ -61,24 +61,6 @@ public class PaymentServiceImplTest {
                 , recipient, title, BigDecimal.TEN).size();
     }
 
-    @Test
-    public void shouldReturnFormattedNumber() {
-        String accountNumber = "PL12345678901234567890123496";
-        String formattedAccountNumber = "12 3456 7890 1234 5678 9012 3496";
-
-        Account account = new Account();
-        account.setIBAN_NUMBER(accountNumber);
-        Person.setAccounts(Collections.singletonList(account));
-
-        assertEquals(formattedAccountNumber, paymentService.getFormatAccountNumber());
-    }
-
-    @Test
-    public void formattedNumberShouldHaveLength32() {
-        Person.setAccounts(Collections.singletonList(new Account("PL", 26, BigDecimal.ZERO)));
-        assertEquals(32, paymentService.getFormatAccountNumber().length());
-    }
-
     private static final Integer ID_ACCOUNT = 3;
 
     @Test
