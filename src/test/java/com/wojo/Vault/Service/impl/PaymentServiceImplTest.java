@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
 
 public class PaymentServiceImplTest {
 
