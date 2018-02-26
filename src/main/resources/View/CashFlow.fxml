@@ -76,8 +76,7 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label fx:id="firstExpenses" alignment="CENTER_RIGHT" layoutX="620.0" layoutY="50.0"
-                               prefHeight="30.0" prefWidth="200.0">
+                        <Label fx:id="firstExpenses" layoutX="620.0" layoutY="50.0" prefHeight="30.0" prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
@@ -128,8 +127,8 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label fx:id="secondExpenses" alignment="CENTER_RIGHT" layoutX="620.0" layoutY="50.0"
-                               prefHeight="30.0" prefWidth="200.0">
+                        <Label fx:id="secondExpenses" layoutX="620.0" layoutY="50.0" prefHeight="30.0"
+                               prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
@@ -180,8 +179,7 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label fx:id="thirdExpenses" alignment="CENTER_RIGHT" layoutX="620.0" layoutY="50.0"
-                               prefHeight="30.0" prefWidth="200.0">
+                        <Label fx:id="thirdExpenses" layoutX="620.0" layoutY="50.0" prefHeight="30.0" prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>
@@ -191,8 +189,8 @@
                 <Pane layoutY="500.0" prefHeight="100.0" prefWidth="1050.0">
                     <children>
                         <Line endX="1050.0"/>
-                        <Label fx:id="summaryExpenses" alignment="CENTER_RIGHT" layoutX="620.0" layoutY="50.0"
-                               prefHeight="30.0" prefWidth="200.0">
+                        <Label fx:id="summaryExpenses" layoutX="620.0" layoutY="50.0" prefHeight="30.0"
+                               prefWidth="200.0">
                             <font>
                                 <Font size="18.0"/>
                             </font>

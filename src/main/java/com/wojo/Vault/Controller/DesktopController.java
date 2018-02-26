@@ -18,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 public class DesktopController {
-
     private RootController rootController;
 
     private AccountService accountService = new AccountServiceImpl();
@@ -37,19 +36,34 @@ public class DesktopController {
     private JFXButton paymentsLeft;
 
     @FXML
+    public JFXButton cashFlowLeft;
+
+    @FXML
     private Label fullName;
 
     @FXML
-    protected AnchorPane mainPane;
+    private AnchorPane mainPane;
+
+    @FXML
+    private Label cashFlowMonth;
+
+    @FXML
+    private Label cashFlowYear;
+
+    @FXML
+    private Label cashFlowBalance;
+
+    @FXML
+    private Label cashFlowIncomes;
+
+    @FXML
+    private Label cashFlowExpenses;
+
+    @FXML
+    private JFXButton cashFlowCenter;
 
     @FXML
     private JFXButton accountsCenter;
-
-    @FXML
-    private JFXButton paymentsCenter;
-
-    @FXML
-    private JFXButton exit;
 
     @FXML
     private Label accountsNumber;
@@ -61,6 +75,12 @@ public class DesktopController {
     private Label recentDebit;
 
     @FXML
+    private JFXButton paymentsCenter;
+
+    @FXML
+    private JFXButton exit;
+
+    @FXML
     public void initialize() {
         addEventHandlers();
         setLabelsText();
@@ -68,6 +88,10 @@ public class DesktopController {
 
     private void addEventHandlers() {
         dashboard.addEventHandler(ActionEvent.ACTION, e -> rootController.loadDesktopPane());
+
+        cashFlowLeft.addEventHandler(ActionEvent.ACTION, e -> goToCashFlow());
+
+        cashFlowCenter.addEventHandler(ActionEvent.ACTION, e -> goToCashFlow());
 
         accountsLeft.addEventHandler(ActionEvent.ACTION, e -> goToAccounts());
 
@@ -102,9 +126,18 @@ public class DesktopController {
         }
     }
 
+    private static final String CASH_FLOW_VIEW = "CashFlow";
     private static final String ACCOUNTS_VIEW = "Accounts";
     private static final String PAYMENTS_VIEW = "Payments";
     private static final String PAYMENTS_HISTORY_VIEW = "PaymentsHistory";
+
+    protected void goToCashFlow() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), CASH_FLOW_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
+        CashFlowController controller = loader.getController();
+        controller.setRootController(rootController);
+        mainPaneSetScreen(pane);
+    }
 
     protected void goToAccounts() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNTS_VIEW);

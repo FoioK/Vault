@@ -1,25 +1,32 @@
 package com.wojo.Vault.Database.Model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CashFlow {
 
+    private Integer year;
     private Month month;
     private List<Payment> paymentList = new ArrayList<>();
 
-    public CashFlow(Month month) {
-        this.month = month;
+    public CashFlow(LocalDate date) {
+        month = date.getMonth();
+        year = date.getYear();
+    }
+
+    public Integer getYear() {
+        return year;
     }
 
     public Month getMonth() {
         return month;
     }
 
-    public boolean addPayment(Payment payment) {
-        return paymentList.add(payment);
+    public void addPayment(Payment payment) {
+        paymentList.add(payment);
     }
 
     public BigDecimal getIncomes() {

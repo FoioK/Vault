@@ -23,18 +23,19 @@ public class CashFlowServiceImpl implements CashFlowService {
     public List<CashFlow> getLastThreeMonthCashFlow() {
         List<CashFlow> cashFlowList = new ArrayList<>(3);
 
-        Month currentMonth = LocalDate.now().getMonth();
+        LocalDate currentDate = LocalDate.now();
+        Month currentMonth = currentDate.getMonth();
+
         final Integer CURRENT_MONTH_INDEX = 0;
         final Integer A_MONTH_AGO_INDEX = 1;
         final Integer A_TWO_MONTH_AGO_INDEX = 2;
 
-
         List<Payment> lastThreeMonthPayment = paymentDAO
                 .getLastThreeMonthPayment(Person.getAccounts().get(activeIdAccount).getIdAccount());
 
-        cashFlowList.add(new CashFlow(currentMonth));
-        cashFlowList.add(new CashFlow(currentMonth.minus(1)));
-        cashFlowList.add(new CashFlow(currentMonth.minus(2)));
+        cashFlowList.add(new CashFlow(currentDate));
+        cashFlowList.add(new CashFlow(currentDate.minusMonths(1)));
+        cashFlowList.add(new CashFlow(currentDate.minusMonths(2)));
 
         lastThreeMonthPayment.forEach(payment -> {
             Month paymentMonth = payment.getDate()
