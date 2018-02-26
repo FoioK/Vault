@@ -7,4 +7,6 @@ import java.util.List;
 public interface CashFlowService {
 
     List<CashFlow> getLastThreeMonthCashFlow();
+
+    CashFlow getLastMothFlow();
 }

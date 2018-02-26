@@ -51,4 +51,10 @@ public class CashFlowServiceImpl implements CashFlowService {
         });
         return cashFlowList;
     }
+
+    @Override
+    public CashFlow getLastMothFlow() {
+        final Integer A_MONTH_AGO_INDEX = 1;
+        return this.getLastThreeMonthCashFlow().get(A_MONTH_AGO_INDEX);
+    }
 }
