@@ -22,7 +22,7 @@ public class CashFlow {
         return paymentList.add(payment);
     }
 
-    public BigDecimal getDeposit() {
+    public BigDecimal getIncomes() {
         return BigDecimal.valueOf(
                 paymentList.stream()
                         .filter(payment -> payment.getPaymentValue()
@@ -31,7 +31,7 @@ public class CashFlow {
                         .sum());
     }
 
-    public BigDecimal getDebit() {
+    public BigDecimal getExpenses() {
         return BigDecimal.valueOf(
                 paymentList.stream()
                         .filter(payment -> payment.getPaymentValue()
@@ -40,7 +40,7 @@ public class CashFlow {
                         .sum());
     }
 
-    public BigDecimal getSum() {
+    public BigDecimal getBalance() {
         return BigDecimal.valueOf(
                 paymentList.stream()
                         .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
