@@ -63,12 +63,38 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     @Override
     public List<Payment> getAllPayment(Integer idAccount) {
-        List<Payment> allPayments = new ArrayList<>();
         String queryStatement = "SELECT * FROM payments " +
                 "WHERE idAccount = ? OR recipientIdAccount = ?";
         try {
             ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement
                     , Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+            return getPaymentList(resultSet, idAccount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Payment> getLastThreeMonthPayment(Integer idAccount) {
+        String queryStatement = "SELECT * FROM payments " +
+                "WHERE date >= now() - INTERVAL 3 MONTH " +
+                "AND (idAccount = ? OR recipientIdAccount = ?)";
+        ResultSet resultSet;
+        try {
+            resultSet = DBManager.dbExecuteQuery(queryStatement,
+                    Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+            return getPaymentList(resultSet, idAccount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Payment> getPaymentList(ResultSet resultSet, Integer idAccount) {
+        List<Payment> paymentList = new ArrayList<>();
+        try {
             while (resultSet.next()) {
                 BigDecimal value = resultSet.getInt("idAccount") == idAccount ?
                         resultSet.getBigDecimal("paymentValue").negate() :
@@ -83,11 +109,9 @@ public class PaymentDAOImpl implements PaymentDAO {
                         value,
                         resultSet.getTimestamp("date")
                 );
-                allPayments.add(payment);
+                paymentList.add(payment);
             }
-            allPayments.sort(Comparator.comparing(Payment::getDate));
-            Collections.reverse(allPayments);
-            return allPayments;
+            return paymentList;
         } catch (SQLException e) {
             e.printStackTrace();
         }
