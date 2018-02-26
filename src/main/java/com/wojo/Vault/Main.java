@@ -1,5 +1,6 @@
 package com.wojo.Vault;
 
+import com.wojo.Vault.Controller.Loader.ViewLoader;
 import com.wojo.Vault.Database.DBManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,21 +9,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.ResourceBundle;
-
 public class Main extends Application {
 
-    private static final String ROOT_PATH = "/View/Root.fxml";
-
-    private static Parent root;
+    private static final String ROOT_VIEW = "Root";
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource(ROOT_PATH));
-        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
-        loader.setResources(languageBundles);
-        root = loader.load();
+                this.getClass().getResource(ROOT_VIEW));
+        Parent root = ViewLoader.loadPane(loader, 0, 0);
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

@@ -4,6 +4,7 @@ import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Payment;
 import com.wojo.Vault.Database.Model.Person;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,8 +12,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import static junit.framework.Assert.assertTrue;
 
 public class PaymentServiceImplTest {
 
@@ -72,7 +71,7 @@ public class PaymentServiceImplTest {
         for (int i = 0; i < allPayments.size() - 1; i++) {
             Date dateFirst = allPayments.get(i).getDate();
             Date dateSecond = allPayments.get(i + 1).getDate();
-            assertTrue(dateFirst.compareTo(dateSecond) >= 0);
+            Assert.assertTrue(dateFirst.compareTo(dateSecond) >= 0);
         }
     }
 }

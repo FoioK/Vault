@@ -22,10 +22,10 @@ public class AccountServiceImpl implements AccountService {
         return accountDAO.addNewAccount(idPerson, countryCode, length);
     }
 
-    @Override
-    public <T> void deleteAccount(T value) {
-        accountDAO.deleteAccount(value);
-    }
+//    @Override
+//    public <T> void deleteAccount(T value) {
+//        accountDAO.deleteAccount(value);
+//    }
 
     @Override
     public String getFormatAccountNumber() {

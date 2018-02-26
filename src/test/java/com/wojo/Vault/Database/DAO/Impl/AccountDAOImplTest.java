@@ -42,6 +42,7 @@ public class AccountDAOImplTest {
         assertEquals(NUMBER_PLUS_COUNTRY_CODE_LENGTH, account.getIBAN_NUMBER().length());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NullPointerException.class)
     public void shouldNotCreateObjectWithBadCountryCode() {
         String badCountryCode = "PL1";
@@ -50,6 +51,7 @@ public class AccountDAOImplTest {
                 .toString();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NullPointerException.class)
     public void shouldNotCreateObjectWithBadLength() {
         int badNumberLength = 0;

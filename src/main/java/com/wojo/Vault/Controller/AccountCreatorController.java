@@ -178,15 +178,14 @@ public class AccountCreatorController {
             accountData = getAccountDataList(login);
         }
         int idPerson = personService.insertPersonToDB(accountData);
-        if (idPerson <= 0) {
-            //TODO throw wyjątek -> błędne dane podczas tworzenia konta
-        }
+        //TODO throw wyjątek -> idPerson < 0 -> błędne dane podczas tworzenia konta
         createAccountNumber(idPerson, "PL", 26);
 
         JOptionPane.showMessageDialog(null, "User ID: " + login);
         rootController.loadLoginStep1();
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void createAccountNumber(int idPerson, String countryCode, int length) {
         accountService.addNewAccount(idPerson, countryCode, length);
     }
