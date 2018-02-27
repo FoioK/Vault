@@ -109,4 +109,17 @@ public class ViewControllerTest extends ApplicationTest {
         clickOn("#backToAccountsPane");
         sleep(50);
     }
+
+    @Test
+    public void loadCashFlowAndBack() {
+        clickOn("#loginField").write("ABCDEFGHI");
+        clickOn("#goToNextStep");
+        clickOn("#passwordFiled").write("Test");
+        clickOn("#logInButton");
+
+        clickOn("#cashFlowLeft");
+        sleep(50);
+        clickOn("#backToDesktopPane");
+        clickOn("#cashFlowCenter");
+    }
 }
