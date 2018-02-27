@@ -23,6 +23,4 @@ public interface PaymentDAO {
     List<Payment> getAllPayment(Integer idAccount);
 
     List<Payment> getLastThreeMonthPayment(Integer idAccount);
-
-    List<Payment> getPaymentList(ResultSet resultSet, Integer idAccount);
 }
