@@ -26,7 +26,7 @@ public class DBManager {
         ResultSet resultSet = null;
         CachedRowSetImpl cachedRowSet = null;
         try {
-            if (connection == null) {
+            if (connection == null || connection.isClosed()) {
                 dbConnection();
             }
             statement = connection.prepareStatement(queryStatement);
@@ -57,7 +57,7 @@ public class DBManager {
         PreparedStatement statement = null;
         int updateRows = 0;
         try {
-            if (connection == null) {
+            if (connection == null || connection.isClosed()) {
                 dbConnection();
             }
             statement = connection.prepareStatement(updateStatement);
@@ -79,7 +79,7 @@ public class DBManager {
 
     public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
             throws SQLException {
-        if (connection == null) {
+        if (connection == null || connection.isClosed()) {
             try {
                 dbConnection();
             } catch (IOException e) {
