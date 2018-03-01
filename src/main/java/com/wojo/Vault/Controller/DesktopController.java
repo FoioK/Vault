@@ -4,11 +4,11 @@ import com.jfoenix.controls.JFXButton;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
 import com.wojo.Vault.Database.Model.Payment;
 import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Main;
 import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PaymentService;
 import com.wojo.Vault.Service.impl.AccountServiceImpl;
 import com.wojo.Vault.Service.impl.PaymentServiceImpl;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -170,7 +170,7 @@ public class DesktopController {
     }
 
     private void exitApplication() {
-        Platform.exit();
+        Main.exitApplication();
     }
 
     private void logOutAction() {
