@@ -3,10 +3,12 @@ package com.wojo.Vault.Database.DAO.Impl;
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Payment;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -20,8 +22,16 @@ public class PaymentDAOImplTest {
     private PaymentDAO paymentDAO = new PaymentDAOImpl();
 
     @BeforeClass
-    public static void setConnectionTestPath() {
+    public static void connectionToTestDatabase() throws IOException, SQLException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
+    }
+
+    @AfterClass
+    public static void clearDatabaseAndDisconnect() throws SQLException {
+        String updateStatement = "TRUNCATE TABLE payments";
+        DBManager.dbExecuteUpdate(updateStatement, null);
+        DBManager.dbDisconnect();
     }
 
     @Test

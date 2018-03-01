@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -31,8 +32,9 @@ public class CashFlowServiceImplTest {
     private final static BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.0);
 
     @BeforeClass
-    public static void setRecordToPayment() throws SQLException {
+    public static void setRecordToPayment() throws SQLException, IOException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
 
         String updateStatement = "INSERT INTO payments " +
                 "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
@@ -84,11 +86,10 @@ public class CashFlowServiceImplTest {
     }
 
     @AfterClass
-    public static void deleteRecordFromPayment() throws SQLException {
-        String updateDeleteStatement = "DELETE FROM payments WHERE idAccount = ? OR idAccount = ?";
-        final Integer insertRowCounter = 8;
-        assertEquals((int) insertRowCounter, DBManager.dbExecuteUpdate(updateDeleteStatement,
-                Arrays.asList(String.valueOf(ID_ACCOUNT), String.valueOf(RECIPIENT_ID_ACCOUNT))));
+    public static void clearDatabaseAndDisconnect() throws SQLException {
+        String updateStatement = "TRUNCATE TABLE payments";
+        DBManager.dbExecuteUpdate(updateStatement, null);
+        DBManager.dbDisconnect();
     }
 
     @Test

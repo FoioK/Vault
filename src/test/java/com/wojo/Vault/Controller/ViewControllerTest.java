@@ -1,14 +1,23 @@
 package com.wojo.Vault.Controller;
 
+import com.wojo.Vault.Database.DBManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.testfx.framework.junit.ApplicationTest;
 
+@Category(com.wojo.Vault.Categories.GUITest.class)
 public class ViewControllerTest extends ApplicationTest {
+
+    @BeforeClass
+    public static void setTestConnectionPath(){
+        DBManager.setTestConnectionPath();
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {

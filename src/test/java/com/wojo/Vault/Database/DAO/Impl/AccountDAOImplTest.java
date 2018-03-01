@@ -4,11 +4,15 @@ import com.wojo.Vault.Database.DAO.AccountDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Person;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -17,11 +21,9 @@ public class AccountDAOImplTest {
     /**
      * Test Accounts on database
      */
-    private static final Integer idAccount = 3;
     private static final Integer idPerson = 7;
-    private static final String NUMBER = "12345678901234567890123456";
     private static final String IBAN_NUMBER = "PL12345678901234567890123456";
-    private static final BigDecimal VALUE = new BigDecimal("10000");
+    private static final BigDecimal VALUE = BigDecimal.valueOf(10000.0);
 
     private static final String PL_COUNTRY_CODE = "PL";
     private static final int NUMBER_LENGTH = 26;
@@ -30,8 +32,16 @@ public class AccountDAOImplTest {
     private AccountDAO accountDAO = new AccountDAOImpl();
 
     @BeforeClass
-    public static void setConnectionTestPath() {
+    public static void connectionToTestDatabase() throws IOException, SQLException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
+    }
+
+    @AfterClass
+    public static void clearDatabaseAndDisconnect() throws SQLException {
+        String updateStatement = "TRUNCATE TABLE accounts";
+        DBManager.dbExecuteUpdate(updateStatement, null);
+        DBManager.dbDisconnect();
     }
 
     @Test
@@ -75,9 +85,14 @@ public class AccountDAOImplTest {
     }
 
     @Test
-    public void shouldCorrectInsertAccountDateToClass() {
-        accountDAO.insertAccountData(idPerson);
-        Integer activeAccountIndex = Person.getAccounts().size() - 1;
+    public void shouldCorrectInsertAccountDateToClass() throws SQLException {
+        String updateStatement = "INSERT INTO accounts (idPerson, number, value) VALUES (?, ?, ?)";
+        Integer uniqueIdPerson = 647;
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdPerson), IBAN_NUMBER, VALUE.toString())));
+
+        accountDAO.insertAccountData(uniqueIdPerson);
+        Integer activeAccountIndex = 0;
         assertEquals(IBAN_NUMBER, Person.getAccounts().get(activeAccountIndex).getIBAN_NUMBER());
         assertEquals(VALUE, Person.getAccounts().get(activeAccountIndex).getValue());
     }
@@ -95,8 +110,16 @@ public class AccountDAOImplTest {
     }
 
     @Test
-    public void shouldFindAccountByNumber() {
-        assertEquals(idAccount, accountDAO.searchAccountByNumber(NUMBER));
+    public void shouldFindAccountByNumber() throws SQLException {
+        String updateStatement = "INSERT INTO accounts (idAccount, idPerson, number, value) VALUES (?, ?, ?, ?)";
+        Integer uniqueIdAccount = 4789;
+        String uniqueFullNumber = "PL97436678987234567890432156";
+        String uniqueNumber = "97436678987234567890432156";
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdAccount),
+                        String.valueOf(idPerson), uniqueFullNumber, VALUE.toString())));
+
+        assertEquals(uniqueIdAccount, accountDAO.searchAccountByNumber(uniqueNumber));
     }
 
     @Test
@@ -105,8 +128,14 @@ public class AccountDAOImplTest {
     }
 
     @Test
-    public void shouldReturnCorrectAccountValue() {
-        assertEquals(VALUE, accountDAO.getAccountValue(String.valueOf(idAccount)));
+    public void shouldReturnCorrectAccountValue() throws SQLException {
+        String updateStatement = "INSERT INTO accounts (idAccount, idPerson, number, value) VALUES (?, ?, ?, ?)";
+        Integer uniqueIdAccount = 5790;
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdAccount), String.valueOf(idPerson),
+                        IBAN_NUMBER, VALUE.toString())));
+
+        assertEquals(VALUE, accountDAO.getAccountValue(String.valueOf(uniqueIdAccount)));
     }
 
     @Test
