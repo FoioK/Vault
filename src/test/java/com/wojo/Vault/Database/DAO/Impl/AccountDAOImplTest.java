@@ -91,6 +91,7 @@ public class AccountDAOImplTest {
         assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
                 Arrays.asList(String.valueOf(uniqueIdPerson), IBAN_NUMBER, VALUE.toString())));
 
+        Person.setAccounts(new ArrayList<>());
         accountDAO.insertAccountData(uniqueIdPerson);
         Integer activeAccountIndex = 0;
         assertEquals(IBAN_NUMBER, Person.getAccounts().get(activeAccountIndex).getIBAN_NUMBER());

@@ -2,12 +2,15 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.Database.Model.CashFlow;
 import com.wojo.Vault.Database.Model.Payment;
 import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Main;
 import com.wojo.Vault.Service.AccountService;
+import com.wojo.Vault.Service.CashFlowService;
 import com.wojo.Vault.Service.PaymentService;
 import com.wojo.Vault.Service.impl.AccountServiceImpl;
+import com.wojo.Vault.Service.impl.CashFlowServiceImpl;
 import com.wojo.Vault.Service.impl.PaymentServiceImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +25,7 @@ public class DesktopController {
 
     private AccountService accountService = new AccountServiceImpl();
     private PaymentService paymentService = new PaymentServiceImpl();
+    private CashFlowService cashFlowService = new CashFlowServiceImpl();
 
     @FXML
     private JFXButton dashboard;
@@ -124,6 +128,13 @@ public class DesktopController {
             recentDebit.setText(debit.getRecipientName() + " " + debit.getPaymentValue() + " PLN");
             recentDebit.setTextFill(Color.RED);
         }
+
+        CashFlow lastMonthFlow = cashFlowService.getLastMothFlow();
+        cashFlowMonth.setText(lastMonthFlow.getMonth().toString());
+        cashFlowYear.setText(lastMonthFlow.getYear() + "");
+        cashFlowIncomes.setText(lastMonthFlow.getIncomes().toString());
+        cashFlowExpenses.setText(lastMonthFlow.getExpenses().toString());
+        cashFlowBalance.setText(lastMonthFlow.getBalance().toString());
     }
 
     private static final String CASH_FLOW_VIEW = "CashFlow";
@@ -131,7 +142,7 @@ public class DesktopController {
     private static final String PAYMENTS_VIEW = "Payments";
     private static final String PAYMENTS_HISTORY_VIEW = "PaymentsHistory";
 
-    protected void goToCashFlow() {
+    private void goToCashFlow() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), CASH_FLOW_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         CashFlowController controller = loader.getController();

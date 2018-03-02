@@ -3,7 +3,6 @@ package com.wojo.Vault.Database.DAO;
 import com.wojo.Vault.Database.Model.Payment;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 

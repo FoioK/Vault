@@ -46,9 +46,4 @@ public class PersonServiceImpl implements PersonService {
     public int insertPersonToDB(List<String> accountDate) {
         return personDAO.insertPersonToDB(accountDate);
     }
-
-//    @Override
-//    public <T> boolean deletePerson(T value) {
-//        return personDAO.deletePerson(value);
-//    }
 }

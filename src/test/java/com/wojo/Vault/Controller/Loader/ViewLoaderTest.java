@@ -38,7 +38,8 @@ public class ViewLoaderTest extends ApplicationTest {
         ViewLoader.loadPane(loader, 0, 0);
     }
 
-    @Test void cashFlowShouldBeLoad() {
+    @Test
+    public void cashFlowShouldBeLoad() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), CASH_FLOW_VIEW);
         ViewLoader.loadPane(loader, 0, 0);
     }
