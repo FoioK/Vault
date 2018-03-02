@@ -20,4 +20,6 @@ public interface PaymentDAO {
     boolean sendTransfer(Map<List<Object>, String> dataToUpdate);
 
     List<Payment> getAllPayment(Integer idAccount);
+
+    List<Payment> getLastThreeMonthPayment(Integer idAccount);
 }

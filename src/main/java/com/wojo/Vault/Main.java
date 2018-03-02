@@ -1,28 +1,26 @@
 package com.wojo.Vault;
 
+import com.wojo.Vault.Controller.Loader.ViewLoader;
 import com.wojo.Vault.Database.DBManager;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.ResourceBundle;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class Main extends Application {
 
-    private static final String ROOT_PATH = "/View/Root.fxml";
-
-    private static Parent root;
+    private static final String ROOT_VIEW = "Root";
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource(ROOT_PATH));
-        ResourceBundle languageBundles = ResourceBundle.getBundle("Bundles.messages");
-        loader.setResources(languageBundles);
-        root = loader.load();
+    public void start(Stage primaryStage) {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), ROOT_VIEW);
+        Parent root = ViewLoader.loadPane(loader, 0, 0);
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -31,7 +29,29 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        DBManager.setOriginalConnectionPath();
+        connectionToDatabase();
         launch(args);
+    }
+
+    private static void connectionToDatabase() {
+        DBManager.setOriginalConnectionPath();
+        try {
+            DBManager.dbConnection();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void exitApplication() {
+        disconnectionFromDatabase();
+        Platform.exit();
+    }
+
+    private static void disconnectionFromDatabase() {
+        try {
+            DBManager.dbDisconnect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

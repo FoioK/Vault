@@ -3,10 +3,16 @@ package com.wojo.Vault.Database.DAO.Impl;
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Payment;
+import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -16,8 +22,16 @@ public class PaymentDAOImplTest {
     private PaymentDAO paymentDAO = new PaymentDAOImpl();
 
     @BeforeClass
-    public static void setConnectionTestPath() {
+    public static void connectionToTestDatabase() throws IOException, SQLException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
+    }
+
+    @AfterClass
+    public static void clearDatabaseAndDisconnect() throws SQLException {
+        String updateStatement = "TRUNCATE TABLE payments";
+        DBManager.dbExecuteUpdate(updateStatement, null);
+        DBManager.dbDisconnect();
     }
 
     @Test
@@ -161,21 +175,61 @@ public class PaymentDAOImplTest {
     }
 
     @Test
-    public void shouldGetPaymentsHistoryForFirstAccount() {
-        List<Payment> firstAccountPayments = paymentDAO.getAllPayment(FIRST_ID_ACCOUNT);
+    public void getPaymentsHistoryTest() {
+        List<Payment> allPayment = paymentDAO.getAllPayment(FIRST_ID_ACCOUNT);
 
-        firstAccountPayments.forEach(payment -> {
-               if (payment.getIdAccount().equals(FIRST_ID_ACCOUNT)) {
-                   assertEquals(SECOND_NAME ,payment.getRecipientName());
-                   assertEquals(FIRST_NAME ,payment.getSenderName());
-                    assertEquals(PAYMENT_VALUE.negate(), payment.getPaymentValue());
-               }
-               else {
-                   assertEquals(FIRST_NAME, payment.getRecipientName());
-                   assertEquals(SECOND_NAME ,payment.getSenderName());
-                   assertEquals(PAYMENT_VALUE, payment.getPaymentValue());
-               }
-               assertEquals(TITLE, payment.getTitle());
+        allPayment.forEach(payment -> {
+            if (payment.getIdAccount().equals(FIRST_ID_ACCOUNT)) {
+                assertEquals(SECOND_NAME, payment.getRecipientName());
+                assertEquals(FIRST_NAME, payment.getSenderName());
+                assertEquals(PAYMENT_VALUE.negate(), payment.getPaymentValue());
+            } else {
+                assertEquals(FIRST_NAME, payment.getRecipientName());
+                assertEquals(SECOND_NAME, payment.getSenderName());
+                assertEquals(PAYMENT_VALUE, payment.getPaymentValue());
+            }
+            assertEquals(TITLE, payment.getTitle());
         });
+    }
+
+
+
+    @Test
+    public void getLastThreeMonthPaymentTest() throws SQLException {
+        String updateInsertStatement = "INSERT INTO payments " +
+                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        final Integer ID_ACCOUNT = -17;
+        final Integer RECIPIENT_ID_ACCOUNT = -18;
+        final String NAME = "Test";
+        final String TITLE = "Title";
+        final BigDecimal PAYMENT_VALUE = BigDecimal.valueOf(500);
+
+        final Date THIS_MONTH = new Date();
+        final Date A_THREE_MONTH_PLUS_ONE_DAY_AGO =
+                Date.from(LocalDateTime.now().minusMonths(3).minusDays(1)
+                        .atZone(ZoneId.systemDefault()).toInstant());
+
+        List<Object> transferInThisMonth = Arrays.asList(ID_ACCOUNT, RECIPIENT_ID_ACCOUNT,
+                NAME, NAME, TITLE, PAYMENT_VALUE, THIS_MONTH);
+        List<Object> transferMoreThanTreeMonthAgo = Arrays.asList(RECIPIENT_ID_ACCOUNT, ID_ACCOUNT,
+                NAME, NAME, TITLE, PAYMENT_VALUE, A_THREE_MONTH_PLUS_ONE_DAY_AGO);
+
+        Map<List<Object>, String> dataToUpdate = new HashMap<>();
+        dataToUpdate.put(transferInThisMonth, updateInsertStatement);
+        dataToUpdate.put(transferMoreThanTreeMonthAgo, updateInsertStatement);
+
+        Assert.assertTrue(DBManager.dbExecuteTransactionUpdate(dataToUpdate));
+
+        List<Payment> lastThreeMonthPayment = paymentDAO.getLastThreeMonthPayment(ID_ACCOUNT);
+        assertEquals(1, lastThreeMonthPayment.size());
+        lastThreeMonthPayment.forEach(payment ->
+                Assert.assertTrue(payment.getDate().compareTo(A_THREE_MONTH_PLUS_ONE_DAY_AGO) >= 0));
+
+
+        String updateDeleteStatement = "DELETE FROM payments WHERE idAccount = ? OR idAccount = ?";
+        Assert.assertEquals(2, DBManager.dbExecuteUpdate(updateDeleteStatement,
+                Arrays.asList(String.valueOf(ID_ACCOUNT), String.valueOf(RECIPIENT_ID_ACCOUNT))));
     }
 }

@@ -26,7 +26,9 @@ public class DBManager {
         ResultSet resultSet = null;
         CachedRowSetImpl cachedRowSet = null;
         try {
-            connection = getConnection();
+            if (connection == null || connection.isClosed()) {
+                dbConnection();
+            }
             statement = connection.prepareStatement(queryStatement);
             if (queryDate != null) {
                 for (int i = 0; i < queryDate.size(); i++) {
@@ -45,7 +47,6 @@ public class DBManager {
             if (statement != null) {
                 statement.close();
             }
-            dbDisconnect();
         }
         return cachedRowSet;
     }
@@ -56,7 +57,9 @@ public class DBManager {
         PreparedStatement statement = null;
         int updateRows = 0;
         try {
-            connection = getConnection();
+            if (connection == null || connection.isClosed()) {
+                dbConnection();
+            }
             statement = connection.prepareStatement(updateStatement);
             if (updateData != null) {
                 for (int i = 0; i < updateData.size(); i++) {
@@ -64,25 +67,26 @@ public class DBManager {
                 }
             }
             updateRows = statement.executeUpdate();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             if (statement != null) {
                 statement.close();
             }
-            dbDisconnect();
         }
         return updateRows;
     }
 
     public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
             throws SQLException {
-        try {
-            connection = getConnection();
-            connection.setAutoCommit(false);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (connection == null || connection.isClosed()) {
+            try {
+                dbConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        connection.setAutoCommit(false);
         List<PreparedStatement> preparedStatements = new ArrayList<>();
         try {
             dataToUpdate.entrySet()
@@ -109,8 +113,8 @@ public class DBManager {
                     }
                 }
             });
-            dbDisconnect();
         }
+        connection.setAutoCommit(true);
         return true;
     }
 
@@ -131,6 +135,10 @@ public class DBManager {
             return null;
         }
         return statement;
+    }
+
+    public static void dbConnection() throws SQLException, IOException {
+        connection = getConnection();
     }
 
     /**
@@ -154,7 +162,7 @@ public class DBManager {
         return DriverManager.getConnection(url, username, password);
     }
 
-    private static void dbDisconnect() throws SQLException {
+    public static void dbDisconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }

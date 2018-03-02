@@ -1,7 +1,7 @@
 package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Platform;
+import com.wojo.Vault.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -20,6 +20,6 @@ public class MainController {
     }
 
     private void exitApplication() {
-        Platform.exit();
+        Main.exitApplication();
     }
 }

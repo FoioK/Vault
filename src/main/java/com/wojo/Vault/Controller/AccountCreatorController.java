@@ -173,26 +173,14 @@ public class AccountCreatorController {
 
     private void createAccount() {
         String login = personService.generateLogin(9);
-        List<String> accountData = null;
-        if (login != null) {
-            accountData = getAccountDataList(login);
-        }
-        int idPerson = personService.insertPersonToDB(accountData);
-        if (idPerson <= 0) {
-            //TODO throw wyjątek -> błędne dane podczas tworzenia konta
-        }
-        createAccountNumber(idPerson, "PL", 26);
-
-        JOptionPane.showMessageDialog(null, "User ID: " + login);
-        rootController.loadLoginStep1();
-    }
-
-    private void createAccountNumber(int idPerson, String countryCode, int length) {
-        accountService.addNewAccount(idPerson, countryCode, length);
+       if (accountService.createAccount(login, getAccountDataList(login), "PL", 26)) {
+           JOptionPane.showMessageDialog(null, "User ID: " + login);
+           rootController.loadLoginStep1();
+       }
     }
 
     private List<String> getAccountDataList(String login) {
-        List<String> accountData = new ArrayList<>();
+        List<String> accountData = new ArrayList<>(8);
         accountData.add(firstNameField.getText());
         accountData.add(lastNameField.getText());
         accountData.add(personIdField.getText());

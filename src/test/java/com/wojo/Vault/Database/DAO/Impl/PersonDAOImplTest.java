@@ -3,10 +3,14 @@ package com.wojo.Vault.Database.DAO.Impl;
 import com.wojo.Vault.Database.DAO.PersonDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Person;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -15,7 +19,6 @@ public class PersonDAOImplTest {
     /**
      * Test Person on database
      */
-    private static final Integer idPerson = 1;
     private static final String FIRST_NAME = "FirstName";
     private static final String LAST_NAME = "LastName";
     private static final String PERSON_ID = "00000000000";
@@ -30,8 +33,16 @@ public class PersonDAOImplTest {
     private PersonDAO personDAO = new PersonDAOImpl();
 
     @BeforeClass
-    public static void setConnectionTstPath() {
+    public static void connectionToTestDatabase() throws IOException, SQLException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
+    }
+
+    @AfterClass
+    public static void clearDatabaseAndDisconnect() throws SQLException {
+        String updateStatement = "TRUNCATE TABLE person";
+        DBManager.dbExecuteUpdate(updateStatement, null);
+        DBManager.dbDisconnect();
     }
 
     @Test
@@ -40,8 +51,17 @@ public class PersonDAOImplTest {
     }
 
     @Test
-    public void shouldFindLogin() {
-        assertTrue(personDAO.searchPersonLogin(LOGIN));
+    public void shouldFindLogin() throws SQLException {
+        String updateStatement = "INSERT INTO person " +
+                "(FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS, TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?)";
+        String uniqueLogin = "2M7E46FSX";
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS,
+                        TELEPHONE_NUMBER, EMAIL, uniqueLogin, PASSWORD)));
+
+        assertTrue(personDAO.searchPersonLogin(uniqueLogin));
     }
 
     @Test
@@ -50,15 +70,26 @@ public class PersonDAOImplTest {
     }
 
     @Test
-    public void shouldReturnGoodIdPersonAndPassword() {
-        String[] idPersonAndPassword = personDAO.getIdPersonAndPassword(LOGIN);
-        assertEquals(String.valueOf(idPerson), idPersonAndPassword[0]);
+    public void shouldReturnGoodIdPersonAndPassword() throws SQLException {
+        String updateStatement = "INSERT INTO person " +
+                "(idPerson, FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS, TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Integer uniqueIdPerson = 424;
+        String uniqueLogin = "GMK456DS9";
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdPerson), FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS,
+                        TELEPHONE_NUMBER, EMAIL, uniqueLogin, PASSWORD)));
+
+        String[] idPersonAndPassword = personDAO.getIdPersonAndPassword(uniqueLogin);
+        assertEquals(String.valueOf(uniqueIdPerson), idPersonAndPassword[0]);
         assertEquals(PASSWORD, idPersonAndPassword[1]);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldReturnNull() {
         String[] idPersonAndPassword = personDAO.getIdPersonAndPassword("");
+        Integer idPerson = 1;
         assertEquals(String.valueOf(idPerson), idPersonAndPassword[0]);
         assertEquals(PASSWORD, idPersonAndPassword[1]);
     }
@@ -70,23 +101,43 @@ public class PersonDAOImplTest {
     }
 
     @Test
-    public void shouldTryInsertData() {
-        assertTrue(personDAO.insertPersonData(idPerson));
+    public void shouldTryInsertData() throws SQLException {
+        String updateStatement = "INSERT INTO person " +
+                "(idPerson, FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS, TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Integer uniqueIdPerson = 758;
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdPerson), FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS,
+                        TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD)));
+
+        assertTrue(personDAO.insertPersonData(uniqueIdPerson));
     }
 
     @Test
-    public void shouldInsertAccountDateToClass() {
-        personDAO.insertPersonData(idPerson);
+    public void shouldInsertAccountDateToClass() throws SQLException {
+        String updateStatement = "INSERT INTO person " +
+                "(idPerson, FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS, TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Integer uniqueIdPerson = 589;
+        String uniqueEmail = "Unique email";
+        String uniqueFirstName = "Unique First Name";
+        String uniquePassword = "UniquePassword";
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdPerson), uniqueFirstName, LAST_NAME, PERSON_ID, ADDRESS,
+                        TELEPHONE_NUMBER, uniqueEmail, LOGIN, uniquePassword)));
+        personDAO.insertPersonData(uniqueIdPerson);
 
-        assertEquals((int) idPerson, Person.getIdPersonInDatabase());
-        assertEquals(FIRST_NAME, Person.getFirstName());
+        assertEquals((int) uniqueIdPerson, Person.getIdPersonInDatabase());
+        assertEquals(uniqueFirstName, Person.getFirstName());
         assertEquals(LAST_NAME, Person.getLastName());
         assertEquals(PERSON_ID, Person.getPersonId());
         assertEquals(ADDRESS, Person.getAddress());
         assertEquals(TELEPHONE_NUMBER, Person.getTelephoneNumber());
-        assertEquals(EMAIL, Person.getEmail());
+        assertEquals(uniqueEmail, Person.getEmail());
         assertEquals(LOGIN, Person.getLogin());
-        assertEquals(PASSWORD, Person.getPassword());
+        assertEquals(uniquePassword, Person.getPassword());
     }
 
     @Test

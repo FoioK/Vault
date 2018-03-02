@@ -4,16 +4,17 @@ import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Payment;
 import com.wojo.Vault.Database.Model.Person;
+import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
 
 public class PaymentServiceImplTest {
 
@@ -22,8 +23,14 @@ public class PaymentServiceImplTest {
     private static final String RECIPIENT_ID_ACCOUNT = 1 + "";
 
     @BeforeClass
-    public static void setConnectionTestPath() {
+    public static void setConnectionTestPath() throws IOException, SQLException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
+    }
+
+    @AfterClass
+    public static void disconnectFromDatabase() throws SQLException {
+        DBManager.dbDisconnect();
     }
 
     /**
@@ -73,7 +80,7 @@ public class PaymentServiceImplTest {
         for (int i = 0; i < allPayments.size() - 1; i++) {
             Date dateFirst = allPayments.get(i).getDate();
             Date dateSecond = allPayments.get(i + 1).getDate();
-            assertTrue(dateFirst.compareTo(dateSecond) >= 0);
+            Assert.assertTrue(dateFirst.compareTo(dateSecond) >= 0);
         }
     }
 }

@@ -3,11 +3,12 @@ package com.wojo.Vault.Service;
 import com.wojo.Vault.Database.Model.Account;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountService {
-    Account addNewAccount(Integer idPerson, String contryCode, int length);
+    Account addNewAccount(Integer idPerson, String countryCode, int length);
 
-    <T> void deleteAccount(T value);
+    boolean createAccount(String login, List<String> accountDataList, String countryCode, int length);
 
     String getFormatAccountNumber();
 

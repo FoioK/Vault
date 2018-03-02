@@ -11,7 +11,5 @@ public interface PersonService {
 
     int insertPersonToDB(List<String> accountDate);
 
-    <T> boolean deletePerson(T value);
-
     String generateLogin(int length);
 }

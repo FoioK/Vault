@@ -24,12 +24,9 @@ public class Payment {
         this.date = date;
     }
 
+    @SuppressWarnings("unused")
     public Integer getIdPayment() {
         return idPayment;
-    }
-
-    public void setIdPayment(Integer idPayment) {
-        this.idPayment = idPayment;
     }
 
     public Integer getIdAccount() {
@@ -44,16 +41,8 @@ public class Payment {
         return recipientName;
     }
 
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
-    }
-
     public String getSenderName() {
         return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
     }
 
     public String getTitle() {
@@ -68,15 +57,8 @@ public class Payment {
         return paymentValue;
     }
 
-    public void setPaymentValue(BigDecimal paymentValue) {
-        this.paymentValue = paymentValue;
-    }
-
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }

@@ -2,13 +2,16 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.Database.Model.CashFlow;
 import com.wojo.Vault.Database.Model.Payment;
 import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Main;
 import com.wojo.Vault.Service.AccountService;
+import com.wojo.Vault.Service.CashFlowService;
 import com.wojo.Vault.Service.PaymentService;
 import com.wojo.Vault.Service.impl.AccountServiceImpl;
+import com.wojo.Vault.Service.impl.CashFlowServiceImpl;
 import com.wojo.Vault.Service.impl.PaymentServiceImpl;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,11 +21,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 public class DesktopController {
-
     private RootController rootController;
 
     private AccountService accountService = new AccountServiceImpl();
     private PaymentService paymentService = new PaymentServiceImpl();
+    private CashFlowService cashFlowService = new CashFlowServiceImpl();
 
     @FXML
     private JFXButton dashboard;
@@ -37,19 +40,34 @@ public class DesktopController {
     private JFXButton paymentsLeft;
 
     @FXML
+    public JFXButton cashFlowLeft;
+
+    @FXML
     private Label fullName;
 
     @FXML
-    protected AnchorPane mainPane;
+    private AnchorPane mainPane;
+
+    @FXML
+    private Label cashFlowMonth;
+
+    @FXML
+    private Label cashFlowYear;
+
+    @FXML
+    private Label cashFlowBalance;
+
+    @FXML
+    private Label cashFlowIncomes;
+
+    @FXML
+    private Label cashFlowExpenses;
+
+    @FXML
+    private JFXButton cashFlowCenter;
 
     @FXML
     private JFXButton accountsCenter;
-
-    @FXML
-    private JFXButton paymentsCenter;
-
-    @FXML
-    private JFXButton exit;
 
     @FXML
     private Label accountsNumber;
@@ -61,6 +79,12 @@ public class DesktopController {
     private Label recentDebit;
 
     @FXML
+    private JFXButton paymentsCenter;
+
+    @FXML
+    private JFXButton exit;
+
+    @FXML
     public void initialize() {
         addEventHandlers();
         setLabelsText();
@@ -68,6 +92,10 @@ public class DesktopController {
 
     private void addEventHandlers() {
         dashboard.addEventHandler(ActionEvent.ACTION, e -> rootController.loadDesktopPane());
+
+        cashFlowLeft.addEventHandler(ActionEvent.ACTION, e -> goToCashFlow());
+
+        cashFlowCenter.addEventHandler(ActionEvent.ACTION, e -> goToCashFlow());
 
         accountsLeft.addEventHandler(ActionEvent.ACTION, e -> goToAccounts());
 
@@ -100,11 +128,27 @@ public class DesktopController {
             recentDebit.setText(debit.getRecipientName() + " " + debit.getPaymentValue() + " PLN");
             recentDebit.setTextFill(Color.RED);
         }
+
+        CashFlow lastMonthFlow = cashFlowService.getLastMothFlow();
+        cashFlowMonth.setText(lastMonthFlow.getMonth().toString());
+        cashFlowYear.setText(lastMonthFlow.getYear() + "");
+        cashFlowIncomes.setText(lastMonthFlow.getIncomes().toString());
+        cashFlowExpenses.setText(lastMonthFlow.getExpenses().toString());
+        cashFlowBalance.setText(lastMonthFlow.getBalance().toString());
     }
 
+    private static final String CASH_FLOW_VIEW = "CashFlow";
     private static final String ACCOUNTS_VIEW = "Accounts";
     private static final String PAYMENTS_VIEW = "Payments";
     private static final String PAYMENTS_HISTORY_VIEW = "PaymentsHistory";
+
+    private void goToCashFlow() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), CASH_FLOW_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
+        CashFlowController controller = loader.getController();
+        controller.setRootController(rootController);
+        mainPaneSetScreen(pane);
+    }
 
     protected void goToAccounts() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNTS_VIEW);
@@ -137,7 +181,7 @@ public class DesktopController {
     }
 
     private void exitApplication() {
-        Platform.exit();
+        Main.exitApplication();
     }
 
     private void logOutAction() {
