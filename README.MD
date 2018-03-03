@@ -86,6 +86,6 @@ public class Foo {
 
 Vault is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
-##Author
+## Author
 
 Wojciech Kozioł
