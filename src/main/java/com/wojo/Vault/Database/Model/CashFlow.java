@@ -1,6 +1,7 @@
 package com.wojo.Vault.Database.Model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class CashFlow {
                         .filter(payment -> payment.getPaymentValue()
                                 .compareTo(BigDecimal.ZERO) > 0)
                         .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
-                        .sum());
+                        .sum()).setScale(2, RoundingMode.CEILING);
     }
 
     public BigDecimal getExpenses() {
@@ -44,13 +45,13 @@ public class CashFlow {
                         .filter(payment -> payment.getPaymentValue()
                                 .compareTo(BigDecimal.ZERO) < 0)
                         .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
-                        .sum());
+                        .sum()).setScale(2, RoundingMode.CEILING);
     }
 
     public BigDecimal getBalance() {
         return BigDecimal.valueOf(
                 paymentList.stream()
                         .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
-                        .sum());
+                        .sum()).setScale(2, RoundingMode.CEILING);
     }
 }
