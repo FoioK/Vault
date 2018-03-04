@@ -6,6 +6,14 @@ Vault is desktop application which is simple representation of internet bank. Ap
 
 - Java SE Runtime Environment 8
 
+You can get it from: http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html
+
+## Installing
+Get last version from:
+https://github.com/FoioK/Vault/blob/master/app/Vault.rar?raw=true
+
+Next extract file and run it.
+
 ## Features
 
 - Panel for creating account
