@@ -4,8 +4,6 @@ import com.sun.rowset.CachedRowSetImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +14,8 @@ public class DBManager {
 
     private static Connection connection = null;
 
-    private static final String ORIGINAL_CONNECTION_PATH = "src/main/resources/Database/database.properties";
-    private static final String TEST_CONNECTION_PATH = "src/main/resources/Database/databaseTest.properties";
+    private static final String ORIGINAL_CONNECTION_PATH = "META-INF/database.properties";
+    private static final String TEST_CONNECTION_PATH = "META-INF/databaseTest.properties";
     private static String connectionPath = ORIGINAL_CONNECTION_PATH;
 
     public static ResultSet dbExecuteQuery(String queryStatement, List<String> queryDate)
@@ -148,7 +146,8 @@ public class DBManager {
      */
     private static Connection getConnection() throws SQLException, IOException {
         Properties properties = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get(connectionPath))) {
+        DBManager dbManager = new DBManager();
+        try (InputStream in = dbManager.getClass().getClassLoader().getResourceAsStream(connectionPath)) {
             properties.load(in);
         }
         String drivers = properties.getProperty("jdbc.drivers");

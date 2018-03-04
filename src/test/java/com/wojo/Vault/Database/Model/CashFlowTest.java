@@ -14,9 +14,9 @@ public class CashFlowTest {
     private static CashFlow cashFlowWithPayment;
     private static CashFlow cashFlowWithoutPayment = new CashFlow(LocalDate.now());
 
-    private static final BigDecimal VALUE_OF_500 = BigDecimal.valueOf(500.0);
-    private static final BigDecimal VALUE_OF_1000 = BigDecimal.valueOf(1000.0);
-    private static final BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.0);
+    private static final BigDecimal VALUE_OF_500 = BigDecimal.valueOf(500.00);
+    private static final BigDecimal VALUE_OF_1000 = BigDecimal.valueOf(1000.00);
+    private static final BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.00);
 
     @BeforeClass
     public static void setDataToTests() {
