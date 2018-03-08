@@ -14,8 +14,7 @@ public abstract class Deposits {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public Deposits(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
-        this.idDeposit = idDeposit;
+    public Deposits(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         this.idAccount = idAccount;
         this.depositAmount = depositAmount;
         this.startDate = startDate;

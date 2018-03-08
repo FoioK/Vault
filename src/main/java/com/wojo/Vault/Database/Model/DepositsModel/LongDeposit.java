@@ -11,8 +11,8 @@ public class LongDeposit extends Deposits {
     public static final BigDecimal MINIMAL_AMOUNT = BigDecimal.valueOf(500);
     public static final Integer NUMBER_OF_DAYS = 30;
 
-    public LongDeposit(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
-        super(idDeposit, idAccount, depositAmount, startDate);
+    public LongDeposit(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+        super(idAccount, depositAmount, startDate);
         super.setPercent(PERCENT);
         super.setMinimalAmount(MINIMAL_AMOUNT);
         super.setNumberOfDays(NUMBER_OF_DAYS);
