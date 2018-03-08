@@ -4,8 +4,6 @@ import com.sun.rowset.CachedRowSetImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +14,8 @@ public class DBManager {
 
     private static Connection connection = null;
 
-    private static final String ORIGINAL_CONNECTION_PATH = "src/main/resources/Database/database.properties";
-    private static final String TEST_CONNECTION_PATH = "src/main/resources/Database/databaseTest.properties";
+    private static final String ORIGINAL_CONNECTION_PATH = "META-INF/database.properties";
+    private static final String TEST_CONNECTION_PATH = "META-INF/databaseTest.properties";
     private static String connectionPath = ORIGINAL_CONNECTION_PATH;
 
     public static ResultSet dbExecuteQuery(String queryStatement, List<String> queryDate)
@@ -26,7 +24,9 @@ public class DBManager {
         ResultSet resultSet = null;
         CachedRowSetImpl cachedRowSet = null;
         try {
-            connection = getConnection();
+            if (connection == null || connection.isClosed()) {
+                dbConnection();
+            }
             statement = connection.prepareStatement(queryStatement);
             if (queryDate != null) {
                 for (int i = 0; i < queryDate.size(); i++) {
@@ -45,7 +45,6 @@ public class DBManager {
             if (statement != null) {
                 statement.close();
             }
-            dbDisconnect();
         }
         return cachedRowSet;
     }
@@ -56,7 +55,9 @@ public class DBManager {
         PreparedStatement statement = null;
         int updateRows = 0;
         try {
-            connection = getConnection();
+            if (connection == null || connection.isClosed()) {
+                dbConnection();
+            }
             statement = connection.prepareStatement(updateStatement);
             if (updateData != null) {
                 for (int i = 0; i < updateData.size(); i++) {
@@ -64,25 +65,26 @@ public class DBManager {
                 }
             }
             updateRows = statement.executeUpdate();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             if (statement != null) {
                 statement.close();
             }
-            dbDisconnect();
         }
         return updateRows;
     }
 
     public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
             throws SQLException {
-        try {
-            connection = getConnection();
-            connection.setAutoCommit(false);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (connection == null || connection.isClosed()) {
+            try {
+                dbConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        connection.setAutoCommit(false);
         List<PreparedStatement> preparedStatements = new ArrayList<>();
         try {
             dataToUpdate.entrySet()
@@ -109,8 +111,8 @@ public class DBManager {
                     }
                 }
             });
-            dbDisconnect();
         }
+        connection.setAutoCommit(true);
         return true;
     }
 
@@ -133,6 +135,10 @@ public class DBManager {
         return statement;
     }
 
+    public static void dbConnection() throws SQLException, IOException {
+        connection = getConnection();
+    }
+
     /**
      * Gets a connection from the properties specified in the file database.properties.
      *
@@ -140,7 +146,8 @@ public class DBManager {
      */
     private static Connection getConnection() throws SQLException, IOException {
         Properties properties = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get(connectionPath))) {
+        DBManager dbManager = new DBManager();
+        try (InputStream in = dbManager.getClass().getClassLoader().getResourceAsStream(connectionPath)) {
             properties.load(in);
         }
         String drivers = properties.getProperty("jdbc.drivers");
@@ -154,7 +161,7 @@ public class DBManager {
         return DriverManager.getConnection(url, username, password);
     }
 
-    private static void dbDisconnect() throws SQLException {
+    public static void dbDisconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }

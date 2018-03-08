@@ -1,8 +1,8 @@
 package com.wojo.Vault.Database;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +16,6 @@ public class DBManagerTest {
     /**
      * Test person data
      */
-    private static final Integer idPerson = 1;
     private static final String FIRST_NAME = "FirstName";
     private static final String LAST_NAME = "LastName";
     private static final String PERSON_ID = "00000000000";
@@ -25,8 +24,6 @@ public class DBManagerTest {
     private static final String EMAIL = "email";
     private static final String LOGIN = "ABCDEFGHI";
     private static final String PASSWORD = "Test";
-
-    private static final Integer idPerson_TO_SET = 2;
 
     private static final String INSERT_FIRST_NAME = "Jan";
     private static final String INSERT_LAST_NAME = "Kowalski";
@@ -38,8 +35,20 @@ public class DBManagerTest {
     private static final String INSERT_PASSWORD = "Janek";
 
     @BeforeClass
-    public static void setConnectionTestPath() {
+    public static void connectionToTestDatabase() throws IOException, SQLException {
         DBManager.setTestConnectionPath();
+        DBManager.dbConnection();
+    }
+
+    @AfterClass
+    public static void clearDatabaseAndDisconnect() throws SQLException {
+        String truncatePerson = "TRUNCATE TABLE person";
+        DBManager.dbExecuteUpdate(truncatePerson, null);
+        String truncateAccounts = "TRUNCATE TABLE accounts";
+        DBManager.dbExecuteUpdate(truncateAccounts, null);
+        String truncatePayments = "TRUNCATE TABLE payments";
+        DBManager.dbExecuteUpdate(truncatePayments, null);
+        DBManager.dbDisconnect();
     }
 
     @Test(expected = SQLException.class)
@@ -56,19 +65,31 @@ public class DBManagerTest {
 
     @Test
     public void shouldReturnCorrectDate() throws SQLException {
+        String updateStatement = "INSERT INTO person " +
+                "(idPerson, FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS, TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Integer uniqueIdPerson = 148;
+        String uniquePassword = "Passwordddd";
+        String uniqueTelephoneNumber = "765233111";
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdPerson), FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS,
+                        uniqueTelephoneNumber, EMAIL, LOGIN, uniquePassword)));
+
         String queryStatement = "SELECT * FROM person WHERE idPerson = ?;";
         ResultSet resultSet = DBManager.dbExecuteQuery(
-                queryStatement, Collections.singletonList(String.valueOf(idPerson)));
+                queryStatement, Collections.singletonList(String.valueOf(uniqueIdPerson)));
+        Assert.assertTrue(resultSet.next());
         if (resultSet.next()) {
-            assertEquals(String.valueOf(idPerson), resultSet.getString("idPerson"));
+            assertEquals(String.valueOf(uniqueIdPerson), resultSet.getString("idPerson"));
             assertEquals(FIRST_NAME, resultSet.getString("FIRST_NAME"));
             assertEquals(LAST_NAME, resultSet.getString("LAST_NAME"));
             assertEquals(PERSON_ID, resultSet.getString("PERSON_ID"));
             assertEquals(ADDRESS, resultSet.getString("ADDRESS"));
-            assertEquals(TELEPHONE_NUMBER, resultSet.getString("TELEPHONE_NUMBER"));
+            assertEquals(uniqueTelephoneNumber, resultSet.getString("TELEPHONE_NUMBER"));
             assertEquals(EMAIL, resultSet.getString("EMAIL"));
             assertEquals(LOGIN, resultSet.getString("LOGIN"));
-            assertEquals(PASSWORD, resultSet.getString("PASSWORD"));
+            assertEquals(uniquePassword, resultSet.getString("PASSWORD"));
         }
     }
 
@@ -85,6 +106,15 @@ public class DBManagerTest {
 
     @Test
     public void executeUpdateTest() throws SQLException {
+        String updateStatement = "INSERT INTO person " +
+                "(idPerson, FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS, TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Integer uniqueIdPerson = 258;
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(uniqueIdPerson), FIRST_NAME, LAST_NAME, PERSON_ID, ADDRESS,
+                        TELEPHONE_NUMBER, EMAIL, LOGIN, PASSWORD)));
+
         String queryStatementSetNewValue = "UPDATE person SET " +
                 "FIRST_NAME = ?, " +
                 "LAST_NAME = ?, " +
@@ -101,7 +131,7 @@ public class DBManagerTest {
         for (int i = 0; i < listDateSize; i++) {
             updateDate.add(newValue);
         }
-        updateDate.add(String.valueOf(idPerson_TO_SET));
+        updateDate.add(String.valueOf(uniqueIdPerson));
         assertEquals(1, DBManager.dbExecuteUpdate(queryStatementSetNewValue, updateDate));
     }
 
@@ -122,18 +152,35 @@ public class DBManagerTest {
 
     @Test
     public void OneWrongStatementInTheTransaction() throws SQLException {
+        String updateStatement = "INSERT INTO accounts (idAccount, idPerson, number, value) VALUES (?, ?, ?, ?)";
+
+        Integer firstIdAccount = 3478;
+        Integer firstIdPerson = 1;
+        String firstNumber = "PL47345678901266567899123456";
+
+        Integer secondIdAccount = 4478;
+        Integer secondIdPerson = 2;
+        String secondNumber = "PL57345678901266567899123456";
+
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(firstIdAccount),
+                        String.valueOf(firstIdPerson), firstNumber, BigDecimal.valueOf(1000.0).toString())));
+        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
+                Arrays.asList(String.valueOf(secondIdAccount),
+                        String.valueOf(secondIdPerson), secondNumber, BigDecimal.valueOf(1000.0).toString())));
+
         String updateStatementFirstAndSecond = "UPDATE accounts " +
                 "SET value = ? " +
                 "WHERE idAccount = ?";
-        List<Object> firstData = Arrays.asList(new BigDecimal("50000"), "1");
-        List<Object> secondData = Arrays.asList(new BigDecimal("50000"), "2");
+        List<Object> firstData = Arrays.asList(BigDecimal.valueOf(900.0), firstIdAccount);
+        List<Object> secondData = Arrays.asList(BigDecimal.valueOf(1100.0), secondIdAccount);
 
         String updateStatementThird = "INSERT INTO payments " +
                 "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
                 "VALUES " +
                 "(?, ?, ?, ?, ?, ?, ?)";
-        List<Object> thirdData = Arrays.asList("1", "2", "Recipient", "Sender", "Title"
-                , new BigDecimal("1"), new Date());
+        List<Object> thirdData = Arrays.asList(firstIdAccount, secondIdAccount, "Recipient", "Sender", "Title"
+                , BigDecimal.valueOf(100.0), new Date());
 
         Map<List<Object>, String> dataToUpdate = new HashMap<>(3);
         dataToUpdate.put(firstData, updateStatementFirstAndSecond);

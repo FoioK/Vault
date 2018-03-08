@@ -17,8 +17,6 @@ public class CashFlowServiceImpl implements CashFlowService {
 
     private PaymentDAO paymentDAO = new PaymentDAOImpl();
 
-    private Integer activeIdAccount = 0;
-
     @Override
     public List<CashFlow> getLastThreeMonthCashFlow() {
         List<CashFlow> cashFlowList = new ArrayList<>(3);
@@ -30,6 +28,7 @@ public class CashFlowServiceImpl implements CashFlowService {
         final Integer A_MONTH_AGO_INDEX = 1;
         final Integer A_TWO_MONTH_AGO_INDEX = 2;
 
+        Integer activeIdAccount = 0;
         List<Payment> lastThreeMonthPayment = paymentDAO
                 .getLastThreeMonthPayment(Person.getAccounts().get(activeIdAccount).getIdAccount());
 

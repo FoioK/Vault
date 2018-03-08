@@ -1,12 +1,21 @@
 package com.wojo.Vault.Filters;
 
 import com.jfoenix.controls.JFXTextField;
+import com.wojo.Vault.Database.DBManager;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+@Category(com.wojo.Vault.Categories.GUITest.class)
 public class TextFieldFilterTest extends ApplicationTest {
+
+    @BeforeClass
+    public static void setTestConnectionPath(){
+        DBManager.setTestConnectionPath();
+    }
 
     @Test
     public void lengthLimiterTest() {

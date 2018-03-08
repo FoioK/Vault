@@ -91,8 +91,7 @@ public class PaymentDAOImpl implements PaymentDAO {
         return null;
     }
 
-    @Override
-    public List<Payment> getPaymentList(ResultSet resultSet, Integer idAccount) {
+    private List<Payment> getPaymentList(ResultSet resultSet, Integer idAccount) {
         List<Payment> paymentList = new ArrayList<>();
         try {
             while (resultSet.next()) {

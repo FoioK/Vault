@@ -1,9 +1,13 @@
 package com.wojo.Vault.Controller.Loader;
 
+import com.wojo.Vault.Database.DBManager;
 import javafx.fxml.FXMLLoader;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.testfx.framework.junit.ApplicationTest;
 
+@Category(com.wojo.Vault.Categories.GUITest.class)
 public class ViewLoaderTest extends ApplicationTest {
 
     private static final String ACCOUNT_CREATOR_VIEW = "AccountCreator";
@@ -17,6 +21,11 @@ public class ViewLoaderTest extends ApplicationTest {
     private static final String PAYMENTS_HISTORY_VIEW = "PaymentsHistory";
     private static final String ROOT_VIEW = "Root";
 
+    @BeforeClass
+    public static void setTestConnectionPath(){
+        DBManager.setTestConnectionPath();
+    }
+
     @Test
     public void accountCreatorShouldBeLoad() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNT_CREATOR_VIEW);
@@ -29,7 +38,8 @@ public class ViewLoaderTest extends ApplicationTest {
         ViewLoader.loadPane(loader, 0, 0);
     }
 
-    @Test void cashFlowShouldBeLoad() {
+    @Test
+    public void cashFlowShouldBeLoad() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), CASH_FLOW_VIEW);
         ViewLoader.loadPane(loader, 0, 0);
     }
