@@ -13,6 +13,13 @@ public abstract class Deposits {
     private BigDecimal depositAmount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private DepositType depositType;
+
+    public enum DepositType {
+        Short,
+        Middle,
+        Long
+    }
 
     public Deposits(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         this.idAccount = idAccount;
@@ -82,5 +89,13 @@ public abstract class Deposits {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public DepositType getDepositType() {
+        return depositType;
+    }
+
+    public void setDepositType(DepositType depositType) {
+        this.depositType = depositType;
     }
 }

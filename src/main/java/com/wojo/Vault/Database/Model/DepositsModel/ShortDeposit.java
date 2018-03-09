@@ -17,5 +17,10 @@ public class ShortDeposit extends Deposits {
         super.setMinimalAmount(MINIMAL_AMOUNT);
         super.setNumberOfDays(NUMBER_OF_DAYS);
         super.setEndDate(startDate.plusDays(NUMBER_OF_DAYS));
+        super.setDepositType(DepositType.Short);
+    }
+
+    public static String depositDescription() {
+        return PERCENT + "% | MIN: " + MINIMAL_AMOUNT + " | " + NUMBER_OF_DAYS + " day";
     }
 }
