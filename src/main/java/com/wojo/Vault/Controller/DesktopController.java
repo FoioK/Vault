@@ -70,6 +70,12 @@ public class DesktopController {
     private JFXButton accountsCenter;
 
     @FXML
+    private JFXButton depositsLeft;
+
+    @FXML
+    private JFXButton depositsCenter;
+
+    @FXML
     private Label accountsNumber;
 
     @FXML
@@ -94,16 +100,16 @@ public class DesktopController {
         dashboard.addEventHandler(ActionEvent.ACTION, e -> rootController.loadDesktopPane());
 
         cashFlowLeft.addEventHandler(ActionEvent.ACTION, e -> goToCashFlow());
-
         cashFlowCenter.addEventHandler(ActionEvent.ACTION, e -> goToCashFlow());
 
         accountsLeft.addEventHandler(ActionEvent.ACTION, e -> goToAccounts());
-
         accountsCenter.addEventHandler(ActionEvent.ACTION, e -> goToAccounts());
 
         paymentsLeft.addEventHandler(ActionEvent.ACTION, e -> goToPayments());
-
         paymentsCenter.addEventHandler(ActionEvent.ACTION, e -> goToPayments());
+
+        depositsLeft.addEventHandler(ActionEvent.ACTION, e -> goToDeposits());
+        depositsCenter.addEventHandler(ActionEvent.ACTION, e -> goToDeposits());
 
         exit.addEventHandler(ActionEvent.ACTION, e -> exitApplication());
 
@@ -141,6 +147,7 @@ public class DesktopController {
     private static final String ACCOUNTS_VIEW = "Accounts";
     private static final String PAYMENTS_VIEW = "Payments";
     private static final String PAYMENTS_HISTORY_VIEW = "PaymentsHistory";
+    private static final String DEPOSITS_VIEW = "Deposits";
 
     private void goToCashFlow() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), CASH_FLOW_VIEW);
@@ -172,6 +179,14 @@ public class DesktopController {
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         PaymentsHistoryController controller = loader.getController();
         controller.setRootController(this);
+        mainPaneSetScreen(pane);
+    }
+
+    private void goToDeposits() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), DEPOSITS_VIEW);
+        AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
+        DepositsController depositsController = loader.getController();
+        depositsController.setRootController(rootController);
         mainPaneSetScreen(pane);
     }
 

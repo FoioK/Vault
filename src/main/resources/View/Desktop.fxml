@@ -84,8 +84,8 @@
                         <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="MONEY"/>
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" layoutY="245.0" prefHeight="65.0" prefWidth="375.0"
-                           text="%Desktop.deposits" textAlignment="RIGHT">
+                <JFXButton fx:id="depositsLeft" alignment="BASELINE_LEFT" layoutY="245.0" prefHeight="65.0"
+                           prefWidth="375.0" text="%Desktop.deposits" textAlignment="RIGHT">
                     <font>
                         <Font size="22.0"/>
                     </font>
@@ -120,8 +120,8 @@
                         <FontAwesomeIcon fill="#00549e" glyphStyleClass="" iconName="CALENDAR" size="1.1em"/>
                     </graphic>
                 </JFXButton>
-                <JFXButton fx:id="cashFlowLeft" alignment="BASELINE_LEFT" layoutY="440.0" prefHeight="65.0" prefWidth="375.0"
-                           text="%Desktop.cashFlow" textAlignment="RIGHT">
+                <JFXButton fx:id="cashFlowLeft" alignment="BASELINE_LEFT" layoutY="440.0" prefHeight="65.0"
+                           prefWidth="375.0" text="%Desktop.cashFlow" textAlignment="RIGHT">
                     <font>
                         <Font size="22.0"/>
                     </font>
@@ -163,35 +163,33 @@
         </Label>
     </Pane>
     <AnchorPane fx:id="mainPane" layoutX="375.0" prefHeight="900.0" prefWidth="1475.0">
-        <JFXButton fx:id="cashFlowCenter" alignment="TOP_LEFT" layoutX="52.0" layoutY="120.0" prefHeight="320.0" prefWidth="320.0"
-                   style="-fx-background-color: #ffff;" textFill="#00549e">
+        <JFXButton fx:id="cashFlowCenter" alignment="TOP_LEFT" layoutX="52.0" layoutY="120.0" prefHeight="320.0"
+                   prefWidth="320.0" style="-fx-background-color: #ffff;" textFill="#00549e">
             <font>
                 <Font size="26.0"/>
             </font>
             <graphic>
                 <Pane prefHeight="320.0" prefWidth="320.0">
-                    <children>
-                        <Label text="%Desktop.cashFlow" textFill="#00549e">
-                            <font>
-                                <Font size="26.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="cashFlowMonth" alignment="CENTER_RIGHT" layoutX="30.0" layoutY="50.0"
-                               prefHeight="25.0" prefWidth="75.0"/>
-                        <Label fx:id="cashFlowYear" layoutX="110.0" layoutY="50.0" prefHeight="25.0" prefWidth="75.0"/>
-                        <Label alignment="CENTER_RIGHT" layoutX="30.0" layoutY="80.0" prefHeight="25.0" prefWidth="75.0"
-                               text="%Desktop.CashFlow.balanceName"/>
-                        <Label fx:id="cashFlowBalance" layoutX="110.0" layoutY="80.0" prefHeight="25.0"
-                               prefWidth="125.0"/>
-                        <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="150.0" prefHeight="25.0"
-                               prefWidth="75.0" text="%Desktop.CashFlow.incomesName"/>
-                        <Label fx:id="cashFlowIncomes" layoutX="150.0" layoutY="180.0" prefHeight="25.0"
-                               prefWidth="125.0"/>
-                        <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="220.0" prefHeight="25.0"
-                               prefWidth="75.0" text="%Desktop.CashFlow.expensesName"/>
-                        <Label fx:id="cashFlowExpenses" layoutX="150.0" layoutY="250.0" prefHeight="25.0"
-                               prefWidth="125.0"/>
-                    </children>
+                    <Label text="%Desktop.cashFlow" textFill="#00549e">
+                        <font>
+                            <Font size="26.0"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="cashFlowMonth" alignment="CENTER_RIGHT" layoutX="30.0" layoutY="50.0"
+                           prefHeight="25.0" prefWidth="75.0"/>
+                    <Label fx:id="cashFlowYear" layoutX="110.0" layoutY="50.0" prefHeight="25.0" prefWidth="75.0"/>
+                    <Label alignment="CENTER_RIGHT" layoutX="30.0" layoutY="80.0" prefHeight="25.0" prefWidth="75.0"
+                           text="%Desktop.CashFlow.balanceName"/>
+                    <Label fx:id="cashFlowBalance" layoutX="110.0" layoutY="80.0" prefHeight="25.0"
+                           prefWidth="125.0"/>
+                    <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="150.0" prefHeight="25.0"
+                           prefWidth="75.0" text="%Desktop.CashFlow.incomesName"/>
+                    <Label fx:id="cashFlowIncomes" layoutX="150.0" layoutY="180.0" prefHeight="25.0"
+                           prefWidth="125.0"/>
+                    <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="220.0" prefHeight="25.0"
+                           prefWidth="75.0" text="%Desktop.CashFlow.expensesName"/>
+                    <Label fx:id="cashFlowExpenses" layoutX="150.0" layoutY="250.0" prefHeight="25.0"
+                           prefWidth="125.0"/>
                 </Pane>
             </graphic>
         </JFXButton>
@@ -276,8 +274,8 @@
                 <Font size="26.0"/>
             </font>
         </JFXButton>
-        <JFXButton alignment="TOP_LEFT" layoutX="1102.0" layoutY="470.0" prefHeight="320.0" prefWidth="320.0"
-                   style="-fx-background-color: #ffff;" text="%Desktop.deposits" textFill="#00549e">
+        <JFXButton fx:id="depositsCenter" alignment="TOP_LEFT" layoutX="1102.0" layoutY="470.0" prefHeight="320.0"
+                   prefWidth="320.0" style="-fx-background-color: #ffff;" text="%Desktop.deposits" textFill="#00549e">
             <font>
                 <Font size="26.0"/>
             </font>
