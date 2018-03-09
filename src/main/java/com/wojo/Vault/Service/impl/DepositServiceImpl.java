@@ -18,18 +18,18 @@ public class DepositServiceImpl implements DepositService {
     private DepositDAO depositDAO = new DepositDAOImpl();
 
     @Override
-    public boolean createDeposit(BigDecimal amount, String type) {
+    public boolean createDeposit(BigDecimal amount, Deposits.DepositType type) {
         Integer activeAccountId = 0;
         Account account = Person.getAccounts().get(activeAccountId);
         Deposits deposits;
-        if (amount.compareTo(account.getValue()) < 0) {
+        if (amount.compareTo(account.getValue()) > 0) {
             return false;
         }
-        if (type.equals(ShortDeposit.class.getName())) {
+        if (type == Deposits.DepositType.Short) {
             deposits = new ShortDeposit(account.getIdAccount(), amount, LocalDateTime.now());
-        } else if (type.equals(MiddleDeposit.class.getName())) {
+        } else if (type == Deposits.DepositType.Middle) {
             deposits = new MiddleDeposit(account.getIdAccount(), amount, LocalDateTime.now());
-        } else if (type.equals(LongDeposit.class.getName())) {
+        } else if (type == Deposits.DepositType.Long) {
             deposits = new LongDeposit(account.getIdAccount(), amount, LocalDateTime.now());
         } else {
             return false;
