@@ -29,11 +29,11 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="Vault" uuid="02509b2c-bec8-4432-a90a-c540a489c769">
+    <data-source source="LOCAL" name="Vault" uuid="d553d5b8-74cf-4300-80fb-82eaea6bd5f8">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11223986</jdbc-url>
+      <jdbc-url>jdbc:mysql://johnny.heliohost.org:3306/wojooo_Vault</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
