@@ -1,12 +1,14 @@
 package com.wojo.Vault.Database.DAO;
 
-import com.wojo.Vault.Database.Model.Deposits;
+import com.wojo.Vault.Database.Model.Deposit;
 
 import java.util.List;
 
 public interface DepositDAO {
 
-    <T extends Deposits> Integer insertDepositToDB(T deposit);
+    <T extends Deposit> Integer insertDepositToDB(T deposit);
 
-    List<Deposits> getAllDeposits(Integer idAccount);
+    List<Deposit> getAllDeposits(Integer idAccount);
+
+    Integer archiveDeposit(Integer idDeposit);
 }
