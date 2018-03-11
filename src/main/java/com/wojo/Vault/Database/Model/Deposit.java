@@ -3,9 +3,9 @@ package com.wojo.Vault.Database.Model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public abstract class Deposits {
+public abstract class Deposit {
 
-    private Double percent;
+    private Integer percent;
     private BigDecimal minimalAmount;
     private Integer numberOfDays;
     private Integer idDeposit;
@@ -21,17 +21,24 @@ public abstract class Deposits {
         Long
     }
 
-    public Deposits(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+    public Deposit(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+        this.idDeposit = idDeposit;
         this.idAccount = idAccount;
         this.depositAmount = depositAmount;
         this.startDate = startDate;
     }
 
-    public Double getPercent() {
+    public Deposit(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+        this.idAccount = idAccount;
+        this.depositAmount = depositAmount;
+        this.startDate = startDate;
+    }
+
+    public Integer getPercent() {
         return percent;
     }
 
-    public void setPercent(Double percent) {
+    public void setPercent(Integer percent) {
         this.percent = percent;
     }
 

@@ -1,18 +1,27 @@
 package com.wojo.Vault.Database.Model.DepositsModel;
 
-import com.wojo.Vault.Database.Model.Deposits;
+import com.wojo.Vault.Database.Model.Deposit;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class LongDeposit extends Deposits {
+public class LongDeposit extends Deposit {
 
-    public static final Double PERCENT = 0.9d;
+    public static final Integer PERCENT = 9;
     public static final BigDecimal MINIMAL_AMOUNT = BigDecimal.valueOf(500);
     public static final Integer NUMBER_OF_DAYS = 30;
 
+    public LongDeposit(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+        super(idDeposit, idAccount, depositAmount, startDate);
+        this.setData(startDate);
+    }
+
     public LongDeposit(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         super(idAccount, depositAmount, startDate);
+        this.setData(startDate);
+    }
+
+    private void setData(LocalDateTime startDate) {
         super.setPercent(PERCENT);
         super.setMinimalAmount(MINIMAL_AMOUNT);
         super.setNumberOfDays(NUMBER_OF_DAYS);
