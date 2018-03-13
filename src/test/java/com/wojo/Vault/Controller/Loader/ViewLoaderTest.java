@@ -14,6 +14,7 @@ public class ViewLoaderTest extends ApplicationTest {
     private static final String ACCOUNTS_VIEW = "Accounts";
     private static final String CASH_FLOW_VIEW = "CashFlow";
     private static final String DESKTOP_VIEW = "Desktop";
+    private static final String DEPOSITS_VIEW = "Deposits";
     private static final String LOGIN_STEP_1_VIEW = "LoginStep1";
     private static final String LOGIN_STEP_2_VIEW = "LoginStep2";
     private static final String MAIN_VIEW = "Main";
@@ -47,6 +48,12 @@ public class ViewLoaderTest extends ApplicationTest {
     @Test
     public void desktopShouldBeLoad() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), DESKTOP_VIEW);
+        ViewLoader.loadPane(loader, 0, 0);
+    }
+
+    @Test
+    public void depositsShouldBeLoad() {
+        FXMLLoader loader = ViewLoader.loadView(this.getClass(), DEPOSITS_VIEW);
         ViewLoader.loadPane(loader, 0, 0);
     }
 

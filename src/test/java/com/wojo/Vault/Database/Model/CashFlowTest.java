@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -42,21 +43,23 @@ public class CashFlowTest {
 
     @Test
     public void shouldReturnCorrectIncomes() {
-        assertEquals(BigDecimal.valueOf(0.0), cashFlowWithoutPayment.getIncomes());
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1000).add(VALUE_OF_1500), cashFlowWithPayment.getIncomes());
+        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.CEILING), cashFlowWithoutPayment.getIncomes());
+        assertEquals(VALUE_OF_500.add(VALUE_OF_1000).add(VALUE_OF_1500).setScale(2, RoundingMode.CEILING),
+                cashFlowWithPayment.getIncomes());
     }
 
     @Test
     public void shouldReturnCorrectExpenses() {
-        assertEquals(BigDecimal.valueOf(0.0), cashFlowWithoutPayment.getExpenses());
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1000).negate(), cashFlowWithPayment.getExpenses());
+        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.CEILING), cashFlowWithoutPayment.getExpenses());
+        assertEquals(VALUE_OF_500.add(VALUE_OF_1000).negate().setScale(2, RoundingMode.CEILING),
+                cashFlowWithPayment.getExpenses());
     }
 
     @Test
     public void shouldReturnCorrectBalance() {
-        assertEquals(BigDecimal.valueOf(0.0), cashFlowWithoutPayment.getBalance());
+        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.CEILING), cashFlowWithoutPayment.getBalance());
 
         BigDecimal expectedBalance = BigDecimal.valueOf(1500.0);
-        assertEquals(expectedBalance, cashFlowWithPayment.getBalance());
+        assertEquals(expectedBalance.setScale(2, RoundingMode.CEILING), cashFlowWithPayment.getBalance());
     }
 }

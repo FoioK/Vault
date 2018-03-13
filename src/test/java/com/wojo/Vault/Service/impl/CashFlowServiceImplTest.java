@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,9 +28,9 @@ public class CashFlowServiceImplTest {
     private final static Integer RECIPIENT_ID_ACCOUNT = -6;
     private final static String NAME = "Test";
     private final static String TITLE = "Title";
-    private final static BigDecimal VALUE_OF_500 = BigDecimal.valueOf(500.0);
-    private final static BigDecimal VALUE_OF_1000 = BigDecimal.valueOf(1000.0);
-    private final static BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.0);
+    private final static BigDecimal VALUE_OF_500 = BigDecimal.valueOf(500.00);
+    private final static BigDecimal VALUE_OF_1000 = BigDecimal.valueOf(1000.00);
+    private final static BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.00);
 
     @BeforeClass
     public static void setRecordToPayment() throws SQLException, IOException {
@@ -103,26 +104,33 @@ public class CashFlowServiceImplTest {
         final Integer A_TWO_MONTH_AGO_INDEX = 2;
 
         CashFlow thisMonth = paymentList.get(THIS_MONTH_INDEX);
-        assertEquals(VALUE_OF_500.negate(), thisMonth.getExpenses());
-        assertEquals(VALUE_OF_1000, thisMonth.getIncomes());
-        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500), thisMonth.getBalance());
+        assertEquals(VALUE_OF_500.negate().setScale(2, RoundingMode.CEILING), thisMonth.getExpenses());
+        assertEquals(VALUE_OF_1000.setScale(2, RoundingMode.CEILING), thisMonth.getIncomes());
+        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500).setScale(2, RoundingMode.CEILING),
+                thisMonth.getBalance());
 
         CashFlow aMonthAgo = paymentList.get(A_MONTH_AGO_INDEX);
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1500).negate(), aMonthAgo.getExpenses());
-        assertEquals(VALUE_OF_1000, aMonthAgo.getIncomes());
-        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500.add(VALUE_OF_1500)), aMonthAgo.getBalance());
+        assertEquals(VALUE_OF_500.add(VALUE_OF_1500).negate().setScale(2, RoundingMode.CEILING),
+                aMonthAgo.getExpenses());
+        assertEquals(VALUE_OF_1000.setScale(2, RoundingMode.CEILING), aMonthAgo.getIncomes());
+        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500
+                .add(VALUE_OF_1500)).setScale(2, RoundingMode.CEILING), aMonthAgo.getBalance());
 
         CashFlow aTwoMonthAgo = paymentList.get(A_TWO_MONTH_AGO_INDEX);
-        assertEquals(VALUE_OF_500.negate(), aTwoMonthAgo.getExpenses());
-        assertEquals(VALUE_OF_1000.add(VALUE_OF_1500), aTwoMonthAgo.getIncomes());
-        assertEquals(VALUE_OF_1000.add(VALUE_OF_1500).subtract(VALUE_OF_500), aTwoMonthAgo.getBalance());
+        assertEquals(VALUE_OF_500.negate().setScale(2, RoundingMode.CEILING), aTwoMonthAgo.getExpenses());
+        assertEquals(VALUE_OF_1000.add(VALUE_OF_1500).setScale(2, RoundingMode.CEILING),
+                aTwoMonthAgo.getIncomes());
+        assertEquals(VALUE_OF_1000.add(VALUE_OF_1500)
+                .subtract(VALUE_OF_500).setScale(2, RoundingMode.CEILING), aTwoMonthAgo.getBalance());
     }
 
     @Test
     public void getLastMonthCashFlowTest() {
         CashFlow lastMonthCashFlow = cashFlowService.getLastMothFlow();
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1500).negate(), lastMonthCashFlow.getExpenses());
-        assertEquals(VALUE_OF_1000, lastMonthCashFlow.getIncomes());
-        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500.add(VALUE_OF_1500)), lastMonthCashFlow.getBalance());
+        assertEquals(VALUE_OF_500.add(VALUE_OF_1500).negate().setScale(2, RoundingMode.CEILING),
+                lastMonthCashFlow.getExpenses());
+        assertEquals(VALUE_OF_1000.setScale(2, RoundingMode.CEILING), lastMonthCashFlow.getIncomes());
+        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500.add(VALUE_OF_1500))
+                .setScale(2, RoundingMode.CEILING), lastMonthCashFlow.getBalance());
     }
 }
