@@ -53,22 +53,6 @@ public class DepositServiceImplTest {
     }
 
     @Test
-    public void shouldSubtractAccountValueAfterInsert() {
-        BigDecimal accountValue = BigDecimal.valueOf(7000.00);
-        BigDecimal depositAmount = BigDecimal.valueOf(5000.00);
-
-        Account account = new Account();
-        account.setIdAccount(2);
-        account.setValue(accountValue);
-        Person.setAccounts(Collections.singletonList(account));
-
-        depositService.createDeposit(depositAmount, Deposit.DepositType.Short);
-
-        assertEquals(accountValue.subtract(depositAmount).setScale(2, RoundingMode.CEILING),
-                account.getValue().setScale(2, RoundingMode.CEILING));
-    }
-
-    @Test
     public void shouldReturnCorrectActiveDepositsList() {
         Account account = new Account();
         account.setIdAccount(777);
@@ -88,6 +72,22 @@ public class DepositServiceImplTest {
         insertDepositsToDatabase(endDeposits);
 
         assertEquals(deposits.size(), depositService.getActiveDeposits().size());
+    }
+
+    @Test
+    public void shouldSubtractAccountValueAfterInsert() {
+        BigDecimal accountValue = BigDecimal.valueOf(7000.00);
+        BigDecimal depositAmount = BigDecimal.valueOf(5000.00);
+
+        Account account = new Account();
+        account.setIdAccount(2);
+        account.setValue(accountValue);
+        Person.setAccounts(Collections.singletonList(account));
+
+        if (depositService.createDeposit(depositAmount, Deposit.DepositType.Short)) {
+            assertEquals(accountValue.subtract(depositAmount).setScale(2, RoundingMode.CEILING),
+                    account.getValue().setScale(2, RoundingMode.CEILING));
+        }
     }
 
     private static void insertDepositsToDatabase(List<Deposit> depositsToInsert) {

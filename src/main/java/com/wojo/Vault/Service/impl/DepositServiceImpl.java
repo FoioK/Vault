@@ -1,8 +1,6 @@
 package com.wojo.Vault.Service.impl;
 
-import com.wojo.Vault.Database.DAO.AccountDAO;
 import com.wojo.Vault.Database.DAO.DepositDAO;
-import com.wojo.Vault.Database.DAO.Impl.AccountDAOImpl;
 import com.wojo.Vault.Database.DAO.Impl.DepositDAOImpl;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Deposit;
@@ -24,7 +22,6 @@ import java.util.List;
 public class DepositServiceImpl implements DepositService {
 
     private DepositDAO depositDAO = new DepositDAOImpl();
-    private AccountDAO accountDAO = new AccountDAOImpl();
 
     @Override
     public boolean createDeposit(BigDecimal amount, Deposit.DepositType type) {

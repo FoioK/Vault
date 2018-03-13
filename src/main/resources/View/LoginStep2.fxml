@@ -14,126 +14,114 @@
 <AnchorPane prefHeight="700.0" prefWidth="1400.0" style="-fx-background-color: #ffffff;"
             xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.wojo.Vault.Controller.LoginStep2Controller">
-    <children>
-        <Pane prefHeight="130.0" prefWidth="1400.0" style="-fx-background-color: #70d4f6;">
-            <children>
-                <Label layoutX="79.0" layoutY="38.0" text="%LoginStep2.panelName">
-                    <font>
-                        <Font size="37.0"/>
-                    </font>
-                </Label>
-                <JFXButton fx:id="backToStep1" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="17.0" text=" "
-                           textFill="WHITE">
-                    <graphic>
-                        <FontAwesomeIcon fill="WHITE" iconName="ARROW_LEFT" size="1.5em"/>
-                    </graphic>
-                </JFXButton>
-            </children>
-        </Pane>
-        <HBox layoutX="400.0" layoutY="150.0" prefHeight="200.0" prefWidth="700.0" spacing="20.0">
-            <children>
-                <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="250.0">
-                    <children>
-                        <Label alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0"
-                               text="%LoginStep2.passwordLabel" textFill="#0b090a">
-                            <font>
-                                <Font name="Arial" size="20.0"/>
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="46.0" prefWidth="350.0">
-                    <children>
-                        <JFXPasswordField fx:id="passwordFiled" focusColor="WHITE" prefHeight="46.0" prefWidth="350.0"
-                                          promptText="%LoginStep2.passwordField"
-                                          style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
-                                          unFocusColor="#cccccc">
-                            <font>
-                                <Font size="20.0"/>
-                            </font>
-                        </JFXPasswordField>
-                        <Label fx:id="badPasswordMessage" prefHeight="30.0" prefWidth="350.0"
-                               text="%LoginStep2.badPasswordMessage" textFill="#ff1414">
-                            <font>
-                                <Font name="System Italic" size="17.0"/>
-                            </font>
-                        </Label>
-                        <JFXButton fx:id="logInButton" prefHeight="46.0" prefWidth="350.0"
-                                   style="-fx-background-color: #00549E;" text="%LoginStep2.logInButton"
-                                   textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="20.0"/>
-                            </font>
-                        </JFXButton>
-                    </children>
-                    <padding>
-                        <Insets bottom="25.0"/>
-                    </padding>
-                </VBox>
-            </children>
-        </HBox>
-        <VBox layoutX="160.0" layoutY="360.0" prefHeight="300.0" prefWidth="1100.0" spacing="15.0">
-            <children>
-                <Label prefHeight="40.0" prefWidth="1004.0" text="%LoginStep1.VBox.label1">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <graphic>
-                        <FontAwesomeIcon glyphStyle="-fx-fill: linear-gradient( #70d4f6 0%, #247cbc 70%, #2c85c1 85%);"
-                                         iconName="LOCK" size="2em"/>
-                    </graphic>
-                </Label>
-                <Label prefHeight="21.0" prefWidth="992.0" text="%LoginStep1.VBox.label2">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                </Label>
-                <Label text="%LoginStep1.VBox.label3">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                    <graphic>
-                        <FontAwesomeIcon iconName="CIRCLE_THIN"/>
-                    </graphic>
-                </Label>
-                <Label text="%LoginStep1.VBox.label4">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                    <graphic>
-                        <FontAwesomeIcon iconName="CIRCLE_THIN"/>
-                    </graphic>
-                </Label>
-                <Label text="%LoginStep1.VBox.label5">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                    <graphic>
-                        <FontAwesomeIcon iconName="CIRCLE_THIN"/>
-                    </graphic>
-                </Label>
-                <Label contentDisplay="RIGHT" prefHeight="27.0" prefWidth="1145.0" text="%LoginStep1.VBox.label6">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                    <graphic>
-                        <Label text="%LoginStep1.VBox.label6.label7">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                    </graphic>
-                </Label>
-            </children>
-        </VBox>
-        <Label fx:id="badLoginProcessMessage" layoutX="535.0" layoutY="130.0" prefHeight="30.0" prefWidth="350.0"
-               text="%LoginStep2.badLoginProcessMessage" textFill="#ff1414">
+    <Pane prefHeight="130.0" prefWidth="1400.0" style="-fx-background-color: #70d4f6;">
+        <Label layoutX="79.0" layoutY="38.0" text="%LoginStep2.panelName">
             <font>
-                <Font name="System Italic" size="17.0"/>
+                <Font size="37.0"/>
             </font>
         </Label>
-    </children>
+        <JFXButton fx:id="backToStep1" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="17.0" text=" "
+                   textFill="WHITE">
+            <graphic>
+                <FontAwesomeIcon fill="WHITE" iconName="ARROW_LEFT" size="1.5em"/>
+            </graphic>
+        </JFXButton>
+    </Pane>
+    <HBox layoutX="400.0" layoutY="150.0" prefHeight="200.0" prefWidth="700.0" spacing="20.0">
+        <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="250.0">
+            <Label alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0"
+                   text="%LoginStep2.passwordLabel" textFill="#0b090a">
+                <font>
+                    <Font name="Arial" size="20.0"/>
+                </font>
+            </Label>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="46.0" prefWidth="350.0">
+            <padding>
+                <Insets bottom="25.0"/>
+            </padding>
+            <JFXPasswordField fx:id="passwordFiled" focusColor="WHITE" prefHeight="46.0" prefWidth="350.0"
+                              promptText="%LoginStep2.passwordField"
+                              style="-fx-border-color: #ccc; -fx-background-color: #fff; -fx-prompt-text-fill: gray;"
+                              unFocusColor="#cccccc">
+                <font>
+                    <Font size="20.0"/>
+                </font>
+            </JFXPasswordField>
+            <Label fx:id="badPasswordMessage" prefHeight="30.0" prefWidth="350.0"
+                   text="%LoginStep2.badPasswordMessage" textFill="#ff1414">
+                <font>
+                    <Font name="System Italic" size="17.0"/>
+                </font>
+            </Label>
+            <JFXButton fx:id="logInButton" prefHeight="46.0" prefWidth="350.0"
+                       style="-fx-background-color: #00549E;" text="%LoginStep2.logInButton"
+                       textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="20.0"/>
+                </font>
+            </JFXButton>
+        </VBox>
+    </HBox>
+    <VBox layoutX="160.0" layoutY="360.0" prefHeight="300.0" prefWidth="1100.0" spacing="15.0">
+        <Label prefHeight="40.0" prefWidth="1004.0" text="%LoginStep1.VBox.label1">
+            <font>
+                <Font size="18.0"/>
+            </font>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+            <graphic>
+                <FontAwesomeIcon glyphStyle="-fx-fill: linear-gradient( #70d4f6 0%, #247cbc 70%, #2c85c1 85%);"
+                                 iconName="LOCK" size="2em"/>
+            </graphic>
+        </Label>
+        <Label prefHeight="21.0" prefWidth="992.0" text="%LoginStep1.VBox.label2">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+        <Label text="%LoginStep1.VBox.label3">
+            <font>
+                <Font size="18.0"/>
+            </font>
+            <graphic>
+                <FontAwesomeIcon iconName="CIRCLE_THIN"/>
+            </graphic>
+        </Label>
+        <Label text="%LoginStep1.VBox.label4">
+            <font>
+                <Font size="18.0"/>
+            </font>
+            <graphic>
+                <FontAwesomeIcon iconName="CIRCLE_THIN"/>
+            </graphic>
+        </Label>
+        <Label text="%LoginStep1.VBox.label5">
+            <font>
+                <Font size="18.0"/>
+            </font>
+            <graphic>
+                <FontAwesomeIcon iconName="CIRCLE_THIN"/>
+            </graphic>
+        </Label>
+        <Label contentDisplay="RIGHT" prefHeight="27.0" prefWidth="1145.0" text="%LoginStep1.VBox.label6">
+            <font>
+                <Font size="18.0"/>
+            </font>
+            <graphic>
+                <Label text="%LoginStep1.VBox.label6.label7">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+            </graphic>
+        </Label>
+    </VBox>
+    <Label fx:id="badLoginProcessMessage" layoutX="535.0" layoutY="130.0" prefHeight="30.0" prefWidth="350.0"
+           text="%LoginStep2.badLoginProcessMessage" textFill="#ff1414">
+        <font>
+            <Font name="System Italic" size="17.0"/>
+        </font>
+    </Label>
 </AnchorPane>
