@@ -2,7 +2,7 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.Database.Model.Deposits;
+import com.wojo.Vault.Database.Model.Deposit;
 import com.wojo.Vault.Database.Model.DepositsModel.LongDeposit;
 import com.wojo.Vault.Database.Model.DepositsModel.MiddleDeposit;
 import com.wojo.Vault.Database.Model.DepositsModel.ShortDeposit;
@@ -14,11 +14,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DepositsController {
@@ -26,25 +31,28 @@ public class DepositsController {
     private RootController rootController;
     private AccountService accountService = new AccountServiceImpl();
     private DepositService depositService = new DepositServiceImpl();
-    private Deposits.DepositType depositType;
+    private Deposit.DepositType depositType;
 
     @FXML
     private JFXButton backToDesktopPane;
 
     @FXML
-    private ChoiceBox<String> depositsTypeBox;
+    private Label badTypeMessage;
 
     @FXML
     private JFXTextField amount;
 
     @FXML
+    private ChoiceBox<String> depositsTypeBox;
+
+    @FXML
     private JFXButton openDeposit;
 
     @FXML
-    private Label badTypeMessage;
+    private Label badAmountMessage;
 
     @FXML
-    private Label badAmountMessage;
+    private AnchorPane activeList;
 
     @FXML
     void initialize() {
@@ -52,6 +60,8 @@ public class DepositsController {
         addEventHandlers();
 
         setDepositsTypeBox();
+
+        new Thread(this::showActiveDepositsList).start();
     }
 
     private void setErrorMessagesVisibleFalse() {
@@ -103,18 +113,82 @@ public class DepositsController {
         BigDecimal minimalAmount = null;
         if (depositDescription.equals(ShortDeposit.depositDescription())) {
             minimalAmount = ShortDeposit.MINIMAL_AMOUNT;
-            depositType = Deposits.DepositType.Short;
+            depositType = Deposit.DepositType.Short;
         } else if (depositDescription.equals(MiddleDeposit.depositDescription())) {
             minimalAmount = MiddleDeposit.MINIMAL_AMOUNT;
-            depositType = Deposits.DepositType.Middle;
+            depositType = Deposit.DepositType.Middle;
         } else if (depositDescription.equals(LongDeposit.depositDescription())) {
             minimalAmount = LongDeposit.MINIMAL_AMOUNT;
-            depositType = Deposits.DepositType.Long;
+            depositType = Deposit.DepositType.Long;
         }
-        if (minimalAmount == null) {
-            return false;
+        return minimalAmount != null && amountValue.compareTo(minimalAmount) >= 0;
+    }
+
+    private static final Integer PANE_WIDTH = 1050;
+    private static final Integer HEADER_PANE_HEIGHT = 75;
+    private static final Integer DEPOSIT_ROW_HEIGHT = 75;
+
+    @SuppressWarnings("Duplicates")
+    private void showActiveDepositsList() {
+        List<Deposit> allActiveDeposits = depositService.getActiveDeposits();
+
+        if (allActiveDeposits.size() > 3) {
+            activeList.setPrefSize(PANE_WIDTH,
+                    (allActiveDeposits.size() * DEPOSIT_ROW_HEIGHT) + HEADER_PANE_HEIGHT);
+            System.out.println((allActiveDeposits.size() * DEPOSIT_ROW_HEIGHT) + HEADER_PANE_HEIGHT);
         }
-        return amountValue.compareTo(minimalAmount) >= 0;
+
+        final int[] counter = {0};
+        allActiveDeposits.forEach(deposit -> {
+            Pane pane = new Pane();
+            pane.setPrefSize(PANE_WIDTH, DEPOSIT_ROW_HEIGHT);
+            pane.setLayoutY((counter[0] * DEPOSIT_ROW_HEIGHT) + HEADER_PANE_HEIGHT);
+            addComponentToPane(pane, deposit);
+            activeList.getChildren().add(pane);
+            counter[0] += 1;
+        });
+    }
+
+    private void addComponentToPane(Pane pane, Deposit deposit) {
+        Line separator = new Line(0, 0, PANE_WIDTH, 0);
+
+        Label startDate = new Label(deposit.getStartDate().toLocalDate().toString());
+        startDate.setPrefSize(200, 30);
+        startDate.setLayoutX(15);
+        startDate.setLayoutY(25);
+        startDate.setAlignment(Pos.CENTER);
+
+        Label endDate = new Label(deposit.getEndDate().toLocalDate().toString());
+        endDate.setPrefSize(200, 30);
+        endDate.setLayoutX(245);
+        endDate.setLayoutY(25);
+        endDate.setAlignment(Pos.CENTER);
+
+        Label amount = new Label(deposit.getDepositAmount().toString());
+        amount.setPrefSize(150, 30);
+        amount.setLayoutX(475);
+        amount.setLayoutY(25);
+        amount.setAlignment(Pos.CENTER);
+
+        Label hoursToEnd = new Label(deposit.getHoursToEnd() + "");
+        hoursToEnd.setPrefSize(175, 30);
+        hoursToEnd.setLayoutX(655);
+        hoursToEnd.setLayoutY(25);
+        hoursToEnd.setAlignment(Pos.CENTER);
+
+        Label expectedProfit = new Label(deposit.getProfit().setScale(2, RoundingMode.CEILING).toString());
+        expectedProfit.setPrefSize(150, 30);
+        expectedProfit.setLayoutX(860);
+        expectedProfit.setLayoutY(25);
+        expectedProfit.setAlignment(Pos.CENTER);
+
+        pane.setStyle("-fx-background-color: #FFFFFF;");
+        pane.getChildren().add(separator);
+        pane.getChildren().add(startDate);
+        pane.getChildren().add(endDate);
+        pane.getChildren().add(amount);
+        pane.getChildren().add(hoursToEnd);
+        pane.getChildren().add(expectedProfit);
     }
 
     public void setRootController(RootController rootController) {

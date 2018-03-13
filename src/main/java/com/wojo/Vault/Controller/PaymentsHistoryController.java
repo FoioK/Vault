@@ -58,6 +58,7 @@ public class PaymentsHistoryController {
         return paymentService.getAllPayment();
     }
 
+    @SuppressWarnings("Duplicates")
     private void showPaymentsHistoryProcess() {
         if (allPayments.size() > 5) {
             scrollPane.setPrefSize(SCROLL_PANE_WIDTH,
