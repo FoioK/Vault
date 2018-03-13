@@ -61,7 +61,7 @@ public class DepositsController {
 
         setDepositsTypeBox();
 
-        new Thread(this::showActiveDepositsList).start();
+        this.showActiveDepositsList();
     }
 
     private void setErrorMessagesVisibleFalse() {
@@ -135,7 +135,6 @@ public class DepositsController {
         if (allActiveDeposits.size() > 3) {
             activeList.setPrefSize(PANE_WIDTH,
                     (allActiveDeposits.size() * DEPOSIT_ROW_HEIGHT) + HEADER_PANE_HEIGHT);
-            System.out.println((allActiveDeposits.size() * DEPOSIT_ROW_HEIGHT) + HEADER_PANE_HEIGHT);
         }
 
         final int[] counter = {0};
