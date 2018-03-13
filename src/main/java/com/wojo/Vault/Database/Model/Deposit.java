@@ -1,7 +1,9 @@
 package com.wojo.Vault.Database.Model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public abstract class Deposit {
 
@@ -104,5 +106,14 @@ public abstract class Deposit {
 
     public void setDepositType(DepositType depositType) {
         this.depositType = depositType;
+    }
+
+    public long getHoursToEnd() {
+        return ChronoUnit.HOURS.between(LocalDateTime.now(), this.endDate);
+    }
+
+    public BigDecimal getProfit() {
+        return BigDecimal.valueOf(this.getDepositAmount().doubleValue() *
+                this.getPercent() / 100 * this.getNumberOfDays() / 365).setScale(2, RoundingMode.CEILING);
     }
 }

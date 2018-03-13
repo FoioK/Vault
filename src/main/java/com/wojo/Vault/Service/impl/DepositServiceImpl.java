@@ -1,6 +1,8 @@
 package com.wojo.Vault.Service.impl;
 
+import com.wojo.Vault.Database.DAO.AccountDAO;
 import com.wojo.Vault.Database.DAO.DepositDAO;
+import com.wojo.Vault.Database.DAO.Impl.AccountDAOImpl;
 import com.wojo.Vault.Database.DAO.Impl.DepositDAOImpl;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Deposit;
@@ -15,11 +17,14 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DepositServiceImpl implements DepositService {
 
     private DepositDAO depositDAO = new DepositDAOImpl();
+    private AccountDAO accountDAO = new AccountDAOImpl();
 
     @Override
     public boolean createDeposit(BigDecimal amount, Deposit.DepositType type) {
@@ -41,6 +46,8 @@ public class DepositServiceImpl implements DepositService {
 
         if (depositDAO.insertDepositToDB(deposit) == 1) {
             account.subtractValue(amount);
+            accountDAO.addAccountValue(String.valueOf(deposit.getIdAccount()), amount.negate());
+
             return true;
         }
         return false;
@@ -61,6 +68,8 @@ public class DepositServiceImpl implements DepositService {
             calculateAndGetProfit(endDeposits);
         }
         allActiveDeposits.removeAll(endDeposits);
+        allActiveDeposits.sort(Comparator.comparing(Deposit::getStartDate));
+        Collections.reverse(allActiveDeposits);
         return allActiveDeposits;
     }
 
@@ -88,9 +97,11 @@ public class DepositServiceImpl implements DepositService {
 
     public BigDecimal getEndDepositAmount(Deposit deposit) {
         Double amount = deposit.getDepositAmount().doubleValue();
-        Double profit = amount * deposit.getPercent() / 100 * deposit.getNumberOfDays() / 365;
+        Double profit = deposit.getProfit().doubleValue();
 
         archiveDeposit(deposit.getIdDeposit());
+        accountDAO.addAccountValue(String.valueOf(deposit.getIdAccount()),
+                BigDecimal.valueOf(amount + profit).setScale(2, RoundingMode.CEILING));
 
         return BigDecimal.valueOf(amount + profit).setScale(2, RoundingMode.CEILING);
     }
