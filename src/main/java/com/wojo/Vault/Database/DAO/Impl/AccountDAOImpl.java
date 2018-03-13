@@ -97,21 +97,4 @@ public class AccountDAOImpl implements AccountDAO {
         }
         return BigDecimal.ZERO;
     }
-
-    @Override
-    public Integer addAccountValue(String idAccount, BigDecimal value) {
-        BigDecimal currentValue = this.getAccountValue(idAccount);
-
-        String updateStatement = "UPDATE accounts " +
-                "SET value = ? " +
-                "WHERE idAccount = ?";
-
-        try {
-            return DBManager.dbExecuteUpdate(updateStatement,
-                    Arrays.asList(currentValue.add(value).toString(), idAccount));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 }

@@ -34,7 +34,8 @@ public class Main extends Application {
     }
 
     private static void connectionToDatabase() {
-        DBManager.setOriginalConnectionPath();
+        DBManager.setTestConnectionPath();
+//        DBManager.setOriginalConnectionPath();
         try {
             DBManager.dbConnection();
         } catch (SQLException | IOException e) {

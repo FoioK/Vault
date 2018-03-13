@@ -17,23 +17,34 @@ import java.util.*;
 public class DepositDAOImpl implements DepositDAO {
 
     @Override
-    public <T extends Deposit> Integer insertDepositToDB(T deposit) {
-        String updateStatement = "INSERT INTO deposit " +
+    public <T extends Deposit> boolean insertDepositToDB(T deposit, BigDecimal newValue) {
+        String insertDepositStatement = "INSERT INTO deposit " +
                 "(ID_ACCOUNT, AMOUNT, DATE_START, DATE_END, TYPE, IS_ACTIVE)" +
                 "VALUES " +
                 "(?, ?, ?, ?, ?, ?)";
+        String updateAccountValueStatement = "UPDATE accounts " +
+                "SET value = ? " +
+                "WHERE idAccount = ?";
+
+        Map<List<Object>, String> dataToUpdate = new HashMap<>();
+
+        dataToUpdate.put(Arrays.asList(
+                String.valueOf(deposit.getIdAccount()),
+                deposit.getDepositAmount().toString(),
+                deposit.getStartDate().toString(),
+                deposit.getEndDate().toString(),
+                deposit.getDepositType().toString(),
+                1 + ""), insertDepositStatement);
+
+        dataToUpdate.put(Arrays.asList(newValue.toString(), String.valueOf(deposit.getIdAccount())),
+                updateAccountValueStatement);
+
         try {
-            return DBManager.dbExecuteUpdate(updateStatement,
-                    Arrays.asList(String.valueOf(deposit.getIdAccount()),
-                            deposit.getDepositAmount().toString(),
-                            deposit.getStartDate().toString(),
-                            deposit.getEndDate().toString(),
-                            deposit.getDepositType().toString(),
-                            1 + ""));
+            return DBManager.dbExecuteTransactionUpdate(dataToUpdate);
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
         }
+        return false;
     }
 
     @Override
@@ -73,16 +84,26 @@ public class DepositDAOImpl implements DepositDAO {
     }
 
     @Override
-    public Integer archiveDeposit(Integer idDeposit) {
-        String updateStatement = "UPDATE deposit " +
+    public <T extends Deposit> boolean archiveDeposit(T deposit, BigDecimal newValue) {
+        String updateDepositStatement = "UPDATE deposit " +
                 "SET IS_ACTIVE = 0 " +
                 "WHERE ID_DEPOSIT = ?";
+
+        String updateAccountValueStatement = "UPDATE accounts " +
+                "SET value = ? " +
+                "WHERE idAccount = ?";
+
+        Map<List<Object>, String> dataToUpdate = new HashMap<>();
+
+        dataToUpdate.put(Collections.singletonList(String.valueOf(deposit.getIdDeposit())), updateDepositStatement);
+        dataToUpdate.put(Arrays.asList(newValue.toString(), String.valueOf(deposit.getIdAccount())),
+                updateAccountValueStatement);
+
         try {
-            return DBManager.dbExecuteUpdate(updateStatement,
-                    Collections.singletonList(String.valueOf(idDeposit)));
+            return DBManager.dbExecuteTransactionUpdate(dataToUpdate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return false;
     }
 }

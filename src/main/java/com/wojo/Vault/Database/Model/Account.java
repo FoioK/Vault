@@ -49,12 +49,4 @@ public class Account {
     public void setValue(BigDecimal value) {
         this.value = value;
     }
-
-    public void addValue(BigDecimal value) {
-        this.value = this.value.add(value);
-    }
-
-    public void subtractValue(BigDecimal value) {
-        this.value = this.value.subtract(value);
-    }
 }

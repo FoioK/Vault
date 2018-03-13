@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DepositDAOImplTest {
 
@@ -42,16 +43,14 @@ public class DepositDAOImplTest {
         final BigDecimal depositAmount = BigDecimal.valueOf(3000);
         final LocalDateTime startDate = LocalDateTime.now();
 
-        Integer expectedReturn = 1;
-
         Deposit shortDeposit = new ShortDeposit(idAccount, depositAmount, startDate);
-        assertEquals(expectedReturn, depositDAO.insertDepositToDB(shortDeposit));
+        assertTrue(depositDAO.insertDepositToDB(shortDeposit, BigDecimal.valueOf(9000)));
 
         Deposit middleDeposit = new MiddleDeposit(idAccount, depositAmount, startDate);
-        assertEquals(expectedReturn, depositDAO.insertDepositToDB(middleDeposit));
+        assertTrue(depositDAO.insertDepositToDB(middleDeposit, BigDecimal.valueOf(6000)));
 
         Deposit longDeposit = new LongDeposit(idAccount, depositAmount, startDate);
-        assertEquals(expectedReturn, depositDAO.insertDepositToDB(longDeposit));
+        assertTrue(depositDAO.insertDepositToDB(longDeposit, BigDecimal.valueOf(3000)));
     }
 
     @Test
@@ -113,7 +112,7 @@ public class DepositDAOImplTest {
         MiddleDeposit middleDeposit = new MiddleDeposit(idDeposit, idAccount, BigDecimal.TEN, LocalDateTime.now());
         DBManager.dbExecuteUpdate(updateStatement, getDateToInsertDeposit(middleDeposit, true));
 
-        assertEquals(Integer.valueOf(1), depositDAO.archiveDeposit(idDeposit));
+        assertTrue(depositDAO.archiveDeposit(middleDeposit, BigDecimal.valueOf(5000)));
     }
 
     private static List<String> getDateToInsertDeposit(Deposit deposit, boolean withIdDeposit) {

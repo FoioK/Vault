@@ -44,10 +44,9 @@ public class DepositServiceImpl implements DepositService {
             return false;
         }
 
-        if (depositDAO.insertDepositToDB(deposit) == 1) {
-            account.subtractValue(amount);
-            accountDAO.addAccountValue(String.valueOf(deposit.getIdAccount()), amount.negate());
-
+        BigDecimal newAccountValue = account.getValue().subtract(amount).setScale(2, RoundingMode.CEILING);
+        if (depositDAO.insertDepositToDB(deposit, newAccountValue)) {
+            account.setValue(newAccountValue);
             return true;
         }
         return false;
@@ -90,24 +89,17 @@ public class DepositServiceImpl implements DepositService {
         Runnable r = () -> {
             Integer activeIdAccount = 0;
             Account account = Person.getAccounts().get(activeIdAccount);
-            endDeposits.parallelStream().forEach(deposit -> account.addValue(getEndDepositAmount(deposit)));
+            endDeposits.parallelStream().forEach(deposit -> {
+                BigDecimal newValue = account.getValue().add(getEndDepositAmount(deposit));
+                if (depositDAO.archiveDeposit(deposit, newValue)) {
+                    account.setValue(newValue);
+                }
+            });
         };
         new Thread(r).start();
     }
 
     public BigDecimal getEndDepositAmount(Deposit deposit) {
-        Double amount = deposit.getDepositAmount().doubleValue();
-        Double profit = deposit.getProfit().doubleValue();
-
-        archiveDeposit(deposit.getIdDeposit());
-        accountDAO.addAccountValue(String.valueOf(deposit.getIdAccount()),
-                BigDecimal.valueOf(amount + profit).setScale(2, RoundingMode.CEILING));
-
-        return BigDecimal.valueOf(amount + profit).setScale(2, RoundingMode.CEILING);
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    private boolean archiveDeposit(Integer idDeposit) {
-        return depositDAO.archiveDeposit(idDeposit) == 1;
+        return deposit.getDepositAmount().add(deposit.getProfit()).setScale(2, RoundingMode.CEILING);
     }
 }

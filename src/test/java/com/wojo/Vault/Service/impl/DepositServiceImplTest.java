@@ -64,7 +64,8 @@ public class DepositServiceImplTest {
 
         depositService.createDeposit(depositAmount, Deposit.DepositType.Short);
 
-        assertEquals(accountValue.subtract(depositAmount), account.getValue());
+        assertEquals(accountValue.subtract(depositAmount).setScale(2, RoundingMode.CEILING),
+                account.getValue().setScale(2, RoundingMode.CEILING));
     }
 
     @Test
