@@ -40,11 +40,13 @@ public class AccountServiceImpl implements AccountService {
                 .get(activeAccountId)
                 .getIBAN_NUMBER()
                 .split(String.format("(?<=\\G.{%1$d})", 4)));
+
         StringBuilder formatNumber = new StringBuilder();
         formatNumberInParts.forEach(part -> {
             part += " ";
             formatNumber.append(part);
         });
+
         return formatNumber.toString().substring(2, formatNumber.toString().length() - 1);
     }
 
@@ -52,5 +54,20 @@ public class AccountServiceImpl implements AccountService {
     public BigDecimal getAccountValue() {
         String idAccount = Person.getAccounts().get(activeAccountId).getIdAccount() + "";
         return accountDAO.getAccountValue(idAccount);
+    }
+
+    @Override
+    public boolean addValueToAccount(BigDecimal value, String number) {
+        final String countryCode = "PL";
+
+        assert number != null;
+        number = countryCode + number;
+
+        BigDecimal currentValue = accountDAO.getAccountValueForNumber(number);
+
+        assert value != null;
+        BigDecimal newValue = currentValue.add(value);
+
+        return accountDAO.setValue(newValue, number);
     }
 }

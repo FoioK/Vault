@@ -13,4 +13,6 @@ public interface AccountService {
     String getFormatAccountNumber();
 
     BigDecimal getAccountValue();
+
+    boolean addValueToAccount(BigDecimal value, String number);
 }
