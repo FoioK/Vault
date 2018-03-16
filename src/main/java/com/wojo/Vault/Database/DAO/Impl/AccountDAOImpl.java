@@ -97,4 +97,35 @@ public class AccountDAOImpl implements AccountDAO {
         }
         return BigDecimal.ZERO;
     }
+
+    @Override
+    public BigDecimal getAccountValueForNumber(String number) {
+        String queryStatement = "SELECT value FROM accounts " +
+                "WHERE number LIKE ?";
+
+        ResultSet resultSet;
+        try {
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(number));
+            return resultSet.next() ?
+                    new BigDecimal(resultSet.getString("value")) : BigDecimal.ZERO;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return BigDecimal.ZERO;
+    }
+
+    @Override
+    public boolean setValue(BigDecimal newValue, String number) {
+        String updateStatement = "UPDATE accounts " +
+                "SET value = ? " +
+                "WHERE number LIKE ?";
+        try {
+            return DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(newValue.toString(), number)) == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

@@ -17,4 +17,8 @@ public interface AccountDAO {
     Integer searchAccountByNumber(String accountNumber);
     
     BigDecimal getAccountValue(String idAccount);
+
+    BigDecimal getAccountValueForNumber(String number);
+
+    boolean setValue(BigDecimal newValue, String number);
 }
