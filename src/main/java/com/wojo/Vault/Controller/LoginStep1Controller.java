@@ -3,7 +3,9 @@ package com.wojo.Vault.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PersonService;
+import com.wojo.Vault.Service.impl.AccountServiceImpl;
 import com.wojo.Vault.Service.impl.PersonServiceImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,11 +16,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+import javax.swing.*;
+import java.math.BigDecimal;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class LoginStep1Controller {
 
     private PersonService personService = new PersonServiceImpl();
+    private AccountService accountService = new AccountServiceImpl();
 
     private RootController rootController;
     private ObservableList<String> languageList = FXCollections.observableArrayList("Language", "PL", "EN");
@@ -31,6 +37,9 @@ public class LoginStep1Controller {
 
     @FXML
     private JFXButton openAccountCreator;
+
+    @FXML
+    private JFXButton addValue;
 
     @FXML
     private Label badLoginMessage;
@@ -65,6 +74,8 @@ public class LoginStep1Controller {
         goToNextStep.addEventHandler(ActionEvent.ACTION, e -> loginProcessStep1());
 
         openAccountCreator.addEventHandler(ActionEvent.ACTION, e -> loadAccountCreator());
+
+        addValue.addEventHandler(ActionEvent.ACTION, e -> addValueProcess());
     }
 
     private void loginProcessStep1() {
@@ -99,6 +110,39 @@ public class LoginStep1Controller {
         AccountCreatorController controller = loader.getController();
         controller.setRootController(rootController);
         rootController.setScreen(pane);
+    }
+
+    private void addValueProcess() {
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundles.messages");
+
+        String regex = "[0-9]+";
+        String number = JOptionPane.showInputDialog(bundle.getString("LoginStep1.enterNumber"));
+        if (!number.matches(regex)) {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("LoginStep1.badNumberMessage"),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BigDecimal amount;
+        try {
+            amount = new BigDecimal(JOptionPane.showInputDialog(bundle.getString("LoginStep1.enterAmount")));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("LoginStep1.badAmountMessage"),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (accountService.addValueToAccount(amount, String.valueOf(number))) {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("LoginStep1.addValueSuccess"),
+                    "Success", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("LoginStep1.badAddValueMessage"),
+                    "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     protected void setRootController(RootController rootController) {
