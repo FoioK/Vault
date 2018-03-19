@@ -1,7 +1,10 @@
 package com.wojo.Vault.Database;
 
 import com.sun.rowset.CachedRowSetImpl;
+import com.wojo.Vault.Exception.DatabaseConnectionException;
+import com.wojo.Vault.Exception.LoadPropertiesException;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -22,10 +25,14 @@ public class DBManager {
             throws SQLException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        CachedRowSetImpl cachedRowSet = null;
+        CachedRowSetImpl cachedRowSet;
+
         try {
             if (connection == null || connection.isClosed()) {
                 dbConnection();
+                if (connection == null || connection.isClosed()) {
+                    return new CachedRowSetImpl();
+                }
             }
             statement = connection.prepareStatement(queryStatement);
             if (queryDate != null) {
@@ -36,8 +43,6 @@ public class DBManager {
             resultSet = statement.executeQuery();
             cachedRowSet = new CachedRowSetImpl();
             cachedRowSet.populate(resultSet);
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             if (resultSet != null) {
                 resultSet.close();
@@ -46,6 +51,7 @@ public class DBManager {
                 statement.close();
             }
         }
+
         return cachedRowSet;
     }
 
@@ -53,10 +59,15 @@ public class DBManager {
             throws SQLException {
 
         PreparedStatement statement = null;
-        int updateRows = 0;
+        int updateRows;
+
         try {
             if (connection == null || connection.isClosed()) {
                 dbConnection();
+                if (connection == null || connection.isClosed()) {
+                    return -1;
+                }
+
             }
             statement = connection.prepareStatement(updateStatement);
             if (updateData != null) {
@@ -65,27 +76,27 @@ public class DBManager {
                 }
             }
             updateRows = statement.executeUpdate();
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             if (statement != null) {
                 statement.close();
             }
         }
+
         return updateRows;
     }
 
     public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
             throws SQLException {
         if (connection == null || connection.isClosed()) {
-            try {
-                dbConnection();
-            } catch (IOException e) {
-                e.printStackTrace();
+            dbConnection();
+            if (connection == null || connection.isClosed()) {
+                return false;
             }
         }
+
         connection.setAutoCommit(false);
         List<PreparedStatement> preparedStatements = new ArrayList<>();
+
         try {
             dataToUpdate.entrySet()
                     .forEach(data -> {
@@ -107,11 +118,12 @@ public class DBManager {
                     try {
                         statement.close();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        System.out.println("Close statement error");
                     }
                 }
             });
         }
+
         connection.setAutoCommit(true);
         return true;
     }
@@ -120,6 +132,7 @@ public class DBManager {
         String updateStatement = data.getValue();
         List<Object> updateData = data.getKey();
         PreparedStatement statement;
+
         try {
             statement = connection.prepareStatement(updateStatement);
             if (updateData != null) {
@@ -129,41 +142,73 @@ public class DBManager {
             }
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Execute statement error");
             return null;
         }
+
         return statement;
     }
 
-    public static void dbConnection() throws SQLException, IOException {
-        connection = getConnection();
+    public static void dbConnection() {
+        try {
+            connection = getConnection();
+        } catch (DatabaseConnectionException | LoadPropertiesException e) {
+            tryAgain();
+        }
     }
 
-    /**
-     * Gets a connection from the properties specified in the file database.properties.
-     *
-     * @return the database connection
-     */
-    private static Connection getConnection() throws SQLException, IOException {
+    private static void tryAgain() {
+        int n = JOptionPane.showConfirmDialog(
+                null,
+                "Try again",
+                "Database connection error",
+                JOptionPane.YES_NO_OPTION);
+
+        if (n == 0) {
+            dbConnection();
+        }
+    }
+
+    private static Connection getConnection() throws DatabaseConnectionException, LoadPropertiesException {
         Properties properties = new Properties();
         DBManager dbManager = new DBManager();
+
         try (InputStream in = dbManager.getClass().getClassLoader().getResourceAsStream(connectionPath)) {
             properties.load(in);
+        } catch (IOException e) {
+            throw new LoadPropertiesException("Database properties load error");
         }
+
         String drivers = properties.getProperty("jdbc.drivers");
         if (drivers != null) {
             System.setProperty("jdbc.drivers", drivers);
         }
+
         String url = properties.getProperty("jdbc.url");
         String username = properties.getProperty("jdbc.username");
         String password = properties.getProperty("jdbc.password");
 
-        return DriverManager.getConnection(url, username, password);
+        try {
+            return DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database connection error");
+        }
     }
 
-    public static void dbDisconnect() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
+    public static void dbDisconnect() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    System.out.println("Connection close failed");
+                } finally {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                }
+            }
+        } catch (SQLException ignored) {
         }
     }
 
