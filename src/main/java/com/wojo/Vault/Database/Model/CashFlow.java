@@ -33,25 +33,25 @@ public class CashFlow {
     public BigDecimal getIncomes() {
         return BigDecimal.valueOf(
                 paymentList.stream()
-                        .filter(payment -> payment.getPaymentValue()
+                        .filter(payment -> payment.getAmount()
                                 .compareTo(BigDecimal.ZERO) > 0)
-                        .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
+                        .mapToDouble(i -> Double.valueOf(i.getAmount().toString()))
                         .sum()).setScale(2, RoundingMode.CEILING);
     }
 
     public BigDecimal getExpenses() {
         return BigDecimal.valueOf(
                 paymentList.stream()
-                        .filter(payment -> payment.getPaymentValue()
+                        .filter(payment -> payment.getAmount()
                                 .compareTo(BigDecimal.ZERO) < 0)
-                        .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
+                        .mapToDouble(i -> Double.valueOf(i.getAmount().toString()))
                         .sum()).setScale(2, RoundingMode.CEILING);
     }
 
     public BigDecimal getBalance() {
         return BigDecimal.valueOf(
                 paymentList.stream()
-                        .mapToDouble(i -> Double.valueOf(i.getPaymentValue().toString()))
+                        .mapToDouble(i -> Double.valueOf(i.getAmount().toString()))
                         .sum()).setScale(2, RoundingMode.CEILING);
     }
 }

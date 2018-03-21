@@ -1,45 +1,43 @@
 package com.wojo.Vault.Database.Model;
 
-import com.wojo.Vault.Database.Model.Generators.AccountDataGenerator;
-
 import java.math.BigDecimal;
 
 public class Account {
 
-    private Integer idAccount;
-    private String IBAN_NUMBER;
+    private String accountId;
+    private String personId;
+    private String number;
     private BigDecimal value;
 
-    public Account(String countryCode, int length, BigDecimal value) {
-        AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
-        IBAN_NUMBER = accountDataGenerator.generateIBAN(countryCode, length);
+    public Account(String accountId, String personId, String number, BigDecimal value) {
+        this.accountId = accountId;
+        this.personId = personId;
+        this.number = number;
         this.value = value;
     }
 
-    public Account(Integer idAccount, String IBAN_NUMBER, BigDecimal value) {
-        this.idAccount = idAccount;
-        this.IBAN_NUMBER = IBAN_NUMBER;
-        this.value = value;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public Account() {
-        this(0, "", new BigDecimal("0"));
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
-    public Integer getIdAccount() {
-        return idAccount;
+    public String getPersonId() {
+        return personId;
     }
 
-    public void setIdAccount(Integer idAccount) {
-        this.idAccount = idAccount;
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
-    public String getIBAN_NUMBER() {
-        return IBAN_NUMBER;
+    public String getNumber() {
+        return number;
     }
 
-    public void setIBAN_NUMBER(String IBAN_NUMBER) {
-        this.IBAN_NUMBER = IBAN_NUMBER;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public BigDecimal getValue() {

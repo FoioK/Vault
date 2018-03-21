@@ -1,48 +1,77 @@
 package com.wojo.Vault.Database.Model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Payment {
 
-    private Integer idPayment;
-    private Integer idAccount;
+    private String paymentId;
+    private String senderAccountId;
+    private String recipientAccountId;
     private String recipientName;
-    private String senderName;
+    private String recipientNumber;
+    private BigDecimal amount;
     private String title;
-    private BigDecimal paymentValue;
-    private Date date;
+    private LocalDateTime data;
 
-    public Payment(Integer idPayment, Integer idAccount, String recipientName,
-                   String senderName, String title, BigDecimal paymentValue, Date date) {
-        this.idPayment = idPayment;
-        this.idAccount = idAccount;
+    public Payment(String paymentId, String senderAccountId, String recipientAccountId, String recipientName,
+                   String recipientNumber, BigDecimal amount, String title, LocalDateTime data) {
+        this.paymentId = paymentId;
+        this.senderAccountId = senderAccountId;
+        this.recipientAccountId = recipientAccountId;
         this.recipientName = recipientName;
-        this.senderName = senderName;
+        this.recipientNumber = recipientNumber;
+        this.amount = amount;
         this.title = title;
-        this.paymentValue = paymentValue;
-        this.date = date;
+        this.data = data;
     }
 
-    @SuppressWarnings("unused")
-    public Integer getIdPayment() {
-        return idPayment;
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    public Integer getIdAccount() {
-        return idAccount;
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
-    public void setIdAccount(Integer idAccount) {
-        this.idAccount = idAccount;
+    public String getSenderAccountId() {
+        return senderAccountId;
+    }
+
+    public void setSenderAccountId(String senderAccountId) {
+        this.senderAccountId = senderAccountId;
+    }
+
+    public String getRecipientAccountId() {
+        return recipientAccountId;
+    }
+
+    public void setRecipientAccountId(String recipientAccountId) {
+        this.recipientAccountId = recipientAccountId;
     }
 
     public String getRecipientName() {
         return recipientName;
     }
 
-    public String getSenderName() {
-        return senderName;
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
+    }
+
+    public String getRecipientNumber() {
+        return recipientNumber;
+    }
+
+    public void setRecipientNumber(String recipientNumber) {
+        this.recipientNumber = recipientNumber;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public String getTitle() {
@@ -53,12 +82,11 @@ public class Payment {
         this.title = title;
     }
 
-    public BigDecimal getPaymentValue() {
-        return paymentValue;
+    public LocalDateTime getData() {
+        return data;
     }
 
-    public Date getDate() {
-        return date;
+    public void setData(LocalDateTime data) {
+        this.data = data;
     }
-
 }

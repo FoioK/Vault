@@ -1,27 +1,25 @@
 package com.wojo.Vault.Database.Model;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Person {
 
-    private static int idPersonInDatabase;
+    private static String personId;
     private static String firstName;
     private static String lastName;
-    private static String personId;
-    private static String address;
     private static String telephoneNumber;
-    private static String email;
     private static String login;
-    private static String password;
-    private static List<Account> accounts = new ArrayList<>();
+    private static char[] password;
+    private static LocalDateTime createTime;
+    private List<Address> addressList;
 
-    public static int getIdPersonInDatabase() {
-        return idPersonInDatabase;
+    public static String getPersonId() {
+        return personId;
     }
 
-    public static void setIdPersonInDatabase(int idPersonInDatabase) {
-        Person.idPersonInDatabase = idPersonInDatabase;
+    public static void setPersonId(String personId) {
+        Person.personId = personId;
     }
 
     public static String getFirstName() {
@@ -40,36 +38,12 @@ public class Person {
         Person.lastName = lastName;
     }
 
-    public static String getPersonId() {
-        return personId;
-    }
-
-    public static void setPersonId(String personId) {
-        Person.personId = personId;
-    }
-
-    public static String getAddress() {
-        return address;
-    }
-
-    public static void setAddress(String address) {
-        Person.address = address;
-    }
-
     public static String getTelephoneNumber() {
         return telephoneNumber;
     }
 
     public static void setTelephoneNumber(String telephoneNumber) {
         Person.telephoneNumber = telephoneNumber;
-    }
-
-    public static String getEmail() {
-        return email;
-    }
-
-    public static void setEmail(String email) {
-        Person.email = email;
     }
 
     public static String getLogin() {
@@ -80,23 +54,27 @@ public class Person {
         Person.login = login;
     }
 
-    public static String getPassword() {
+    public static char[] getPassword() {
         return password;
     }
 
-    public static void setPassword(String password) {
+    public static void setPassword(char[] password) {
         Person.password = password;
     }
 
-    public static void addAccount(Account account) {
-        accounts.add(account);
+    public static LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public static List<Account> getAccounts() {
-        return accounts;
+    public static void setCreateTime(LocalDateTime createTime) {
+        Person.createTime = createTime;
     }
 
-    public static void setAccounts(List<Account> accounts) {
-        Person.accounts = accounts;
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 }
