@@ -1,7 +1,9 @@
 package com.wojo.Vault.Database;
 
 import com.sun.rowset.CachedRowSetImpl;
-import com.wojo.Vault.Exception.DatabaseConnectionException;
+import com.wojo.Vault.Exception.ConnectionException;
+import com.wojo.Vault.Exception.ErrorCode;
+import com.wojo.Vault.Exception.ExecuteStatementException;
 import com.wojo.Vault.Exception.LoadPropertiesException;
 
 import javax.swing.*;
@@ -22,7 +24,7 @@ public class DBManager {
     private static String connectionPath = ORIGINAL_CONNECTION_PATH;
 
     public static ResultSet dbExecuteQuery(String queryStatement, List<String> queryDate)
-            throws SQLException {
+            throws ExecuteStatementException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         CachedRowSetImpl cachedRowSet;
@@ -43,12 +45,28 @@ public class DBManager {
             resultSet = statement.executeQuery();
             cachedRowSet = new CachedRowSetImpl();
             cachedRowSet.populate(resultSet);
+        } catch (SQLException e) {
+            throw new ExecuteStatementException("Execute query error", ErrorCode.EXECUTE_QUERY_ERROR);
         } finally {
+            try {
+                assert connection != null;
+                connection.commit();
+            } catch (SQLException e) {
+                //noinspection ThrowFromFinallyBlock
+                throw new ExecuteStatementException("Execute commit error", ErrorCode.EXECUTE_COMMIT_ERROR);
+            }
+
             if (resultSet != null) {
-                resultSet.close();
+                try {
+                    resultSet.close();
+                } catch (SQLException ignored) {
+                }
             }
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException ignored) {
+                }
             }
         }
 
@@ -56,7 +74,7 @@ public class DBManager {
     }
 
     public static int dbExecuteUpdate(String updateStatement, List<String> updateData)
-            throws SQLException {
+            throws ExecuteStatementException {
 
         PreparedStatement statement = null;
         int updateRows;
@@ -67,8 +85,8 @@ public class DBManager {
                 if (connection == null || connection.isClosed()) {
                     return -1;
                 }
-
             }
+
             statement = connection.prepareStatement(updateStatement);
             if (updateData != null) {
                 for (int i = 0; i < updateData.size(); i++) {
@@ -76,9 +94,22 @@ public class DBManager {
                 }
             }
             updateRows = statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new ExecuteStatementException("Execute update error", ErrorCode.EXECUTE_UPDATE_ERROR);
         } finally {
+            try {
+                assert connection != null;
+                connection.commit();
+            } catch (SQLException e) {
+                //noinspection ThrowFromFinallyBlock
+                throw new ExecuteStatementException("Execute commit error", ErrorCode.EXECUTE_COMMIT_ERROR);
+            }
+
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException ignored) {
+                }
             }
         }
 
@@ -86,15 +117,18 @@ public class DBManager {
     }
 
     public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
-            throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            dbConnection();
+            throws ExecuteStatementException {
+        try {
             if (connection == null || connection.isClosed()) {
-                return false;
+                dbConnection();
+                if (connection == null || connection.isClosed()) {
+                    return false;
+                }
             }
+        } catch (SQLException e) {
+            return false;
         }
 
-        connection.setAutoCommit(false);
         List<PreparedStatement> preparedStatements = new ArrayList<>();
 
         try {
@@ -111,7 +145,12 @@ public class DBManager {
                     .stream()
                     .filter(data -> data.getValue() != null)
                     .count() == dataToUpdate.size()) {
-                connection.commit();
+                try {
+                    connection.commit();
+                } catch (SQLException e) {
+//                    noinspection ThrowFromFinallyBlock
+                    throw new ExecuteStatementException("Execute commit error", ErrorCode.EXECUTE_COMMIT_ERROR);
+                }
             }
             preparedStatements.forEach(statement -> {
                 if (statement != null) {
@@ -124,7 +163,6 @@ public class DBManager {
             });
         }
 
-        connection.setAutoCommit(true);
         return true;
     }
 
@@ -152,7 +190,11 @@ public class DBManager {
     public static void dbConnection() {
         try {
             connection = getConnection();
-        } catch (DatabaseConnectionException | LoadPropertiesException e) {
+            if (connection == null) {
+                tryAgain();
+            }
+            connection.setAutoCommit(false);
+        } catch (LoadPropertiesException | SQLException e) {
             tryAgain();
         }
     }
@@ -169,14 +211,15 @@ public class DBManager {
         }
     }
 
-    private static Connection getConnection() throws DatabaseConnectionException, LoadPropertiesException {
+    private static Connection getConnection() throws ConnectionException, LoadPropertiesException {
         Properties properties = new Properties();
         DBManager dbManager = new DBManager();
 
         try (InputStream in = dbManager.getClass().getClassLoader().getResourceAsStream(connectionPath)) {
             properties.load(in);
         } catch (IOException e) {
-            throw new LoadPropertiesException("Database properties load error");
+            throw new LoadPropertiesException("Database properties load error",
+                    ErrorCode.PROPERTIES_LOAD_ERROR);
         }
 
         String drivers = properties.getProperty("jdbc.drivers");
@@ -191,7 +234,7 @@ public class DBManager {
         try {
             return DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            throw new DatabaseConnectionException("Database connection error");
+            throw new ConnectionException("Database connection error", ErrorCode.CONNECTION_ERROR);
         }
     }
 
