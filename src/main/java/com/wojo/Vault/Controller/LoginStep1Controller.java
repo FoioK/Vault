@@ -3,6 +3,7 @@ package com.wojo.Vault.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PersonService;
 import com.wojo.Vault.Service.impl.AccountServiceImpl;
@@ -80,27 +81,26 @@ public class LoginStep1Controller {
 
     private void loginProcessStep1() {
         setErrorMessagesVisibleFalse();
+
         String login = loginField.getText();
-        if (isLoginExist(login)) {
-            personService.setPeronLogin(login);
-            loadLoginStep2();
+        Person person;
+
+        if ((person = personService.findPersonByLogin(login)) != null) {
+            loadLoginStep2(person);
         } else {
             badLoginMessage.setVisible(true);
         }
     }
 
-    private boolean isLoginExist(String login) {
-        return personService.searchPersonLogin(login);
-    }
-
     private static final String LOGIN_STEP2_VIEW = "LoginStep2";
     private static final String ACCOUNT_CREATOR_VIEW = "AccountCreator";
 
-    private void loadLoginStep2() {
+    private void loadLoginStep2(Person person) {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), LOGIN_STEP2_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 225, 100);
         LoginStep2Controller controller = loader.getController();
         controller.setRootController(rootController);
+        controller.setPerson(person);
         rootController.setScreen(pane);
     }
 
@@ -134,15 +134,15 @@ public class LoginStep1Controller {
             return;
         }
 
-        if (accountService.addValueToAccount(amount, String.valueOf(number))) {
-            JOptionPane.showMessageDialog(null,
-                    bundle.getString("LoginStep1.addValueSuccess"),
-                    "Success", JOptionPane.PLAIN_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    bundle.getString("LoginStep1.badAddValueMessage"),
-                    "Warning", JOptionPane.WARNING_MESSAGE);
-        }
+//        if (accountService.addValueToAccount(amount, String.valueOf(number))) {
+//            JOptionPane.showMessageDialog(null,
+//                    bundle.getString("LoginStep1.addValueSuccess"),
+//                    "Success", JOptionPane.PLAIN_MESSAGE);
+//        } else {
+//            JOptionPane.showMessageDialog(null,
+//                    bundle.getString("LoginStep1.badAddValueMessage"),
+//                    "Warning", JOptionPane.WARNING_MESSAGE);
+//        }
     }
 
     protected void setRootController(RootController rootController) {
