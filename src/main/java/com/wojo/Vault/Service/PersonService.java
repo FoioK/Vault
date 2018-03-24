@@ -1,15 +1,14 @@
 package com.wojo.Vault.Service;
 
-import java.util.List;
+import com.wojo.Vault.Database.Model.Address;
+import com.wojo.Vault.Database.Model.Person;
 
 public interface PersonService {
-    boolean searchPersonLogin(String login);
+    Person findPersonByLogin(String login);
 
-    void setPeronLogin(String login);
+    String findPersonIdByLogin(String login);
 
-    boolean loginStep2Process(String password);
+    boolean setPersonData(Person person);
 
-    int insertPersonToDB(List<String> accountDate);
-
-    String generateLogin(int length);
+    String createPerson(Person person, Address address);
 }
