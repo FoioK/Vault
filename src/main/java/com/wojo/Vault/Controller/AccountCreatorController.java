@@ -3,6 +3,9 @@ package com.wojo.Vault.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.wojo.Vault.Database.Model.Account;
+import com.wojo.Vault.Database.Model.Address;
+import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Filters.TextFieldFilter;
 import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PersonService;
@@ -13,13 +16,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ResourceBundle;
 
 public class AccountCreatorController {
 
     private PersonService personService = new PersonServiceImpl();
     private AccountService accountService = new AccountServiceImpl();
+
     private RootController rootController;
 
     @FXML
@@ -44,7 +49,13 @@ public class AccountCreatorController {
     private Label badPersonIdMessage;
 
     @FXML
-    private JFXTextField addressField;
+    private JFXTextField city;
+
+    @FXML
+    private JFXTextField street;
+
+    @FXML
+    private JFXTextField apartmentNumber;
 
     @FXML
     private Label badAddressMessage;
@@ -93,7 +104,9 @@ public class AccountCreatorController {
         TextFieldFilter.lengthLimiter(personIdField, 11);
         TextFieldFilter.typeInteger(personIdField);
 
-        TextFieldFilter.lengthLimiter(addressField, 40);
+        TextFieldFilter.lengthLimiter(city, 40);
+        TextFieldFilter.lengthLimiter(street, 40);
+        TextFieldFilter.lengthLimiter(apartmentNumber, 40);
 
         //TODO split entered text
         TextFieldFilter.lengthLimiter(telephoneNumberField, 9);
@@ -125,17 +138,15 @@ public class AccountCreatorController {
 
     private void createAccountProcess() {
         setErrorMessages();
+
         if (checkData()) {
-            if (isPasswordsEqual()) {
-                createAccount();
-                return;
-            }
-            badRepeatPasswordsMessage.setVisible(true);
+            createAccount();
         }
     }
 
     private boolean checkData() {
         boolean isCorrect = true;
+
         if (firstNameField.getText().equals("")) {
             badFirstNameMessage.setVisible(true);
             isCorrect = false;
@@ -148,7 +159,7 @@ public class AccountCreatorController {
             badPersonIdMessage.setVisible(true);
             isCorrect = false;
         }
-        if (addressField.getText().equals("")) {
+        if (city.getText().equals("") || street.getText().equals("") || apartmentNumber.getText().equals("")) {
             badAddressMessage.setVisible(true);
             isCorrect = false;
         }
@@ -164,33 +175,56 @@ public class AccountCreatorController {
             badPasswordMessage.setVisible(true);
             isCorrect = false;
         }
+        if (!passwordField.getText().equals(repeatPasswordField.getText())) {
+            badRepeatPasswordsMessage.setVisible(true);
+            isCorrect = false;
+        }
+
         return isCorrect;
     }
 
-    private boolean isPasswordsEqual() {
-        return passwordField.getText().equals(repeatPasswordField.getText());
-    }
-
     private void createAccount() {
-        String login = personService.generateLogin(9);
-       if (accountService.createAccount(login, getAccountDataList(login), "PL", 26)) {
-           JOptionPane.showMessageDialog(null, "User ID: " + login);
-           rootController.loadLoginStep1();
-       }
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundles.messages");
+        String login = personService.createPerson(getPerson(), getAddress());
+
+        if (login.equals("")) {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("AccountCreator.badCreateMessage"),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            String personId = personService.findPersonIdByLogin(login);
+            if (!personId.equals("")) {
+                accountService.createAccount(new Account(personId, "", BigDecimal.ZERO));
+            }
+
+            String message = bundle.getString("AccountCreator.createSuccess");
+            JOptionPane.showMessageDialog(null,
+                    message + " " + login,
+                    "Success",
+                    JOptionPane.PLAIN_MESSAGE);
+
+            rootController.loadLoginStep1();
+        }
     }
 
-    private List<String> getAccountDataList(String login) {
-        List<String> accountData = new ArrayList<>(8);
-        accountData.add(firstNameField.getText());
-        accountData.add(lastNameField.getText());
-        accountData.add(personIdField.getText());
-        accountData.add(addressField.getText());
-        accountData.add(telephoneNumberField.getText());
-        accountData.add(emailField.getText());
-        accountData.add(login);
-        accountData.add(passwordField.getText());
+    private Person getPerson() {
+        return new Person(
+                firstNameField.getText(),
+                lastNameField.getText(),
+                telephoneNumberField.getText(),
+                "",
+                passwordField.getText().toCharArray(),
+                LocalDateTime.now()
+        );
+    }
 
-        return accountData;
+    private Address getAddress() {
+        return new Address(
+                city.getText(),
+                street.getText(),
+                apartmentNumber.getText()
+        );
     }
 
     protected void setRootController(RootController rootController) {
