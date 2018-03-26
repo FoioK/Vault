@@ -101,7 +101,7 @@ public class DBManager {
                 assert connection != null;
                 connection.commit();
             } catch (SQLException e) {
-                //noinspection ThrowFromFinallyBlock
+//                noinspection ThrowFromFinallyBlock
                 throw new ExecuteStatementException("Execute commit error", ErrorCode.EXECUTE_COMMIT_ERROR);
             }
 
@@ -116,7 +116,7 @@ public class DBManager {
         return updateRows;
     }
 
-    public static boolean dbExecuteTransactionUpdate(Map<List<Object>, String> dataToUpdate)
+    public static <T> boolean dbExecuteTransactionUpdate(Map<List<T>, String> dataToUpdate)
             throws ExecuteStatementException {
         try {
             if (connection == null || connection.isClosed()) {
@@ -129,7 +129,7 @@ public class DBManager {
             return false;
         }
 
-        List<PreparedStatement> preparedStatements = new ArrayList<>();
+        List<PreparedStatement> preparedStatements = new ArrayList<>(dataToUpdate.size());
 
         try {
             dataToUpdate.entrySet()
@@ -166,9 +166,9 @@ public class DBManager {
         return true;
     }
 
-    private static PreparedStatement executeStatement(Map.Entry<List<Object>, String> data) {
+    private static <T> PreparedStatement executeStatement(Map.Entry<List<T>, String> data) {
         String updateStatement = data.getValue();
-        List<Object> updateData = data.getKey();
+        List<T> updateData = data.getKey();
         PreparedStatement statement;
 
         try {

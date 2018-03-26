@@ -1,15 +1,15 @@
 package com.wojo.Vault.Exception;
 
-import java.io.IOException;
+import java.sql.SQLException;
 
-public class LoadPropertiesException extends IOException {
+public class DatabaseException extends SQLException {
 
     private ErrorCode errorCode;
 
-    public LoadPropertiesException() {
+    DatabaseException() {
     }
 
-    public LoadPropertiesException(String gripe, ErrorCode errorCode) {
+    DatabaseException(String gripe, ErrorCode errorCode) {
         super(gripe);
         this.errorCode = errorCode;
     }

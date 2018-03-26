@@ -1,0 +1,12 @@
+package com.wojo.Vault.Exception;
+
+public enum ErrorCode {
+
+    CONNECTION_ERROR,
+    PROPERTIES_LOAD_ERROR,
+    EXECUTE_QUERY_ERROR,
+    EXECUTE_UPDATE_ERROR,
+    EXECUTE_TRANSACTION_ERROR,
+    EXECUTE_COMMIT_ERROR,
+    NO_ACCOUNT_FOR_PERSON,
+}
