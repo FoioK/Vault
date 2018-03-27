@@ -1,7 +1,9 @@
 package com.wojo.Vault.Service.impl;
 
 import com.wojo.Vault.Database.DAO.AccountDAO;
+import com.wojo.Vault.Database.DAO.AddressDAO;
 import com.wojo.Vault.Database.DAO.Impl.AccountDAOImpl;
+import com.wojo.Vault.Database.DAO.Impl.AddressDAOImpl;
 import com.wojo.Vault.Database.DAO.Impl.PersonDAOImpl;
 import com.wojo.Vault.Database.DAO.PersonDAO;
 import com.wojo.Vault.Database.Model.Account;
@@ -24,6 +26,8 @@ public class PersonServiceImpl implements PersonService {
     private AccountService accountService = new AccountServiceImpl();
     private AccountDAO accountDAO = new AccountDAOImpl();
 
+    private AddressDAO addressDAO = new AddressDAOImpl();
+
     @Override
     public Person findPersonByLogin(String login) {
         Person person = personDAO.findByLogin(Optional.ofNullable(login).get());
@@ -37,7 +41,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public boolean setPersonData(Person person) throws LoginException {
+    public boolean setPersonData(Person person) {
+        try {
+            return setAccounts(person) && setAddresses(person);
+        } catch (LoginException e) {
+            System.out.println(e.errorCode() + ": Set person data");
+        }
+
+        return false;
+    }
+
+    private boolean setAccounts(Person person) throws LoginException {
         List<Account> accountList = accountDAO.findAllByPersonId(person.getPersonId());
 
         if (accountList.size() == 0) {
@@ -48,8 +62,20 @@ public class PersonServiceImpl implements PersonService {
                 throw new LoginException("Create account error", ErrorCode.NO_ACCOUNT_FOR_PERSON);
             }
         }
-        person.setAccountList(accountList);
 
+        person.setAccountList(accountList);
+        return true;
+    }
+
+    private boolean setAddresses(Person person) throws LoginException {
+        List<Address> addressList = addressDAO.findAll(person.getPersonId());
+
+        if (addressList.size() == 0) {
+            //TODO ADD ADDRESS
+            throw new LoginException("Find addresses error", ErrorCode.NO_ADDRESS);
+        }
+
+        person.setAddressList(addressList);
         return true;
     }
 
