@@ -15,7 +15,8 @@ public class PersonDataGenerator {
 
     private String generateLoginProcess(int length) {
         String login = generateRandomString(new Random(), length);
-        return personDAO.searchPersonLogin(login) ? generateLoginProcess(length) : login;
+
+        return personDAO.isLoginExist(login) ? generateLoginProcess(length) : login;
     }
 
     private String generateRandomString(Random random, int length) {

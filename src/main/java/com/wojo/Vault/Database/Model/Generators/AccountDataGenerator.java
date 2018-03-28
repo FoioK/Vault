@@ -9,26 +9,15 @@ public class AccountDataGenerator {
 
     private AccountDAO accountDAO = new AccountDAOImpl();
 
-    public String generateIBAN(String countryCode, int length) {
-        return countryCode.length() == 2 ?
-                length > 0 ?
-                        isCountryCodeCorrect(countryCode) ?
-                                countryCode + generateNumberProcess(length):
-                                "" :
-                        "" :
-                "";
-    }
-
-    private boolean isCountryCodeCorrect(String countryCode) {
-        return countryCode.chars()
-                .mapToObj(item -> (char) item)
-                .filter(i -> (i < '[' && i > '@'))
-                .count() == countryCode.length();
+    public String generateIBAN(int length) {
+        return length > 0 ? generateNumberProcess(length) : "";
     }
 
     private String generateNumberProcess(int length) {
         String number = generateRandomNumber(new Random(), length);
-        return accountDAO.searchAccountByNumber(number) == 0 ? number : generateNumberProcess(length);
+        
+        return accountDAO.isNumberExist(number) ?
+                generateNumberProcess(length) : generateRandomNumber(new Random(), length);
     }
 
     private String generateRandomNumber(Random random, int length) {
