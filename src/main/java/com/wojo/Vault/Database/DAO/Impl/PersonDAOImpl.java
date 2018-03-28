@@ -21,7 +21,7 @@ public class PersonDAOImpl implements PersonDAO {
             personId = getLastPersonId() + 1;
             addressId = getLastAddressId() + 1;
         } catch (SQLException e) {
-            System.out.println("Find max person and address id error");
+            System.out.println("Find max personId and addressId error");
             return false;
         }
 
@@ -104,12 +104,12 @@ public class PersonDAOImpl implements PersonDAO {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
             return resultSet.next() ? getPersonObject(resultSet) : new Person("-1");
         } catch (ExecuteStatementException e) {
-            System.out.println(e.errorCode() + ": Find person by login");
-            return null;
+            System.out.println("find person by login: " + e.errorCode());
         } catch (SQLException e) {
             System.out.println("ResultSet error: Find login");
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class PersonDAOImpl implements PersonDAO {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
             return resultSet.next() ? resultSet.getString("PERSON_ID") : "";
         } catch (ExecuteStatementException e) {
-            System.out.println(e.errorCode() + ": Find person id by login");
+            System.out.println("find person id by login: " + e.errorCode());
         } catch (SQLException e) {
             System.out.println("ResultSet error: Find person id by login");
         }
@@ -153,7 +153,7 @@ public class PersonDAOImpl implements PersonDAO {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
             return resultSet.next() && resultSet.getInt(1) > 0;
         } catch (ExecuteStatementException e) {
-            System.out.println(e.errorCode() + ": check login");
+            System.out.println("check login: " + e.errorCode());
         } catch (SQLException e) {
             System.out.println("ResultSet error: check login");
         }
