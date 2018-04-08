@@ -51,12 +51,13 @@ public class PersonServiceImpl implements PersonService {
         return false;
     }
 
-    private boolean setAccounts(Person person) throws LoginException {
+    public boolean setAccounts(Person person) throws LoginException {
         List<Account> accountList = accountDAO.findAllByPersonId(person.getPersonId());
 
         if (accountList.size() == 0) {
-            accountService.createAccount(new Account(person.getPersonId(), "", BigDecimal.ZERO));
-            accountList = accountDAO.findAllByPersonId(person.getPersonId());
+            if (accountService.createAccount(new Account(person.getPersonId(), "", BigDecimal.ZERO))) {
+                accountList = accountDAO.findAllByPersonId(person.getPersonId());
+            }
 
             if (accountList.size() == 0) {
                 throw new LoginException("Create account error", ErrorCode.NO_ACCOUNT_FOR_PERSON);
@@ -67,11 +68,10 @@ public class PersonServiceImpl implements PersonService {
         return true;
     }
 
-    private boolean setAddresses(Person person) throws LoginException {
+    public boolean setAddresses(Person person) throws LoginException {
         List<Address> addressList = addressDAO.findAll(person.getPersonId());
 
         if (addressList.size() == 0) {
-            //TODO ADD ADDRESS
             throw new LoginException("Find addresses error", ErrorCode.NO_ADDRESS);
         }
 
