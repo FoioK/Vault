@@ -85,7 +85,7 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     private Integer getLastAddressId() throws SQLException {
-        String queryStatement = "SELECT MAX(ENTRY_ID) FROM person_has_address";
+        String queryStatement = "SELECT MAX(ADDRESS_ID) FROM address";
         ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement, null);
 
         return resultSet.next() ? resultSet.getInt(1) : -1;
