@@ -2,6 +2,7 @@ package com.wojo.Vault.Database.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Payment {
 
@@ -88,5 +89,33 @@ public class Payment {
 
     public void setData(LocalDateTime data) {
         this.data = data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Payment)) return false;
+        Payment payment = (Payment) o;
+        return Objects.equals(paymentId, payment.paymentId) &&
+                Objects.equals(senderAccountId, payment.senderAccountId) &&
+                Objects.equals(recipientAccountId, payment.recipientAccountId) &&
+                Objects.equals(recipientName, payment.recipientName) &&
+                Objects.equals(recipientNumber, payment.recipientNumber) &&
+                Objects.equals(amount.abs(), payment.amount.abs()) &&
+                Objects.equals(title, payment.title) &&
+                Objects.equals(data.toLocalDate(), payment.data.toLocalDate());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(paymentId,
+                senderAccountId,
+                recipientAccountId,
+                recipientName,
+                recipientNumber,
+                amount,
+                title,
+                data);
     }
 }
