@@ -3,16 +3,11 @@ package com.wojo.Vault.Database.DAO.Impl;
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Payment;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.wojo.Vault.Exception.ExecuteStatementException;
+import org.junit.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -21,215 +16,252 @@ public class PaymentDAOImplTest {
 
     private PaymentDAO paymentDAO = new PaymentDAOImpl();
 
+    private static final String DISABLE_FOREIGN_KEY_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
+    private static final String ENABLE_FOREIGN_KEY_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
+
     @BeforeClass
-    public static void connectionToTestDatabase() throws IOException, SQLException {
+    public static void connectionToTestDatabase() throws ExecuteStatementException {
         DBManager.setTestConnectionPath();
         DBManager.dbConnection();
+
+        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
+
+        String updateStatement = "TRUNCATE TABLE payment";
+        DBManager.dbExecuteUpdate(updateStatement, null);
     }
 
     @AfterClass
-    public static void clearDatabaseAndDisconnect() throws SQLException {
-        String updateStatement = "TRUNCATE TABLE payments";
+    public static void clearDatabaseAndDisconnect() throws ExecuteStatementException {
+        String updateStatement = "TRUNCATE TABLE payment";
         DBManager.dbExecuteUpdate(updateStatement, null);
+
+        DBManager.dbExecuteUpdate(ENABLE_FOREIGN_KEY_CHECK, null);
+
         DBManager.dbDisconnect();
+    }
+
+    private static final String FIRST_ACCOUNT_ID = "77";
+    private static final String SECOND_ACCOUNT_ID = "32";
+    private static final String THIRD_ACCOUNT_ID = "31";
+
+    private static final Payment FIRST_PAYMENT = new Payment(
+            "1",
+            FIRST_ACCOUNT_ID,
+            SECOND_ACCOUNT_ID,
+            "Second",
+            "78900987789009877890098778",
+            new BigDecimal("765.25"),
+            "First transfer",
+            LocalDateTime.now().minusDays(5)
+    );
+
+
+    private static final Payment SECOND_PAYMENT = new Payment(
+            "2",
+            FIRST_ACCOUNT_ID,
+            THIRD_ACCOUNT_ID,
+            "Third",
+            "12340987789009877890098778",
+            new BigDecimal("130.50"),
+            "Second transfer",
+            LocalDateTime.now().minusDays(12)
+    );
+
+    private static final Payment THIRD_PAYMENT = new Payment(
+            "3",
+            SECOND_ACCOUNT_ID,
+            FIRST_ACCOUNT_ID,
+            "First",
+            "56780987789009877890098778",
+            new BigDecimal("1427.00"),
+            "Third transfer",
+            LocalDateTime.now().minusMonths(1)
+    );
+
+    private static final Payment A_THREE_MONTH_AGO_PAYMENT = new Payment(
+            "4",
+            SECOND_ACCOUNT_ID,
+            FIRST_ACCOUNT_ID,
+            "First",
+            "56780987789009877890098778",
+            new BigDecimal("1427.00"),
+            "Fourth transfer",
+            LocalDateTime.now().minusMonths(3)
+    );
+
+    @Before
+    public void insertDataToTests() throws ExecuteStatementException {
+        insertPayment(FIRST_PAYMENT);
+        insertPayment(SECOND_PAYMENT);
+        insertPayment(THIRD_PAYMENT);
+        insertPayment(A_THREE_MONTH_AGO_PAYMENT);
+    }
+
+    private void insertPayment(Payment payment) throws ExecuteStatementException {
+        String updateStatement = "INSERT INTO payment " +
+                "(PAYMENT_ID, SENDER_ACCOUNT_ID, RECIPIENT_ACCOUNT_ID, RECIPIENT_NAME, " +
+                "RECIPIENT_NUMBER, AMOUNT, TITLE, CREATE_TIME) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?)";
+
+        List<String> dataToUpdate = Arrays.asList(
+                payment.getPaymentId(),
+                payment.getSenderAccountId(),
+                payment.getRecipientAccountId(),
+                payment.getRecipientName(),
+                payment.getRecipientNumber(),
+                payment.getAmount().toString(),
+                payment.getTitle(),
+                payment.getData().toString()
+        );
+
+        DBManager.dbExecuteUpdate(updateStatement, dataToUpdate);
+    }
+
+    @After
+    public void clearTable() throws ExecuteStatementException {
+        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
+
+        String updateStatement = "TRUNCATE TABLE payment";
+        DBManager.dbExecuteUpdate(updateStatement, null);
     }
 
     @Test
     public void shouldReturnCorrectTransferInsideData() {
-        String recipientIdAccount = 1 + "";
-        String senderIdAccount = 2 + "";
-        BigDecimal recipientNewValue = BigDecimal.valueOf(1000);
-        BigDecimal senderNewValue = BigDecimal.valueOf(2000);
+        BigDecimal recipientNewValue = new BigDecimal("2500.00").add(SECOND_PAYMENT.getAmount());
+        BigDecimal senderNewValue = new BigDecimal("1500.00").subtract(SECOND_PAYMENT.getAmount());
 
-        Integer valueIndexOnList = 0;
-        Integer idIndexOnList = 1;
+        Map<List<String>, String> transferInsideData = paymentDAO.getTransferInsideData(
+                SECOND_PAYMENT.getRecipientAccountId(),
+                SECOND_PAYMENT.getSenderAccountId(),
+                recipientNewValue,
+                senderNewValue
+        );
 
-        Map<List<Object>, String> transferInsideData =
-                paymentDAO.getTransferInsideData(recipientIdAccount, senderIdAccount, recipientNewValue, senderNewValue);
+        final int expectedSize = 2;
+        assertEquals(expectedSize, transferInsideData.size());
 
-        int expectedDataSize = 2;
-        assertEquals(expectedDataSize, transferInsideData.size());
         transferInsideData.forEach((data, updateStatement) -> {
-            if (Objects.equals(data.get(idIndexOnList), recipientIdAccount)) {
-                assertEquals(recipientNewValue, data.get(valueIndexOnList));
-            } else {
-                assertEquals(senderIdAccount, data.get(idIndexOnList));
-                assertEquals(senderNewValue, data.get(valueIndexOnList));
-            }
+            final int expectedDataSize = 2;
+            assertEquals(expectedDataSize, data.size());
 
-            assertFalse(updateStatement == null);
-            assertTrue(updateStatement.length() != 0);
+            if (Objects.equals(recipientNewValue.toString(), data.get(0))) {
+                assertEquals(SECOND_PAYMENT.getRecipientAccountId(), data.get(1));
+            } else {
+                assertEquals(senderNewValue.toString(), data.get(0));
+                assertEquals(SECOND_PAYMENT.getSenderAccountId(), data.get(1));
+            }
         });
     }
 
     @Test
     public void shouldReturnCorrectTransferOutsideData() {
-        String senderIdAccount = 2 + "";
-        BigDecimal senderNewValue = BigDecimal.valueOf(2000);
+        BigDecimal senderNewValue = new BigDecimal("4000").subtract(THIRD_PAYMENT.getAmount());
 
-        Integer valueIndexOnList = 0;
-        Integer idIndexOnList = 1;
+        Map<List<String>, String> transferOutsideData = paymentDAO.getTransferOutsideData(
+                THIRD_PAYMENT.getSenderAccountId(),
+                senderNewValue
+        );
 
-        Map<List<Object>, String> transferOutsideData =
-                paymentDAO.getTransferOutsideData(senderIdAccount, senderNewValue);
+        final int expectedSize = 1;
+        assertEquals(expectedSize, transferOutsideData.size());
 
-        int expectedDataSize = 1;
-        assertEquals(expectedDataSize, transferOutsideData.size());
-        transferOutsideData.forEach((data, updateStatement) -> {
-            assertEquals(senderNewValue, data.get(valueIndexOnList));
-            assertEquals(senderIdAccount, data.get(idIndexOnList));
+        List<String> data = transferOutsideData.entrySet().iterator().next().getKey();
 
-            assertFalse(updateStatement == null);
-            assertTrue(updateStatement.length() != 0);
-        });
+        final int expectedDataSize = 2;
+        assertEquals(expectedDataSize, data.size());
+
+        assertEquals(senderNewValue.toString(), data.get(0));
+        assertEquals(THIRD_PAYMENT.getSenderAccountId(), data.get(1));
     }
 
     @Test
     public void shouldReturnCorrectInsertPaymentData() {
-        String senderIdAccount = 1 + "";
-        String recipientIdAccount = 2 + "";
-        String recipient = "John";
-        String sender = "Andrej";
-        String title = "Test";
-        BigDecimal value = BigDecimal.valueOf(700);
+        Map<List<String>, String> insertPaymentData =
+                paymentDAO.getInsertPaymentData(
+                        FIRST_PAYMENT.getSenderAccountId(),
+                        FIRST_PAYMENT.getRecipientAccountId(),
+                        FIRST_PAYMENT.getRecipientName(),
+                        FIRST_PAYMENT.getRecipientNumber(),
+                        FIRST_PAYMENT.getAmount(),
+                        FIRST_PAYMENT.getTitle(),
+                        FIRST_PAYMENT.getData()
+                );
 
-        Integer senderIdAccountIndexOnList = 0;
-        Integer recipientIdAccountIndexOnList = 1;
-        Integer recipientIndexOnList = 2;
-        Integer senderIndexOnList = 3;
-        Integer titleIndexOnList = 4;
-        Integer valueIndexOnList = 5;
-        Integer dataIndexOnList = 6;
+        final int expectedSize = 1;
+        assertEquals(expectedSize, insertPaymentData.size());
 
-        Map<List<Object>, String> insertPaymentData =
-                paymentDAO.getInsertPaymentData(senderIdAccount, recipientIdAccount, recipient, sender, title, value);
-
-        int expectedDataSize = 1;
-        assertEquals(expectedDataSize, insertPaymentData.size());
-        insertPaymentData.forEach((data, updateStatement) -> {
-            assertEquals(senderIdAccount, data.get(senderIdAccountIndexOnList));
-            assertEquals(recipientIdAccount, data.get(recipientIdAccountIndexOnList));
-            assertEquals(recipient, data.get(recipientIndexOnList));
-            assertEquals(sender, data.get(senderIndexOnList));
-            assertEquals(title, data.get(titleIndexOnList));
-            assertEquals(value, data.get(valueIndexOnList));
-            assertTrue(Math.abs(new Date().getTime() - ((Date) data.get(dataIndexOnList)).getTime()) < 500);
-
-            assertFalse(updateStatement == null);
-            assertTrue(updateStatement.length() != 0);
-        });
-    }
-
-    private static final Integer FIRST_ID_ACCOUNT = 3;
-    private static final String FIRST_NAME = "First Name";
-
-    private static final Integer SECOND_ID_ACCOUNT = 4;
-    private static final String SECOND_NAME = "Second Name";
-
-    private static final String TITLE = "Test title";
-    private static final BigDecimal ACCOUNT_VALUE = BigDecimal.valueOf(50000);
-    private static final BigDecimal PAYMENT_VALUE = BigDecimal.valueOf(300);
-
-    @Test
-    public void shouldSendPaymentFromFirstToSecondAccount() {
-        Map<List<Object>, String> dataToUpdate = new HashMap<>(3);
-
-        String updateAccountsStatement = "UPDATE accounts " +
-                "SET value = ? " +
-                "WHERE idAccount = ?";
-        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.subtract(PAYMENT_VALUE), FIRST_ID_ACCOUNT)
-                , updateAccountsStatement);
-        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.add(PAYMENT_VALUE), SECOND_ID_ACCOUNT)
-                , updateAccountsStatement);
-
-        String updatePaymentsStatement = "INSERT INTO payments " +
-                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
-                "VALUES " +
-                "(?, ?, ?, ?, ?, ?, ?)";
-        dataToUpdate.put(Arrays.asList(FIRST_ID_ACCOUNT, SECOND_ID_ACCOUNT, SECOND_NAME, FIRST_NAME
-                , TITLE, PAYMENT_VALUE, new Date()), updatePaymentsStatement);
-
-        assertTrue(paymentDAO.sendTransfer(dataToUpdate));
-    }
-
-    @Test
-    public void shouldSendPaymentFromSecondToFirstAccount() {
-        Map<List<Object>, String> dataToUpdate = new HashMap<>(3);
-
-        String updateAccountsStatement = "UPDATE accounts " +
-                "SET value = ? " +
-                "WHERE idAccount = ?";
-        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.add(PAYMENT_VALUE), FIRST_ID_ACCOUNT)
-                , updateAccountsStatement);
-        dataToUpdate.put(Arrays.asList(ACCOUNT_VALUE.subtract(PAYMENT_VALUE), SECOND_ID_ACCOUNT)
-                , updateAccountsStatement);
-
-        String updatePaymentsStatement = "INSERT INTO payments " +
-                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
-                "VALUES " +
-                "(?, ?, ?, ?, ?, ?, ?)";
-        dataToUpdate.put(Arrays.asList(SECOND_ID_ACCOUNT, FIRST_ID_ACCOUNT, FIRST_NAME, SECOND_NAME
-                , TITLE, PAYMENT_VALUE, new Date()), updatePaymentsStatement);
-
-        assertTrue(paymentDAO.sendTransfer(dataToUpdate));
+        List<String> expectedData = Arrays.asList(
+                FIRST_PAYMENT.getSenderAccountId(),
+                FIRST_PAYMENT.getRecipientAccountId(),
+                FIRST_PAYMENT.getRecipientName(),
+                FIRST_PAYMENT.getRecipientNumber(),
+                FIRST_PAYMENT.getAmount().toString(),
+                FIRST_PAYMENT.getTitle(),
+                FIRST_PAYMENT.getData().toString()
+        );
+        assertEquals(expectedData, insertPaymentData.entrySet().iterator().next().getKey());
     }
 
     @Test
     public void getPaymentsHistoryTest() {
-        List<Payment> allPayment = paymentDAO.getAllPayment(FIRST_ID_ACCOUNT);
+        List<Payment> allPayment = paymentDAO.findAll(Integer.valueOf(FIRST_ACCOUNT_ID));
+        assertTrue(allPayment != null);
+
+        /*
+          expected payments:
+                   FIRST_PAYMENT,
+                   SECOND_PAYMENT,
+                   THIRD_PAYMENT,
+                   A_THREE_MONTH_AGO_PAYMENT
+         */
+        final int expectedSize = 4;
+        assertEquals(expectedSize, allPayment.size());
 
         allPayment.forEach(payment -> {
-            if (payment.getIdAccount().equals(FIRST_ID_ACCOUNT)) {
-                assertEquals(SECOND_NAME, payment.getRecipientName());
-                assertEquals(FIRST_NAME, payment.getSenderName());
-                assertEquals(PAYMENT_VALUE.negate(), payment.getPaymentValue());
+            if (payment.getPaymentId().equals(FIRST_PAYMENT.getPaymentId())) {
+                assertTrue(FIRST_PAYMENT.equals(payment));
+            } else if (payment.getPaymentId().equals(SECOND_PAYMENT.getPaymentId())) {
+                assertTrue(SECOND_PAYMENT.equals(payment));
+            } else if (payment.getPaymentId().equals(THIRD_PAYMENT.getPaymentId())) {
+                assertTrue(THIRD_PAYMENT.equals(payment));
             } else {
-                assertEquals(FIRST_NAME, payment.getRecipientName());
-                assertEquals(SECOND_NAME, payment.getSenderName());
-                assertEquals(PAYMENT_VALUE, payment.getPaymentValue());
+                assertTrue(A_THREE_MONTH_AGO_PAYMENT.equals(payment));
             }
-            assertEquals(TITLE, payment.getTitle());
         });
     }
 
+    @Test
+    public void getLastThreeMonthPaymentHistoryTest() {
+        List<Payment> lastThreeMonthPayment = paymentDAO.findAllFromLastThreeMonth(Integer.valueOf(SECOND_ACCOUNT_ID));
+        assertTrue(lastThreeMonthPayment != null);
 
+        /*
+          expected payments:
+                   FIRST_PAYMENT,
+                   THIRD_PAYMENT
+         */
+        final int expectedSize = 2;
+        assertEquals(expectedSize, lastThreeMonthPayment.size());
+
+        lastThreeMonthPayment.forEach(payment -> {
+            if (payment.getPaymentId().equals(FIRST_PAYMENT.getPaymentId())) {
+                assertTrue(FIRST_PAYMENT.equals(payment));
+            } else {
+                assertTrue(THIRD_PAYMENT.equals(payment));
+            }
+        });
+    }
 
     @Test
-    public void getLastThreeMonthPaymentTest() throws SQLException {
-        String updateInsertStatement = "INSERT INTO payments " +
-                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void shouldNotFindPaymentForBadId() {
+        Integer badAccountId = -30;
+        final int expectedSize = 0;
 
-        final Integer ID_ACCOUNT = -17;
-        final Integer RECIPIENT_ID_ACCOUNT = -18;
-        final String NAME = "Test";
-        final String TITLE = "Title";
-        final BigDecimal PAYMENT_VALUE = BigDecimal.valueOf(500);
+        List<Payment> allPayment = paymentDAO.findAll(badAccountId);
+        assertEquals(expectedSize, allPayment.size());
 
-        final Date THIS_MONTH = new Date();
-        final Date A_THREE_MONTH_PLUS_ONE_DAY_AGO =
-                Date.from(LocalDateTime.now().minusMonths(3).minusDays(1)
-                        .atZone(ZoneId.systemDefault()).toInstant());
-
-        List<Object> transferInThisMonth = Arrays.asList(ID_ACCOUNT, RECIPIENT_ID_ACCOUNT,
-                NAME, NAME, TITLE, PAYMENT_VALUE, THIS_MONTH);
-        List<Object> transferMoreThanTreeMonthAgo = Arrays.asList(RECIPIENT_ID_ACCOUNT, ID_ACCOUNT,
-                NAME, NAME, TITLE, PAYMENT_VALUE, A_THREE_MONTH_PLUS_ONE_DAY_AGO);
-
-        Map<List<Object>, String> dataToUpdate = new HashMap<>();
-        dataToUpdate.put(transferInThisMonth, updateInsertStatement);
-        dataToUpdate.put(transferMoreThanTreeMonthAgo, updateInsertStatement);
-
-        Assert.assertTrue(DBManager.dbExecuteTransactionUpdate(dataToUpdate));
-
-        List<Payment> lastThreeMonthPayment = paymentDAO.getLastThreeMonthPayment(ID_ACCOUNT);
-        assertEquals(1, lastThreeMonthPayment.size());
-        lastThreeMonthPayment.forEach(payment ->
-                Assert.assertTrue(payment.getDate().compareTo(A_THREE_MONTH_PLUS_ONE_DAY_AGO) >= 0));
-
-
-        String updateDeleteStatement = "DELETE FROM payments WHERE idAccount = ? OR idAccount = ?";
-        Assert.assertEquals(2, DBManager.dbExecuteUpdate(updateDeleteStatement,
-                Arrays.asList(String.valueOf(ID_ACCOUNT), String.valueOf(RECIPIENT_ID_ACCOUNT))));
+        List<Payment> lastThreeMonthPayment = paymentDAO.findAllFromLastThreeMonth(badAccountId);
+        assertEquals(expectedSize, lastThreeMonthPayment.size());
     }
 }
