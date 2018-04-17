@@ -3,117 +3,140 @@ package com.wojo.Vault.Database.DAO.Impl;
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Payment;
+import com.wojo.Vault.Exception.ExecuteStatementException;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class PaymentDAOImpl implements PaymentDAO {
 
     @Override
-    public Map<List<Object>, String> getTransferInsideData(String recipientIdAccount
-            , String senderIdAccount, BigDecimal recipientNewValue, BigDecimal senderNewValue) {
-        String updateStatement = "UPDATE accounts " +
-                "SET value = ? " +
-                "WHERE idAccount = ?";
+    public Map<List<String>, String> getTransferInsideData(String recipientAccountId
+            , String senderAccountId, BigDecimal recipientNewValue, BigDecimal senderNewValue) {
+        String updateStatement = "UPDATE account " +
+                "SET VALUE = ? " +
+                "WHERE ACCOUNT_ID = ?";
 
-        Map<List<Object>, String> dataToUpdate = new HashMap<>();
-        dataToUpdate.put(Arrays.asList(senderNewValue, senderIdAccount), updateStatement);
-        dataToUpdate.put(Arrays.asList(recipientNewValue, recipientIdAccount), updateStatement);
+        Map<List<String>, String> dataToUpdate = new HashMap<>();
+        dataToUpdate.put(Arrays.asList(senderNewValue.toString(), senderAccountId), updateStatement);
+        dataToUpdate.put(Arrays.asList(recipientNewValue.toString(), recipientAccountId), updateStatement);
+
         return dataToUpdate.size() == 2 ? dataToUpdate : null;
     }
 
     @Override
-    public Map<List<Object>, String> getTransferOutsideData(String senderIdAccount
+    public Map<List<String>, String> getTransferOutsideData(String senderAccountId
             , BigDecimal senderNewValue) {
-        String updateStatement = "UPDATE accounts " +
-                "SET value = ? " +
-                "WHERE idAccount = ?";
+        String updateStatement = "UPDATE account " +
+                "SET VALUE = ? " +
+                "WHERE ACCOUNT_ID = ?";
 
-        Map<List<Object>, String> dataToUpdate = new HashMap<>();
-        dataToUpdate.put(Arrays.asList(senderNewValue, senderIdAccount), updateStatement);
+        Map<List<String>, String> dataToUpdate = new HashMap<>();
+        dataToUpdate.put(Arrays.asList(senderNewValue.toString(), senderAccountId), updateStatement);
+
         return dataToUpdate.size() == 1 ? dataToUpdate : null;
     }
 
     @Override
-    public Map<List<Object>, String> getInsertPaymentData(String senderIdAccount
-            , String recipientIdAccount, String recipient, String sender
-            , String title, BigDecimal value) {
-        String updateStatement = "INSERT INTO payments " +
-                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
+    public Map<List<String>, String> getInsertPaymentData(String senderAccountId
+            , String recipientAccountId, String recipientName, String recipientNumber
+            , BigDecimal amount, String title, LocalDateTime date) {
+
+        String updateStatement = "INSERT INTO payment " +
+                "(SENDER_ACCOUNT_ID, RECIPIENT_ACCOUNT_ID, RECIPIENT_NAME, RECIPIENT_NUMBER, AMOUNT, TITLE, DATA) " +
                 "VALUES " +
                 "(?, ?, ?, ?, ?, ?, ?)";
 
-        Map<List<Object>, String> dataToUpdate = new HashMap<>();
-        dataToUpdate.put(Arrays.asList(senderIdAccount, recipientIdAccount, recipient, sender
-                , title, value, new Date()), updateStatement);
+        List<String> paymentData = Arrays.asList(senderAccountId, recipientAccountId, recipientName,
+                recipientNumber, amount.toString(), title, date.toString());
+
+        Map<List<String>, String> dataToUpdate = new HashMap<>();
+        dataToUpdate.put(paymentData, updateStatement);
+
         return dataToUpdate.size() == 1 ? dataToUpdate : null;
     }
 
     @Override
-    public boolean sendTransfer(Map<List<Object>, String> dataToUpdate) {
+    public <T> boolean sendTransfer(Map<List<T>, String> dataToUpdate) {
         try {
             return DBManager.dbExecuteTransactionUpdate(dataToUpdate);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (ExecuteStatementException e) {
+            System.out.println("send transfer: " + e.errorCode());
         }
+
         return false;
     }
 
     @Override
-    public List<Payment> getAllPayment(Integer idAccount) {
-        String queryStatement = "SELECT * FROM payments " +
-                "WHERE idAccount = ? OR recipientIdAccount = ?";
+    public List<Payment> findAll(Integer idAccount) {
+        String queryStatement = "SELECT * FROM payment " +
+                "WHERE SENDER_ACCOUNT_ID = ? OR RECIPIENT_ACCOUNT_ID = ?";
         try {
             ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement
                     , Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+
             return getPaymentList(resultSet, idAccount);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (ExecuteStatementException e) {
+            System.out.println("get all payment: " + e.errorCode());
         }
-        return null;
+
+        return new ArrayList<>();
     }
 
     @Override
-    public List<Payment> getLastThreeMonthPayment(Integer idAccount) {
-        String queryStatement = "SELECT * FROM payments " +
-                "WHERE date >= now() - INTERVAL 3 MONTH " +
-                "AND (idAccount = ? OR recipientIdAccount = ?)";
+    public List<Payment> findAllFromLastThreeMonth(Integer idAccount) {
+        String queryStatement = "SELECT * FROM payment " +
+                "WHERE DATE >= now() - INTERVAL 3 MONTH " +
+                "AND (SENDER_ACCOUNT_ID = ? OR RECIPIENT_ACCOUNT_ID = ?)";
+
         ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement,
                     Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+
             return getPaymentList(resultSet, idAccount);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (ExecuteStatementException e) {
+            System.out.println("get last three month payment: " + e.errorCode());
         }
-        return null;
+
+        return new ArrayList<>();
     }
 
     private List<Payment> getPaymentList(ResultSet resultSet, Integer idAccount) {
         List<Payment> paymentList = new ArrayList<>();
+
         try {
             while (resultSet.next()) {
-                BigDecimal value = resultSet.getInt("idAccount") == idAccount ?
-                        resultSet.getBigDecimal("paymentValue").negate() :
-                        resultSet.getBigDecimal("paymentValue");
+                BigDecimal value = resultSet.getInt("SENDER_ACCOUNT_ID") == idAccount ?
+                        resultSet.getBigDecimal("AMOUNT").negate() :
+                        resultSet.getBigDecimal("AMOUNT");
+
+                LocalDateTime date = LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(resultSet.getTimestamp("CREATE_TIME").getTime()),
+                        TimeZone.getDefault().toZoneId());
 
                 Payment payment = new Payment(
-                        resultSet.getInt("idPayment"),
-                        resultSet.getInt("idAccount"),
-                        resultSet.getString("recipientName"),
-                        resultSet.getString("senderName"),
-                        resultSet.getString("title"),
+                        resultSet.getString("PAYMENT_ID"),
+                        resultSet.getString("SENDER_ACCOUNT_ID"),
+                        resultSet.getString("RECIPIENT_ACCOUNT_ID"),
+                        resultSet.getString("RECIPIENT_NAME"),
+                        resultSet.getString("RECIPIENT_NUMBER"),
                         value,
-                        resultSet.getTimestamp("date")
+                        resultSet.getString("TITLE"),
+                        date
                 );
                 paymentList.add(payment);
             }
+
             return paymentList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("ResultSet error: get payment list");
         }
+
         return null;
     }
 }

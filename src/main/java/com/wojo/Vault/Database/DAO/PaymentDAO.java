@@ -3,23 +3,24 @@ package com.wojo.Vault.Database.DAO;
 import com.wojo.Vault.Database.Model.Payment;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 public interface PaymentDAO {
 
-    Map<List<Object>, String> getTransferInsideData(String recipientIdAccount
-            , String senderIdAccount, BigDecimal recipientNewValue, BigDecimal senderNewValue);
+    Map<List<String>, String> getTransferInsideData(String recipientAccountId
+            , String senderAccountId, BigDecimal recipientNewValue, BigDecimal senderNewValue);
 
-    Map<List<Object>, String> getTransferOutsideData(String senderIdAccount
+    Map<List<String>, String> getTransferOutsideData(String senderAccountId
             , BigDecimal senderNewValue);
 
-    Map<List<Object>, String> getInsertPaymentData(String senderIdAccount, String recipientIdAccount
-            , String recipient, String sender, String title, BigDecimal value);
+    Map<List<String>, String> getInsertPaymentData(String senderAccountId, String recipientAccountId
+            , String recipientName, String recipientNumber, BigDecimal amount, String title, LocalDateTime date);
 
-    boolean sendTransfer(Map<List<Object>, String> dataToUpdate);
+    <T> boolean sendTransfer(Map<List<T>, String> dataToUpdate);
 
-    List<Payment> getAllPayment(Integer idAccount);
+    List<Payment> findAll(Integer idAccount);
 
-    List<Payment> getLastThreeMonthPayment(Integer idAccount);
+    List<Payment> findAllFromLastThreeMonth(Integer idAccount);
 }
