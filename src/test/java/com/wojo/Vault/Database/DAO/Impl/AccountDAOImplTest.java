@@ -3,144 +3,199 @@ package com.wojo.Vault.Database.DAO.Impl;
 import com.wojo.Vault.Database.DAO.AccountDAO;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
-import com.wojo.Vault.Database.Model.Person;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.wojo.Vault.Exception.ExecuteStatementException;
+import org.junit.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AccountDAOImplTest {
 
-    /**
-     * Test Accounts on database
-     */
-    private static final Integer idPerson = 7;
-    private static final String IBAN_NUMBER = "PL12345678901234567890123456";
-    private static final BigDecimal VALUE = BigDecimal.valueOf(10000.0);
+    private static final String FIRST_PERSON_ID = "10";
+    private static final String SECOND_PERSON_ID = "11";
 
-    private static final String PL_COUNTRY_CODE = "PL";
-    private static final int NUMBER_LENGTH = 26;
-    private static final int NUMBER_PLUS_COUNTRY_CODE_LENGTH = 28;
+    private static final Account FIRST_ACCOUNT = new Account(
+            "1",
+            FIRST_PERSON_ID,
+            "12345678900987654321456789",
+            BigDecimal.valueOf(5000.15)
+    );
 
-    private AccountDAO accountDAO = new AccountDAOImpl();
+    private static final Account SECOND_ACCOUNT = new Account(
+            "2",
+            FIRST_PERSON_ID,
+            "32145678900987654321456987",
+            BigDecimal.valueOf(1230.00)
+    );
+
+    private static final Account THIRD_ACCOUNT = new Account(
+            "3",
+            SECOND_PERSON_ID,
+            "55345678955987654321456785",
+            BigDecimal.valueOf(500.50)
+    );
+
+    private static final String DISABLE_FOREIGN_KEY_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
+    private static final String ENABLE_FOREIGN_KEY_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
+
+    private static final AccountDAO accountDAO = new AccountDAOImpl();
 
     @BeforeClass
-    public static void connectionToTestDatabase() throws IOException, SQLException {
+    public static void connectionToTestDatabase() throws ExecuteStatementException {
         DBManager.setTestConnectionPath();
         DBManager.dbConnection();
+
+
+        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
+        String updateStatement = "TRUNCATE TABLE account";
+        DBManager.dbExecuteUpdate(updateStatement, null);
     }
 
     @AfterClass
-    public static void clearDatabaseAndDisconnect() throws SQLException {
-        String updateStatement = "TRUNCATE TABLE accounts";
+    public static void clearDatabaseAndDisconnect() throws ExecuteStatementException {
+        String updateStatement = "TRUNCATE TABLE account";
         DBManager.dbExecuteUpdate(updateStatement, null);
+
+        DBManager.dbExecuteUpdate(ENABLE_FOREIGN_KEY_CHECK, null);
+
         DBManager.dbDisconnect();
     }
 
+    @Before
+    public void insertDataToTests() throws ExecuteStatementException {
+        String updateStatement = "INSERT INTO account " +
+                "(ACCOUNT_ID, PERSON_ID, NUMBER, VALUE) " +
+                "VALUES " +
+                "(?, ?, ?, ?)";
+
+        DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(
+                FIRST_ACCOUNT.getAccountId(),
+                FIRST_ACCOUNT.getPersonId(),
+                FIRST_ACCOUNT.getNumber(),
+                FIRST_ACCOUNT.getValue().toString()
+        ));
+
+        DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(
+                SECOND_ACCOUNT.getAccountId(),
+                SECOND_ACCOUNT.getPersonId(),
+                SECOND_ACCOUNT.getNumber(),
+                SECOND_ACCOUNT.getValue().toString()
+        ));
+
+        DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(
+                THIRD_ACCOUNT.getAccountId(),
+                THIRD_ACCOUNT.getPersonId(),
+                THIRD_ACCOUNT.getNumber(),
+                THIRD_ACCOUNT.getValue().toString()
+        ));
+    }
+
+    @After
+    public void clearTable() throws ExecuteStatementException {
+        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
+
+        String updateStatement = "TRUNCATE TABLE account";
+        DBManager.dbExecuteUpdate(updateStatement, null);
+    }
+
     @Test
-    public void shouldCorrectCreateAccount() {
-        Account account = accountDAO
-                .addNewAccount(idPerson, PL_COUNTRY_CODE, NUMBER_LENGTH);
-        assertEquals(new BigDecimal("0"), account.getValue());
-        assertEquals(NUMBER_PLUS_COUNTRY_CODE_LENGTH, account.getIBAN_NUMBER().length());
-    }
+    public void shouldFindAllByPersonId() {
+        List<Account> accountList = accountDAO.findAllByPersonId(FIRST_PERSON_ID);
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Test(expected = NullPointerException.class)
-    public void shouldNotCreateObjectWithBadCountryCode() {
-        String badCountryCode = "PL1";
-        accountDAO
-                .addNewAccount(idPerson, badCountryCode, NUMBER_LENGTH)
-                .toString();
-    }
+        int expectedSize = 2;
+        assertEquals(expectedSize, accountList.size());
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Test(expected = NullPointerException.class)
-    public void shouldNotCreateObjectWithBadLength() {
-        int badNumberLength = 0;
-        accountDAO
-                .addNewAccount(idPerson, PL_COUNTRY_CODE, badNumberLength)
-                .toString();
+        Account firstExpectedAccount = null;
+        Account secondExpectedAccount = null;
+
+        for (Account account : accountList) {
+            String accountId = account.getAccountId();
+            if (accountId.equals(FIRST_ACCOUNT.getAccountId())) {
+                firstExpectedAccount = account;
+            } else {
+                secondExpectedAccount = account;
+            }
+        }
+
+        assertTrue(firstExpectedAccount != null);
+        assertTrue(secondExpectedAccount != null);
+
+        assertTrue(firstExpectedAccount.equals(FIRST_ACCOUNT));
+        assertTrue(secondExpectedAccount.equals(SECOND_ACCOUNT));
+
+        assertEquals(firstExpectedAccount.hashCode(), FIRST_ACCOUNT.hashCode());
+        assertEquals(secondExpectedAccount.hashCode(), SECOND_ACCOUNT.hashCode());
     }
 
     @Test
-    public void shouldCorrectInsertAccountToDB() {
-        assertTrue(
-                accountDAO.insertAccountToDB(
-                        new Account(PL_COUNTRY_CODE, NUMBER_LENGTH, new BigDecimal("0")),
-                        idPerson)
+    public void shouldNotFindAccountForBadId() {
+        String badPersonId = "-8";
+
+        List<Account> accountList = accountDAO.findAllByPersonId(badPersonId);
+
+        assertEquals(0, accountList.size());
+    }
+
+    @Test
+    public void shouldFindNumber() {
+        assertTrue(accountDAO.isNumberExist(FIRST_ACCOUNT.getNumber()));
+        assertTrue(accountDAO.isNumberExist(SECOND_ACCOUNT.getNumber()));
+        assertTrue(accountDAO.isNumberExist(THIRD_ACCOUNT.getNumber()));
+    }
+
+    @Test
+    public void shouldNotFindNumber() {
+        String badNumber = "000";
+
+        assertFalse(accountDAO.isNumberExist(badNumber));
+    }
+
+    @Test
+    public void shouldInsertAccount() {
+        String uniquePersonID = "985";
+        String uniqueNumber = "33387690411123456789033455";
+
+        Account accountToInsert = new Account(
+                uniquePersonID,
+                uniqueNumber,
+                BigDecimal.TEN
         );
+
+        assertTrue(accountDAO.insertAccount(accountToInsert));
     }
 
     @Test
-    public void shouldNotInsertAccountToDB() {
-        assertFalse(accountDAO.insertAccountToDB(null, idPerson));
+    public void shouldSetAccountValue() {
+        BigDecimal newValue = BigDecimal.TEN;
+
+        assertTrue(accountDAO.setValue(FIRST_ACCOUNT.getNumber(), newValue));
     }
 
     @Test
-    public void shouldCorrectInsertAccountDateToClass() throws SQLException {
-        String updateStatement = "INSERT INTO accounts (idPerson, number, value) VALUES (?, ?, ?)";
-        Integer uniqueIdPerson = 647;
-        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
-                Arrays.asList(String.valueOf(uniqueIdPerson), IBAN_NUMBER, VALUE.toString())));
+    public void shouldNotSetAccountValue() {
+        String badAccountNumber = "000";
+        BigDecimal newValue = BigDecimal.ONE;
 
-        Person.setAccounts(new ArrayList<>());
-        accountDAO.insertAccountData(uniqueIdPerson);
-        Integer activeAccountIndex = 0;
-        assertEquals(IBAN_NUMBER, Person.getAccounts().get(activeAccountIndex).getIBAN_NUMBER());
-        assertEquals(VALUE, Person.getAccounts().get(activeAccountIndex).getValue());
+        assertFalse(accountDAO.setValue(badAccountNumber, newValue));
     }
 
     @Test
-    public void shouldNotInsertAccountDateToClass() {
-        Person.setAccounts(new ArrayList<>());
-        accountDAO.insertAccountData(Integer.MIN_VALUE);
-        assertEquals(0, Person.getAccounts().size());
+    public void shouldReturnCorrectValue() {
+        assertEquals(FIRST_ACCOUNT.getValue(), accountDAO.getValueByNumber(FIRST_ACCOUNT.getNumber()));
+
+        assertEquals(THIRD_ACCOUNT.getValue(), accountDAO.getValueByNumber(THIRD_ACCOUNT.getNumber()));
     }
 
     @Test
-    public void shouldTryDeleteAccounts() {
-        assertEquals((Integer) 0, accountDAO.deleteAccount(0));
-    }
+    public void shouldReturnCorrectValueForBadNumber() {
+        String badNumber = "00000";
 
-    @Test
-    public void shouldFindAccountByNumber() throws SQLException {
-        String updateStatement = "INSERT INTO accounts (idAccount, idPerson, number, value) VALUES (?, ?, ?, ?)";
-        Integer uniqueIdAccount = 4789;
-        String uniqueFullNumber = "PL97436678987234567890432156";
-        String uniqueNumber = "97436678987234567890432156";
-        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
-                Arrays.asList(String.valueOf(uniqueIdAccount),
-                        String.valueOf(idPerson), uniqueFullNumber, VALUE.toString())));
-
-        assertEquals(uniqueIdAccount, accountDAO.searchAccountByNumber(uniqueNumber));
-    }
-
-    @Test
-    public void searchAccountByBadParameter() {
-        assertEquals((Integer) 0, accountDAO.searchAccountByNumber(""));
-    }
-
-    @Test
-    public void shouldReturnCorrectAccountValue() throws SQLException {
-        String updateStatement = "INSERT INTO accounts (idAccount, idPerson, number, value) VALUES (?, ?, ?, ?)";
-        Integer uniqueIdAccount = 5790;
-        assertEquals(1, DBManager.dbExecuteUpdate(updateStatement,
-                Arrays.asList(String.valueOf(uniqueIdAccount), String.valueOf(idPerson),
-                        IBAN_NUMBER, VALUE.toString())));
-
-        assertEquals(VALUE, accountDAO.getAccountValue(String.valueOf(uniqueIdAccount)));
-    }
-
-    @Test
-    public void shouldNotReturnValue() {
-        assertEquals(new BigDecimal("0"), accountDAO.getAccountValue(""));
+        BigDecimal expectedValue = new BigDecimal("-100");
+        assertEquals(expectedValue, accountDAO.getValueByNumber(badNumber));
     }
 }
