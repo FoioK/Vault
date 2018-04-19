@@ -187,7 +187,7 @@ public class DBManager {
         return statement;
     }
 
-    public static void dbConnection() {
+    public static boolean dbConnection() {
         try {
             connection = getConnection();
             if (connection == null) {
@@ -197,6 +197,8 @@ public class DBManager {
         } catch (LoadPropertiesException | SQLException e) {
             tryAgain();
         }
+
+        return true;
     }
 
     private static void tryAgain() {

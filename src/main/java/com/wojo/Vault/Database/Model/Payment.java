@@ -13,10 +13,10 @@ public class Payment {
     private String recipientNumber;
     private BigDecimal amount;
     private String title;
-    private LocalDateTime data;
+    private LocalDateTime date;
 
     public Payment(String paymentId, String senderAccountId, String recipientAccountId, String recipientName,
-                   String recipientNumber, BigDecimal amount, String title, LocalDateTime data) {
+                   String recipientNumber, BigDecimal amount, String title, LocalDateTime date) {
         this.paymentId = paymentId;
         this.senderAccountId = senderAccountId;
         this.recipientAccountId = recipientAccountId;
@@ -24,7 +24,7 @@ public class Payment {
         this.recipientNumber = recipientNumber;
         this.amount = amount;
         this.title = title;
-        this.data = data;
+        this.date = date;
     }
 
     public String getPaymentId() {
@@ -83,12 +83,12 @@ public class Payment {
         this.title = title;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Payment {
                 Objects.equals(recipientNumber, payment.recipientNumber) &&
                 Objects.equals(amount.abs(), payment.amount.abs()) &&
                 Objects.equals(title, payment.title) &&
-                Objects.equals(data.toLocalDate(), payment.data.toLocalDate());
+                Objects.equals(date.toLocalDate(), payment.date.toLocalDate());
     }
 
     @Override
@@ -116,6 +116,6 @@ public class Payment {
                 recipientNumber,
                 amount,
                 title,
-                data);
+                date);
     }
 }
