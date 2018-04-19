@@ -4,14 +4,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public abstract class Deposit {
 
     private Integer percent;
     private BigDecimal minimalAmount;
     private Integer numberOfDays;
-    private Integer idDeposit;
-    private Integer idAccount;
+    private String depositId;
+    private String accountId;
     private BigDecimal depositAmount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -23,15 +24,15 @@ public abstract class Deposit {
         Long
     }
 
-    public Deposit(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
-        this.idDeposit = idDeposit;
-        this.idAccount = idAccount;
+    public Deposit(String depositId, String accountId, BigDecimal depositAmount, LocalDateTime startDate) {
+        this.depositId = depositId;
+        this.accountId = accountId;
         this.depositAmount = depositAmount;
         this.startDate = startDate;
     }
 
-    public Deposit(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
-        this.idAccount = idAccount;
+    public Deposit(String accountId, BigDecimal depositAmount, LocalDateTime startDate) {
+        this.accountId = accountId;
         this.depositAmount = depositAmount;
         this.startDate = startDate;
     }
@@ -60,20 +61,20 @@ public abstract class Deposit {
         this.numberOfDays = numberOfDays;
     }
 
-    public Integer getIdDeposit() {
-        return idDeposit;
+    public String getDepositId() {
+        return depositId;
     }
 
-    public void setIdDeposit(Integer idDeposit) {
-        this.idDeposit = idDeposit;
+    public void setDepositId(String depositId) {
+        this.depositId = depositId;
     }
 
-    public Integer getIdAccount() {
-        return idAccount;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public void setIdAccount(Integer idAccount) {
-        this.idAccount = idAccount;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public BigDecimal getDepositAmount() {
@@ -115,5 +116,28 @@ public abstract class Deposit {
     public BigDecimal getProfit() {
         return BigDecimal.valueOf(this.getDepositAmount().doubleValue() *
                 this.getPercent() / 100 * this.getNumberOfDays() / 365).setScale(2, RoundingMode.CEILING);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Deposit)) return false;
+        Deposit deposit = (Deposit) o;
+        return Objects.equals(percent, deposit.percent) &&
+                Objects.equals(minimalAmount, deposit.minimalAmount) &&
+                Objects.equals(numberOfDays, deposit.numberOfDays) &&
+                Objects.equals(depositId, deposit.depositId) &&
+                Objects.equals(accountId, deposit.accountId) &&
+                Objects.equals(depositAmount, deposit.depositAmount) &&
+                Objects.equals(startDate.toLocalDate(), deposit.startDate.toLocalDate()) &&
+                Objects.equals(endDate.toLocalDate(), deposit.endDate.toLocalDate()) &&
+                depositType == deposit.depositType;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(percent, minimalAmount, numberOfDays,
+                depositId, accountId, depositAmount, startDate, endDate, depositType);
     }
 }

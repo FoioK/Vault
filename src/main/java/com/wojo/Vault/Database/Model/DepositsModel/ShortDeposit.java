@@ -11,12 +11,12 @@ public class ShortDeposit extends Deposit {
     public static final BigDecimal MINIMAL_AMOUNT = BigDecimal.valueOf(2000);
     public static final Integer NUMBER_OF_DAYS = 1;
 
-    public ShortDeposit(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+    public ShortDeposit(String idDeposit, String idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         super(idDeposit, idAccount, depositAmount, startDate);
         this.setData(startDate);
     }
 
-    public ShortDeposit(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+    public ShortDeposit(String idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         super(idAccount, depositAmount, startDate);
         this.setData(startDate);
     }
