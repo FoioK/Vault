@@ -9,7 +9,7 @@ public interface DepositDAO {
 
     <T extends Deposit> boolean insertDepositToDB(T deposit, BigDecimal newValue);
 
-    List<Deposit> getAllDeposits(Integer idAccount);
+    List<Deposit> findAll(String accountId);
 
     <T extends Deposit> boolean archiveDeposit(T deposit, BigDecimal newValue);
 }
