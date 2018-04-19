@@ -142,6 +142,27 @@ public class AccountDAOImplTest {
     }
 
     @Test
+    public void shouldFindIdByNumber() {
+        String foundedFirstId = accountDAO.findIdByNumber(FIRST_ACCOUNT.getNumber());
+        assertEquals(FIRST_ACCOUNT.getAccountId(), foundedFirstId);
+
+        String foundedSecondId = accountDAO.findIdByNumber(SECOND_ACCOUNT.getNumber());
+        assertEquals(SECOND_ACCOUNT.getAccountId(), foundedSecondId);
+
+        String foundedThirdId = accountDAO.findIdByNumber(THIRD_ACCOUNT.getNumber());
+        assertEquals(THIRD_ACCOUNT.getAccountId(), foundedThirdId);
+    }
+
+    @Test
+    public void shouldNotFindIdForBadNumber() {
+        String badNumber = "321";
+        String foundedId = accountDAO.findIdByNumber(badNumber);
+
+        final String expectedReturn = "";
+        assertEquals(expectedReturn, foundedId);
+    }
+
+    @Test
     public void shouldFindNumber() {
         assertTrue(accountDAO.isNumberExist(FIRST_ACCOUNT.getNumber()));
         assertTrue(accountDAO.isNumberExist(SECOND_ACCOUNT.getNumber()));

@@ -49,6 +49,24 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
+    public String findIdByNumber(String number) {
+        String queryStatement = "SELECT ACCOUNT_ID FROM account WHERE NUMBER LIKE ?";
+
+        ResultSet resultSet;
+        try {
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(number));
+
+            return resultSet.next() ? resultSet.getString("ACCOUNT_ID") : "";
+        } catch (ExecuteStatementException e) {
+            System.out.println("find account id by number: " + e.errorCode());
+        } catch (SQLException e) {
+            System.out.println("ResultSet error: find account id by number");
+        }
+
+        return "";
+    }
+
+    @Override
     public boolean isNumberExist(String number) {
         String queryStatement = "SELECT COUNT(NUMBER) FROM account WHERE NUMBER LIKE ?";
 
