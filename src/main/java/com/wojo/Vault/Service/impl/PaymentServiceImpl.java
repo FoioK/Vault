@@ -6,10 +6,10 @@ import com.wojo.Vault.Database.DAO.Impl.PaymentDAOImpl;
 import com.wojo.Vault.Database.DAO.PaymentDAO;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Payment;
-import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Service.PaymentService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class PaymentServiceImpl implements PaymentService {
@@ -17,102 +17,114 @@ public class PaymentServiceImpl implements PaymentService {
     private AccountDAO accountDAO = new AccountDAOImpl();
     private PaymentDAO paymentDAO = new PaymentDAOImpl();
 
-    //TODO getId active account
-    private static Integer activeAccountId = 0;
-
     @Override
-    public boolean sendTransfer(String recipient, String recipientNumber, String title,
-                                BigDecimal value) {
-        Map<List<Object>, String> dataToUpdate = new HashMap<>();
-        Account senderAccount = Person.getAccounts().get(activeAccountId);
-        Integer recipientIdAccount = accountDAO.searchAccountByNumber(recipientNumber);
+    public boolean sendTransfer(Account senderAccount,
+                                String recipientName,
+                                String recipientNumber,
+                                String title,
+                                BigDecimal amount) {
+        if (!validateData(senderAccount, recipientName, recipientNumber, title, amount)) {
+            return false;
+        }
+
+        Map<List<String>, String> dataToUpdate = new HashMap<>();
+        String recipientAccountId = accountDAO.findIdByNumber(recipientNumber);
+
+        String senderAccountId = senderAccount.getAccountId();
         try {
-            if (recipientIdAccount != 0) {
-                dataToUpdate.putAll(getTransferInsideData(senderAccount, String.valueOf(recipientIdAccount), value));
+            if (!recipientAccountId.equals("")) {
+                dataToUpdate.putAll(getTransferInsideData(senderAccountId, recipientAccountId, recipientNumber, amount));
             } else {
-                dataToUpdate.putAll(getTransferOutsideData(senderAccount, value));
+                dataToUpdate.putAll(getTransferOutsideData(senderAccountId, senderAccount.getNumber(), amount));
             }
-            dataToUpdate.putAll(getInsertPaymentData(senderAccount, String.valueOf(recipientIdAccount)
-                    , recipient, title, value));
+            dataToUpdate.putAll(getInsertPaymentData(senderAccountId, recipientAccountId, recipientNumber,
+                    recipientName, title, amount));
         } catch (NullPointerException e) {
             return false;
         }
+
         return dataToUpdate.size() != 0 && paymentDAO.sendTransfer(dataToUpdate);
     }
 
-    @Override
-    public Map<List<Object>, String> getTransferInsideData(Account senderAccount, String recipientIdAccount
-            , BigDecimal value) {
-        if (senderAccount == null) {
-            return null;
-        }
-        String senderIdAccount = String.valueOf(senderAccount.getIdAccount());
-        BigDecimal recipientValue = accountDAO.getAccountValue(recipientIdAccount);
-        BigDecimal senderValue = accountDAO.getAccountValue(senderIdAccount);
-
-        return senderValue.subtract(value).compareTo(BigDecimal.ZERO) < 0 ? null :
-                paymentDAO.getTransferInsideData(recipientIdAccount, senderIdAccount
-                        , recipientValue.add(value), senderValue.subtract(value));
+    private boolean validateData(Account senderAccount,
+                                 String recipientName,
+                                 String recipientNumber,
+                                 String title,
+                                 BigDecimal amount) {
+        return senderAccount != null && recipientName != null && recipientNumber != null &&
+                title != null && amount != null;
     }
 
     @Override
-    public Map<List<Object>, String> getTransferOutsideData(Account senderAccount, BigDecimal value) {
-        if (senderAccount == null) {
-            return null;
-        }
-        String senderIdAccount = String.valueOf(senderAccount.getIdAccount());
-        BigDecimal senderValue = accountDAO.getAccountValue(senderIdAccount);
+    public Map<List<String>, String> getTransferInsideData(String senderAccountId,
+                                                           String recipientAccountId,
+                                                           String recipientNumber,
+                                                           BigDecimal amount) {
+        BigDecimal recipientValue = accountDAO.getValueByNumber(recipientNumber);
+        BigDecimal senderValue = accountDAO.getValueByNumber(recipientNumber);
 
-        return senderValue.subtract(value).compareTo(BigDecimal.ZERO) < 0 ? null :
-                paymentDAO.getTransferOutsideData(senderIdAccount, senderValue.subtract(value));
+        return senderValue.subtract(amount).compareTo(BigDecimal.ZERO) < 0 ? null :
+                paymentDAO.getTransferInsideData(recipientAccountId, senderAccountId,
+                        recipientValue.add(amount), senderValue.subtract(amount));
     }
 
     @Override
-    public Map<List<Object>, String> getInsertPaymentData(Account senderAccount, String recipientIdAccount
-            , String recipient, String title, BigDecimal value) {
-        if (senderAccount == null) {
-            return null;
-        }
-        String senderIdAccount = String.valueOf(senderAccount.getIdAccount());
-        String sender = Person.getFirstName() + " " + Person.getLastName();
+    public Map<List<String>, String> getTransferOutsideData(String senderAccountId,
+                                                            String senderNumber,
+                                                            BigDecimal amount) {
+        BigDecimal senderValue = accountDAO.getValueByNumber(senderNumber);
 
-        return paymentDAO.getInsertPaymentData(senderIdAccount, recipientIdAccount, recipient
-                , sender, title, value);
+        return senderValue.subtract(amount).compareTo(BigDecimal.ZERO) < 0 ? null :
+                paymentDAO.getTransferOutsideData(senderAccountId, senderValue.subtract(amount));
     }
 
     @Override
-    public List<Payment> getAllPayment() {
-        Integer idAccount = Person.getAccounts().get(activeAccountId).getIdAccount();
-        List<Payment> allPayments = paymentDAO.getAllPayment(idAccount);
+    public Map<List<String>, String> getInsertPaymentData(String senderAccountId,
+                                                          String recipientAccountId,
+                                                          String recipientNumber,
+                                                          String recipientName,
+                                                          String title,
+                                                          BigDecimal amount) {
+        return paymentDAO.getInsertPaymentData(senderAccountId, recipientAccountId, recipientName,
+                recipientNumber, amount, title, LocalDateTime.now());
+    }
+
+    @Override
+    public List<Payment> findAll(String accountId) {
+        List<Payment> allPayments = paymentDAO.findAll(accountId);
+
         if (allPayments == null || allPayments.size() == 0) {
             return new ArrayList<>();
         }
+
         allPayments.sort(Comparator.comparing(Payment::getDate));
         Collections.reverse(allPayments);
+
         return allPayments;
     }
 
     @Override
-    public List<Payment> getLastThreePayment() {
-        List<Payment> allPayments = this.getAllPayment();
+    public List<Payment> getLastThreePayment(String accountId) {
+        List<Payment> allPayments = this.findAll(accountId);
+
         return allPayments.size() > 3 ? allPayments.subList(0, 3) : allPayments;
     }
 
     @Override
-    public Payment getRecentDeposit() {
-        return this.getAllPayment()
+    public Payment getRecentDeposit(String accountId) {
+        return this.findAll(accountId)
                 .stream()
-                .filter(payment -> payment.getPaymentValue()
+                .filter(payment -> payment.getAmount()
                         .compareTo(BigDecimal.ZERO) > 0)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Payment getRecentDebit() {
-        return this.getAllPayment()
+    public Payment getRecentDebit(String accountId) {
+        return this.findAll(accountId)
                 .stream()
-                .filter(payment -> payment.getPaymentValue()
+                .filter(payment -> payment.getAmount()
                         .compareTo(BigDecimal.ZERO) < 0)
                 .findFirst()
                 .orElse(null);

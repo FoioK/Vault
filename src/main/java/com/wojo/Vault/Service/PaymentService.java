@@ -9,21 +9,33 @@ import java.util.Map;
 
 public interface PaymentService {
 
-    boolean sendTransfer(String recipient, String recipientNumber, String title, BigDecimal value);
+    boolean sendTransfer(Account senderAccount,
+                         String recipient,
+                         String recipientNumber,
+                         String title,
+                         BigDecimal amount);
 
-    Map<List<Object>, String> getTransferInsideData(Account senderAccount, String recipientIdAccount
-            , BigDecimal value);
+    Map<List<String>, String> getTransferInsideData(String senderAccountId,
+                                                    String recipientAccountId,
+                                                    String recipientNumber,
+                                                    BigDecimal amount);
 
-    Map<List<Object>, String> getTransferOutsideData(Account senderAccount, BigDecimal value);
+    Map<List<String>, String> getTransferOutsideData(String senderAccountId,
+                                                     String senderNumber,
+                                                     BigDecimal amount);
 
-    Map<List<Object>, String> getInsertPaymentData(Account senderAccount, String recipientIdAccount
-            , String recipient, String title, BigDecimal value);
+    Map<List<String>, String> getInsertPaymentData(String senderAccountId,
+                                                   String recipientAccountId,
+                                                   String recipientNumber,
+                                                   String recipientName,
+                                                   String title,
+                                                   BigDecimal amount);
 
-    List<Payment> getAllPayment();
+    List<Payment> findAll(String accountId);
 
-    List<Payment> getLastThreePayment();
+    List<Payment> getLastThreePayment(String accountId);
 
-    Payment getRecentDeposit();
+    Payment getRecentDeposit(String accountId);
 
-    Payment getRecentDebit();
+    Payment getRecentDebit(String accountId);
 }
