@@ -3,134 +3,181 @@ package com.wojo.Vault.Service.impl;
 import com.wojo.Vault.Database.DBManager;
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.CashFlow;
-import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Database.Model.Payment;
+import com.wojo.Vault.Exception.ExecuteStatementException;
 import com.wojo.Vault.Service.CashFlowService;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
+import java.time.Month;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CashFlowServiceImplTest {
 
-    private CashFlowService cashFlowService = new CashFlowServiceImpl();
-
-    private final static Integer ID_ACCOUNT = -7;
-    private final static Integer RECIPIENT_ID_ACCOUNT = -6;
-    private final static String NAME = "Test";
-    private final static String TITLE = "Title";
-    private final static BigDecimal VALUE_OF_500 = BigDecimal.valueOf(500.00);
-    private final static BigDecimal VALUE_OF_1000 = BigDecimal.valueOf(1000.00);
-    private final static BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.00);
+    private static final String PAYMENT_TABLE_NAME = "payment";
 
     @BeforeClass
-    public static void setRecordToPayment() throws SQLException, IOException {
-        DBManager.setTestConnectionPath();
-        DBManager.dbConnection();
-
-        String updateStatement = "INSERT INTO payments " +
-                "(idAccount, recipientIdAccount, recipientName, senderName, title, paymentValue, date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        final Date THIS_MONTH = new Date();
-        final Date A_MONTH_AGO =
-                Date.from(LocalDateTime.now().minusMonths(1).atZone(ZoneId.systemDefault()).toInstant());
-        final Date A_TWO_MONTH_AGO =
-                Date.from(LocalDateTime.now().minusMonths(2).atZone(ZoneId.systemDefault()).toInstant());
-
-        List<Object> transferToRecipient500ThisMonth =
-                Arrays.asList(ID_ACCOUNT, RECIPIENT_ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_500, THIS_MONTH);
-        List<Object> transferFromRecipient1000ThisMonth =
-                Arrays.asList(RECIPIENT_ID_ACCOUNT, ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_1000, THIS_MONTH);
-
-        List<Object> transferToRecipient500AMonthAgo =
-                Arrays.asList(ID_ACCOUNT, RECIPIENT_ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_500, A_MONTH_AGO);
-        List<Object> transferToRecipient1500AMonthAgo =
-                Arrays.asList(ID_ACCOUNT, RECIPIENT_ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_1500, A_MONTH_AGO);
-        List<Object> transferFromRecipient1000AMonthAgo =
-                Arrays.asList(RECIPIENT_ID_ACCOUNT, ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_1000, A_MONTH_AGO);
-
-        List<Object> transferToRecipient500ATwoMonthAgo =
-                Arrays.asList(ID_ACCOUNT, RECIPIENT_ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_500, A_TWO_MONTH_AGO);
-        List<Object> transferFromRecipient1000ATwoMonthAgo =
-                Arrays.asList(RECIPIENT_ID_ACCOUNT, ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_1000, A_TWO_MONTH_AGO);
-        List<Object> transferFromRecipient1500ATwoMonthAgo =
-                Arrays.asList(RECIPIENT_ID_ACCOUNT, ID_ACCOUNT, NAME, NAME, TITLE, VALUE_OF_1500, A_TWO_MONTH_AGO);
-
-
-        Map<List<Object>, String> dataToUpdate = new HashMap<>();
-        dataToUpdate.put(transferToRecipient500ThisMonth, updateStatement);
-        dataToUpdate.put(transferFromRecipient1000ThisMonth, updateStatement);
-
-        dataToUpdate.put(transferToRecipient500AMonthAgo, updateStatement);
-        dataToUpdate.put(transferToRecipient1500AMonthAgo, updateStatement);
-        dataToUpdate.put(transferFromRecipient1000AMonthAgo, updateStatement);
-
-        dataToUpdate.put(transferToRecipient500ATwoMonthAgo, updateStatement);
-        dataToUpdate.put(transferFromRecipient1000ATwoMonthAgo, updateStatement);
-        dataToUpdate.put(transferFromRecipient1500ATwoMonthAgo, updateStatement);
-
-        Assert.assertTrue(DBManager.dbExecuteTransactionUpdate(dataToUpdate));
-
-        Account account = new Account();
-        account.setIdAccount(ID_ACCOUNT);
-        Person.setAccounts(Collections.singletonList(account));
+    public static void setup() throws ExecuteStatementException {
+        Configuration.connectionToTestDatabase();
+        Configuration.disableForeignKeyCheck();
+        Configuration.truncateTable(PAYMENT_TABLE_NAME);
     }
 
     @AfterClass
     public static void clearDatabaseAndDisconnect() throws SQLException {
-        String updateStatement = "TRUNCATE TABLE payments";
-        DBManager.dbExecuteUpdate(updateStatement, null);
+        Configuration.disableForeignKeyCheck();
+        Configuration.truncateTable(PAYMENT_TABLE_NAME);
+        Configuration.enableForeignKeyCheck();
         DBManager.dbDisconnect();
     }
 
+    private static final Account SENDER_ACCOUNT = new Account(
+            "10",
+            "1",
+            "87655678098712345678098765",
+            new BigDecimal("77000.00")
+    );
+
+    private static final String RECIPIENT_NAME = "Recipient";
+    private static final Account RECIPIENT_ACCOUNT = new Account(
+            "20",
+            "3",
+            "33225678098712345678098755",
+            new BigDecimal("77000.00")
+    );
+
+    private static final Payment THIS_MONTH = new Payment(
+            "30",
+            SENDER_ACCOUNT.getAccountId(),
+            RECIPIENT_ACCOUNT.getAccountId(),
+            RECIPIENT_NAME,
+            RECIPIENT_ACCOUNT.getNumber(),
+            new BigDecimal("300.00"),
+            "this month",
+            LocalDateTime.now()
+    );
+
+    private static final Payment MONTH_AGO = new Payment(
+            "31",
+            SENDER_ACCOUNT.getAccountId(),
+            RECIPIENT_ACCOUNT.getAccountId(),
+            RECIPIENT_NAME,
+            RECIPIENT_ACCOUNT.getNumber(),
+            new BigDecimal("400.00"),
+            "a month ago",
+            LocalDateTime.now().minusMonths(1)
+    );
+
+    private static final Payment TWO_MONTH_AGO = new Payment(
+            "32",
+            SENDER_ACCOUNT.getAccountId(),
+            RECIPIENT_ACCOUNT.getAccountId(),
+            RECIPIENT_NAME,
+            RECIPIENT_ACCOUNT.getNumber(),
+            new BigDecimal("500.00"),
+            "a two month ago",
+            LocalDateTime.now().minusMonths(2)
+    );
+
+    private static final Payment A_MORE_THAN_THREE_MONTH_AGO = new Payment(
+            "33",
+            SENDER_ACCOUNT.getAccountId(),
+            RECIPIENT_ACCOUNT.getAccountId(),
+            RECIPIENT_NAME,
+            RECIPIENT_ACCOUNT.getNumber(),
+            new BigDecimal("600.00"),
+            "this month first",
+            LocalDateTime.now().minusMonths(3).minusDays(1)
+    );
+
+    @Before
+    public void insertDataToTests() throws ExecuteStatementException {
+        assertTrue(insertPayment(THIS_MONTH));
+        assertTrue(insertPayment(MONTH_AGO));
+        assertTrue(insertPayment(TWO_MONTH_AGO));
+        assertTrue(insertPayment(A_MORE_THAN_THREE_MONTH_AGO));
+    }
+
+    private boolean insertPayment(Payment payment) throws ExecuteStatementException {
+        String updateStatement = "INSERT INTO payment " +
+                "(PAYMENT_ID, SENDER_ACCOUNT_ID, RECIPIENT_ACCOUNT_ID, RECIPIENT_NAME, " +
+                "RECIPIENT_NUMBER, AMOUNT, TITLE, CREATE_TIME) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?)";
+
+        return DBManager.dbExecuteUpdate(updateStatement, Arrays.asList(
+                payment.getPaymentId(),
+                payment.getSenderAccountId(),
+                payment.getRecipientAccountId(),
+                payment.getRecipientName(),
+                payment.getRecipientNumber(),
+                payment.getAmount().toString(),
+                payment.getTitle(),
+                payment.getDate().toString()
+        )) == 1;
+    }
+
+    @After
+    public void clearTable() throws ExecuteStatementException {
+        Configuration.disableForeignKeyCheck();
+        Configuration.truncateTable(PAYMENT_TABLE_NAME);
+    }
+
+    private CashFlowService cashFlowService = new CashFlowServiceImpl();
+
     @Test
     public void getLastThreeMonthCashFlowTest() {
-        List<CashFlow> paymentList = cashFlowService.getLastThreeMonthCashFlow();
+        List<CashFlow> lastThreeMonthFlow =
+                cashFlowService.getLastThreeMonthCashFlow(SENDER_ACCOUNT.getAccountId());
 
-        assertEquals(3, paymentList.size());
+        final int expectedSize = 3;
+        assertEquals(expectedSize, lastThreeMonthFlow.size());
 
-        final Integer THIS_MONTH_INDEX = 0;
-        final Integer A_MONTH_AGO_INDEX = 1;
-        final Integer A_TWO_MONTH_AGO_INDEX = 2;
-
-        CashFlow thisMonth = paymentList.get(THIS_MONTH_INDEX);
-        assertEquals(VALUE_OF_500.negate().setScale(2, RoundingMode.CEILING), thisMonth.getExpenses());
-        assertEquals(VALUE_OF_1000.setScale(2, RoundingMode.CEILING), thisMonth.getIncomes());
-        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500).setScale(2, RoundingMode.CEILING),
-                thisMonth.getBalance());
-
-        CashFlow aMonthAgo = paymentList.get(A_MONTH_AGO_INDEX);
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1500).negate().setScale(2, RoundingMode.CEILING),
-                aMonthAgo.getExpenses());
-        assertEquals(VALUE_OF_1000.setScale(2, RoundingMode.CEILING), aMonthAgo.getIncomes());
-        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500
-                .add(VALUE_OF_1500)).setScale(2, RoundingMode.CEILING), aMonthAgo.getBalance());
-
-        CashFlow aTwoMonthAgo = paymentList.get(A_TWO_MONTH_AGO_INDEX);
-        assertEquals(VALUE_OF_500.negate().setScale(2, RoundingMode.CEILING), aTwoMonthAgo.getExpenses());
-        assertEquals(VALUE_OF_1000.add(VALUE_OF_1500).setScale(2, RoundingMode.CEILING),
-                aTwoMonthAgo.getIncomes());
-        assertEquals(VALUE_OF_1000.add(VALUE_OF_1500)
-                .subtract(VALUE_OF_500).setScale(2, RoundingMode.CEILING), aTwoMonthAgo.getBalance());
+        Month currentMonth = LocalDateTime.now().getMonth();
+        lastThreeMonthFlow.forEach(cashFlow -> {
+            if (cashFlow.getMonth().compareTo(currentMonth) == 0) {
+                assertEquals(0,
+                        cashFlow.getBalance().negate().compareTo(THIS_MONTH.getAmount()));
+            } else if (cashFlow.getMonth().compareTo(currentMonth.minus(1)) == 0) {
+                assertEquals(0,
+                        cashFlow.getBalance().negate().compareTo(MONTH_AGO.getAmount()));
+            } else {
+                assertEquals(0,
+                        cashFlow.getBalance().negate().compareTo(TWO_MONTH_AGO.getAmount()));
+            }
+        });
     }
 
     @Test
-    public void getLastMonthCashFlowTest() {
-        CashFlow lastMonthCashFlow = cashFlowService.getLastMothFlow();
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1500).negate().setScale(2, RoundingMode.CEILING),
-                lastMonthCashFlow.getExpenses());
-        assertEquals(VALUE_OF_1000.setScale(2, RoundingMode.CEILING), lastMonthCashFlow.getIncomes());
-        assertEquals(VALUE_OF_1000.subtract(VALUE_OF_500.add(VALUE_OF_1500))
-                .setScale(2, RoundingMode.CEILING), lastMonthCashFlow.getBalance());
+    public void lastThreeMonthCashFlowForBadParameterTest() {
+        final String badAccountId = "-20";
+
+        BigDecimal expected = new BigDecimal("0.00");
+        assertEquals(expected, BigDecimal.valueOf(
+                cashFlowService.getLastThreeMonthCashFlow(badAccountId).stream()
+                        .mapToDouble(i -> Double.valueOf(i.getBalance().toString()))
+                        .sum()).setScale(2, RoundingMode.CEILING)
+        );
+    }
+
+    @Test
+    public void lastMonthCashFlowTest() {
+        assertEquals(THIS_MONTH.getAmount().negate(),
+                cashFlowService.getLastMothFlow(SENDER_ACCOUNT.getAccountId()).getBalance());
+    }
+
+    @Test
+    public void lastMonthFlowForBadParameterTest() {
+        final String badAccountId = "-30";
+
+        BigDecimal expected = new BigDecimal("0.00");
+        assertEquals(expected, cashFlowService.getLastMothFlow(badAccountId).getBalance());
     }
 }
