@@ -79,7 +79,8 @@ public class CashFlowController {
     void initialize() {
         addEventHandlers();
 
-        List<CashFlow> cashFlowList = cashFlowService.getLastThreeMonthCashFlow();
+        List<CashFlow> cashFlowList =
+                cashFlowService.getLastThreeMonthCashFlow(CurrentPerson.getActiveAccount().getAccountId());
 
         final Integer CURRENT_MONTH_INDEX = 0;
         final Integer A_MONTH_AGO_INDEX = 1;
