@@ -72,14 +72,14 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
     @Override
-    public List<Payment> findAll(Integer idAccount) {
+    public List<Payment> findAll(String accountId) {
         String queryStatement = "SELECT * FROM payment " +
-                "WHERE SENDER_ACCOUNT_ID = ? OR RECIPIENT_ACCOUNT_ID = ?";
+                "WHERE SENDER_ACCOUNT_ID LIKE ? OR RECIPIENT_ACCOUNT_ID LIKE ?";
         try {
             ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement
-                    , Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+                    , Arrays.asList(accountId, accountId));
 
-            return getPaymentList(resultSet, idAccount);
+            return getPaymentList(resultSet, accountId);
         } catch (ExecuteStatementException e) {
             System.out.println("get all payment: " + e.errorCode());
         }
@@ -88,17 +88,17 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
     @Override
-    public List<Payment> findAllFromLastThreeMonth(Integer idAccount) {
+    public List<Payment> findAllFromLastThreeMonth(String accountId) {
         String queryStatement = "SELECT * FROM payment " +
-                "WHERE DATE >= now() - INTERVAL 3 MONTH " +
-                "AND (SENDER_ACCOUNT_ID = ? OR RECIPIENT_ACCOUNT_ID = ?)";
+                "WHERE CREATE_TIME >= now() - INTERVAL 3 MONTH " +
+                "AND (SENDER_ACCOUNT_ID LIKE ? OR RECIPIENT_ACCOUNT_ID LIKE ?)";
 
         ResultSet resultSet;
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement,
-                    Arrays.asList(String.valueOf(idAccount), String.valueOf(idAccount)));
+                    Arrays.asList(accountId, accountId));
 
-            return getPaymentList(resultSet, idAccount);
+            return getPaymentList(resultSet, accountId);
         } catch (ExecuteStatementException e) {
             System.out.println("get last three month payment: " + e.errorCode());
         }
@@ -106,12 +106,12 @@ public class PaymentDAOImpl implements PaymentDAO {
         return new ArrayList<>();
     }
 
-    private List<Payment> getPaymentList(ResultSet resultSet, Integer idAccount) {
+    private List<Payment> getPaymentList(ResultSet resultSet, String accountId) {
         List<Payment> paymentList = new ArrayList<>();
 
         try {
             while (resultSet.next()) {
-                BigDecimal value = resultSet.getInt("SENDER_ACCOUNT_ID") == idAccount ?
+                BigDecimal value = resultSet.getString("SENDER_ACCOUNT_ID").equals(accountId) ?
                         resultSet.getBigDecimal("AMOUNT").negate() :
                         resultSet.getBigDecimal("AMOUNT");
 
