@@ -176,7 +176,7 @@ public class DesktopController {
         mainPaneSetScreen(pane);
     }
 
-    protected void goToAccounts() {
+    void goToAccounts() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNTS_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         AccountsController controller = loader.getController();
@@ -185,7 +185,7 @@ public class DesktopController {
         mainPaneSetScreen(pane);
     }
 
-    protected void goToPayments() {
+    void goToPayments() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), PAYMENTS_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         PaymentsController controller = loader.getController();
@@ -193,7 +193,7 @@ public class DesktopController {
         mainPaneSetScreen(pane);
     }
 
-    protected void goToPaymentsHistory() {
+    void goToPaymentsHistory() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), PAYMENTS_HISTORY_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         PaymentsHistoryController controller = loader.getController();
