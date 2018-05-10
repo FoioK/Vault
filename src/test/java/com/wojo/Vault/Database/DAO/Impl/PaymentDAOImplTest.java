@@ -78,7 +78,7 @@ public class PaymentDAOImplTest {
             LocalDateTime.now().minusMonths(1)
     );
 
-    private static final Payment A_THREE_MONTH_AGO_PAYMENT = new Payment(
+    private static final Payment A_THREE_MONTH_AND_ONE_DAY_AGO_PAYMENT = new Payment(
             "4",
             SECOND_ACCOUNT_ID,
             FIRST_ACCOUNT_ID,
@@ -86,7 +86,7 @@ public class PaymentDAOImplTest {
             "56780987789009877890098778",
             new BigDecimal("1427.00"),
             "Fourth transfer",
-            LocalDateTime.now().minusMonths(3)
+            LocalDateTime.now().minusMonths(3).minusDays(1)
     );
 
     @Before
@@ -94,7 +94,7 @@ public class PaymentDAOImplTest {
         insertPayment(FIRST_PAYMENT);
         insertPayment(SECOND_PAYMENT);
         insertPayment(THIRD_PAYMENT);
-        insertPayment(A_THREE_MONTH_AGO_PAYMENT);
+        insertPayment(A_THREE_MONTH_AND_ONE_DAY_AGO_PAYMENT);
     }
 
     private void insertPayment(Payment payment) throws ExecuteStatementException {
@@ -112,7 +112,7 @@ public class PaymentDAOImplTest {
                 payment.getRecipientNumber(),
                 payment.getAmount().toString(),
                 payment.getTitle(),
-                payment.getData().toString()
+                payment.getDate().toString()
         );
 
         DBManager.dbExecuteUpdate(updateStatement, dataToUpdate);
@@ -185,7 +185,7 @@ public class PaymentDAOImplTest {
                         FIRST_PAYMENT.getRecipientNumber(),
                         FIRST_PAYMENT.getAmount(),
                         FIRST_PAYMENT.getTitle(),
-                        FIRST_PAYMENT.getData()
+                        FIRST_PAYMENT.getDate()
                 );
 
         final int expectedSize = 1;
@@ -198,43 +198,43 @@ public class PaymentDAOImplTest {
                 FIRST_PAYMENT.getRecipientNumber(),
                 FIRST_PAYMENT.getAmount().toString(),
                 FIRST_PAYMENT.getTitle(),
-                FIRST_PAYMENT.getData().toString()
+                FIRST_PAYMENT.getDate().toString()
         );
         assertEquals(expectedData, insertPaymentData.entrySet().iterator().next().getKey());
     }
 
     @Test
     public void getPaymentsHistoryTest() {
-        List<Payment> allPayment = paymentDAO.findAll(Integer.valueOf(FIRST_ACCOUNT_ID));
-        assertTrue(allPayment != null);
+        List<Payment> allPayments = paymentDAO.findAll(FIRST_ACCOUNT_ID);
+        assertNotNull(allPayments);
 
         /*
           expected payments:
                    FIRST_PAYMENT,
                    SECOND_PAYMENT,
                    THIRD_PAYMENT,
-                   A_THREE_MONTH_AGO_PAYMENT
+                   A_THREE_MONTH_AND_ONE_DAY_AGO_PAYMENT
          */
         final int expectedSize = 4;
-        assertEquals(expectedSize, allPayment.size());
+        assertEquals(expectedSize, allPayments.size());
 
-        allPayment.forEach(payment -> {
+        allPayments.forEach(payment -> {
             if (payment.getPaymentId().equals(FIRST_PAYMENT.getPaymentId())) {
-                assertTrue(FIRST_PAYMENT.equals(payment));
+                assertEquals(FIRST_PAYMENT, payment);
             } else if (payment.getPaymentId().equals(SECOND_PAYMENT.getPaymentId())) {
-                assertTrue(SECOND_PAYMENT.equals(payment));
+                assertEquals(SECOND_PAYMENT, payment);
             } else if (payment.getPaymentId().equals(THIRD_PAYMENT.getPaymentId())) {
-                assertTrue(THIRD_PAYMENT.equals(payment));
+                assertEquals(THIRD_PAYMENT, payment);
             } else {
-                assertTrue(A_THREE_MONTH_AGO_PAYMENT.equals(payment));
+                assertEquals(A_THREE_MONTH_AND_ONE_DAY_AGO_PAYMENT, payment);
             }
         });
     }
 
     @Test
     public void getLastThreeMonthPaymentHistoryTest() {
-        List<Payment> lastThreeMonthPayment = paymentDAO.findAllFromLastThreeMonth(Integer.valueOf(SECOND_ACCOUNT_ID));
-        assertTrue(lastThreeMonthPayment != null);
+        List<Payment> lastThreeMonthPayment = paymentDAO.findAllFromLastThreeMonth(SECOND_ACCOUNT_ID);
+        assertNotNull(lastThreeMonthPayment);
 
         /*
           expected payments:
@@ -246,16 +246,16 @@ public class PaymentDAOImplTest {
 
         lastThreeMonthPayment.forEach(payment -> {
             if (payment.getPaymentId().equals(FIRST_PAYMENT.getPaymentId())) {
-                assertTrue(FIRST_PAYMENT.equals(payment));
+                assertEquals(FIRST_PAYMENT, payment);
             } else {
-                assertTrue(THIRD_PAYMENT.equals(payment));
+                assertEquals(THIRD_PAYMENT, payment);
             }
         });
     }
 
     @Test
     public void shouldNotFindPaymentForBadId() {
-        Integer badAccountId = -30;
+        String badAccountId = "-30";
         final int expectedSize = 0;
 
         List<Payment> allPayment = paymentDAO.findAll(badAccountId);

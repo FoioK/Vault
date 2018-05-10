@@ -13,42 +13,28 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class PersonServiceImplTest {
 
-    private static final String DISABLE_FOREIGN_KEY_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
-    private static final String ENABLE_FOREIGN_KEY_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
-
+    private static final String PERSON_TABLE_NAME = "person";
+    private static final String ACCOUNT_TABLE_NAME = "account";
+    private static final String PERSON_HAS_ADDRESS_TABLE_NAME = "person_has_address";
 
     @BeforeClass
-    public static void connectionToTestDatabase() throws ExecuteStatementException {
-        DBManager.setTestConnectionPath();
-        DBManager.dbConnection();
-
-        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
-
-        String updateStatement = "TRUNCATE TABLE person";
-        DBManager.dbExecuteUpdate(updateStatement, null);
+    public static void setup() throws ExecuteStatementException {
+        Configuration.connectionToTestDatabase();
+        Configuration.disableForeignKeyCheck();
+        Configuration.truncateTable(PERSON_TABLE_NAME);
     }
 
     @AfterClass
     public static void clearDatabaseAndDisconnect() throws ExecuteStatementException {
-        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
-
-        String updateStatementPerson = "TRUNCATE TABLE person";
-        DBManager.dbExecuteUpdate(updateStatementPerson, null);
-
-        String updateStatementAccount = "TRUNCATE TABLE account";
-        DBManager.dbExecuteUpdate(updateStatementAccount, null);
-
-        String updateStatementPersonHasAddress = "TRUNCATE TABLE person_has_address";
-        DBManager.dbExecuteUpdate(updateStatementPersonHasAddress, null);
-
-        DBManager.dbExecuteUpdate(ENABLE_FOREIGN_KEY_CHECK, null);
-
+        Configuration.disableForeignKeyCheck();
+        Configuration.truncateTable(PERSON_TABLE_NAME);
+        Configuration.truncateTable(ACCOUNT_TABLE_NAME);
+        Configuration.truncateTable(PERSON_HAS_ADDRESS_TABLE_NAME);
+        Configuration.enableForeignKeyCheck();
         DBManager.dbDisconnect();
     }
 
@@ -101,17 +87,11 @@ public class PersonServiceImplTest {
     }
 
     @After
-    public void clearTable() throws ExecuteStatementException {
-        DBManager.dbExecuteUpdate(DISABLE_FOREIGN_KEY_CHECK, null);
-
-        String updateStatementPerson = "TRUNCATE TABLE person";
-        DBManager.dbExecuteUpdate(updateStatementPerson, null);
-
-        String updateStatementAccount = "TRUNCATE TABLE account";
-        DBManager.dbExecuteUpdate(updateStatementAccount, null);
-
-        String updateStatementPersonHasAddress = "TRUNCATE TABLE person_has_address";
-        DBManager.dbExecuteUpdate(updateStatementPersonHasAddress, null);
+    public void clearTables() throws ExecuteStatementException {
+        Configuration.disableForeignKeyCheck();
+        Configuration.truncateTable(PERSON_TABLE_NAME);
+        Configuration.truncateTable(ACCOUNT_TABLE_NAME);
+        Configuration.truncateTable(PERSON_HAS_ADDRESS_TABLE_NAME);
     }
 
     private PersonServiceImpl personService = new PersonServiceImpl();
@@ -119,10 +99,10 @@ public class PersonServiceImplTest {
     @Test
     public void shouldFindPersonByLogin() {
         Person firstFoundedPerson = personService.findPersonByLogin(FIRST_PERSON.getLogin());
-        assertTrue(FIRST_PERSON.equals(firstFoundedPerson));
+        assertEquals(FIRST_PERSON, firstFoundedPerson);
 
         Person secondFoundedPerson = personService.findPersonByLogin(SECOND_PERSON.getLogin());
-        assertTrue(SECOND_PERSON.equals(secondFoundedPerson));
+        assertEquals(SECOND_PERSON, secondFoundedPerson);
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -141,17 +121,17 @@ public class PersonServiceImplTest {
     @Test
     public void shouldFindPersonIdByLogin() {
         String firstFoundedPersonId = personService.findPersonIdByLogin(FIRST_PERSON.getLogin());
-        assertTrue(firstFoundedPersonId.equals(FIRST_PERSON.getPersonId()));
+        assertEquals(firstFoundedPersonId, FIRST_PERSON.getPersonId());
 
         String secondFoundedPersonId = personService.findPersonIdByLogin(SECOND_PERSON.getLogin());
-        assertTrue(secondFoundedPersonId.equals(SECOND_PERSON.getPersonId()));
+        assertEquals(secondFoundedPersonId, SECOND_PERSON.getPersonId());
     }
 
     @Test
     public void findPersonIdForNullParameterTest() {
         String expectedPersonId = "";
         String foundedPersonId = personService.findPersonIdByLogin(null);
-        assertTrue(expectedPersonId.equals(foundedPersonId));
+        assertEquals(expectedPersonId, foundedPersonId);
     }
 
     @Test
@@ -161,7 +141,7 @@ public class PersonServiceImplTest {
         String badLogin = "XBN";
         String foundedPersonId = personService.findPersonIdByLogin(badLogin);
 
-        assertTrue(expectedPersonId.equals(foundedPersonId));
+        assertEquals(expectedPersonId, foundedPersonId);
     }
 
     @Test
@@ -224,16 +204,16 @@ public class PersonServiceImplTest {
     @Test
     public void shouldSetAccounts() throws ExecuteStatementException {
         Account firstAccount = insertAccountToTest(FIRST_PERSON.getPersonId());
-        assertFalse(firstAccount == null);
+        assertNotNull(firstAccount);
         assertTrue(personService.setAccounts(FIRST_PERSON));
         assertEquals(1, FIRST_PERSON.getAccountList().size());
-        assertTrue(firstAccount.equals(FIRST_PERSON.getAccountList().get(0)));
+        assertEquals(firstAccount, FIRST_PERSON.getAccountList().get(0));
         assertEquals(firstAccount.hashCode(), FIRST_PERSON.getAccountList().get(0).hashCode());
     }
 
     @Test
     public void shouldCreateAndSetAccounts() {
-        assertTrue(FIRST_PERSON.getAccountList() == null);
+        assertNull(FIRST_PERSON.getAccountList());
         assertTrue(personService.setAccounts(FIRST_PERSON));
         assertEquals(1, FIRST_PERSON.getAccountList().size());
     }
@@ -241,7 +221,7 @@ public class PersonServiceImplTest {
     @Test
     public void shouldSetAddresses() throws ExecuteStatementException {
         Address firstAddress = insertAddressToTest(FIRST_PERSON.getPersonId());
-        assertFalse(firstAddress == null);
+        assertNotNull(firstAddress);
         assertTrue(personService.setAddresses(FIRST_PERSON));
         assertEquals(1, FIRST_PERSON.getAddressList().size());
         assertTrue(Objects.equals(firstAddress, FIRST_PERSON.getAddressList().get(0)));
@@ -255,12 +235,12 @@ public class PersonServiceImplTest {
 
     @Test
     public void shouldCreatePerson() {
-        assertFalse(personService.createPerson(FIRST_PERSON, ADDRESS).equals(""));
-        assertFalse(personService.createPerson(SECOND_PERSON, ADDRESS).equals(""));
+        assertNotEquals("", personService.createPerson(FIRST_PERSON, ADDRESS));
+        assertNotEquals("", personService.createPerson(SECOND_PERSON, ADDRESS));
     }
 
     @Test
     public void shouldNotCreatePersonForNullParameter() {
-        assertTrue(personService.createPerson(null, null).equals(""));
+        assertEquals("", personService.createPerson(null, null));
     }
 }
