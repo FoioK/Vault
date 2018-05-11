@@ -15,6 +15,9 @@ public class Payment {
     private String title;
     private LocalDateTime date;
 
+    public Payment() {
+    }
+
     public Payment(String paymentId, String senderAccountId, String recipientAccountId, String recipientName,
                    String recipientNumber, BigDecimal amount, String title, LocalDateTime date) {
         this.paymentId = paymentId;

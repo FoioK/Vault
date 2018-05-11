@@ -115,7 +115,8 @@ public abstract class Deposit {
 
     public BigDecimal getProfit() {
         return BigDecimal.valueOf(this.getDepositAmount().doubleValue() *
-                this.getPercent() / 100 * this.getNumberOfDays() / 365).setScale(2, RoundingMode.CEILING);
+                this.getPercent() / 100 * this.getNumberOfDays() / 365)
+                .setScale(2, RoundingMode.HALF_EVEN);
     }
 
     @Override
