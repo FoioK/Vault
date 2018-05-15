@@ -34,6 +34,9 @@ Next extract file and run it.
 
 - Deposits
 
+## Database schema
+![](https://i.imgur.com/mQcuTnu.png)
+
 ## Contributing
 
 Contributions to the Vault library are welcome. Please note the following guidelines before submiting your pull request.

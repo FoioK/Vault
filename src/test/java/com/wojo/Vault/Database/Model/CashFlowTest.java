@@ -1,65 +1,70 @@
 package com.wojo.Vault.Database.Model;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class CashFlowTest {
 
-    private static CashFlow cashFlowWithPayment;
-    private static CashFlow cashFlowWithoutPayment = new CashFlow(LocalDate.now());
+    private Payment paymentOf500 = new Payment();
+    private Payment paymentOf1000 = new Payment();
+    private Payment paymentOf2000 = new Payment();
 
-    private static final BigDecimal VALUE_OF_500 = BigDecimal.valueOf(500.00);
-    private static final BigDecimal VALUE_OF_1000 = BigDecimal.valueOf(1000.00);
-    private static final BigDecimal VALUE_OF_1500 = BigDecimal.valueOf(1500.00);
+    private Payment paymentOfMinus500 = new Payment();
+    private Payment paymentOfMinus1000 = new Payment();
+    private Payment paymentOfMinus2000 = new Payment();
 
-    @BeforeClass
-    public static void setDataToTests() {
-        cashFlowWithPayment = new CashFlow(LocalDate.now());
+    @Before
+    public void initDataToTest() {
+        paymentOf500.setAmount(new BigDecimal("500.00"));
+        paymentOf1000.setAmount(new BigDecimal("1000.00"));
+        paymentOf2000.setAmount(new BigDecimal("2000.00"));
 
-        Payment depositTransferOf500 = new Payment(0, 0, "", "",
-                "", VALUE_OF_500, new Date());
-        Payment depositTransferOf1000 = new Payment(0, 0, "", "",
-                "", VALUE_OF_1000, new Date());
-        Payment depositTransferOf1500 = new Payment(0, 0, "", "",
-                "", VALUE_OF_1500, new Date());
-        cashFlowWithPayment.addPayment(depositTransferOf500);
-        cashFlowWithPayment.addPayment(depositTransferOf1000);
-        cashFlowWithPayment.addPayment(depositTransferOf1500);
-
-        Payment debitTransferOf500 = new Payment(0, 0, "", "",
-                "", VALUE_OF_500.negate(), new Date());
-        Payment debitTransferOf1000 = new Payment(0, 0, "", "",
-                "", VALUE_OF_1000.negate(), new Date());
-        cashFlowWithPayment.addPayment(debitTransferOf500);
-        cashFlowWithPayment.addPayment(debitTransferOf1000);
+        paymentOfMinus500.setAmount(new BigDecimal("-500.00"));
+        paymentOfMinus1000.setAmount(new BigDecimal("-1000.00"));
+        paymentOfMinus2000.setAmount(new BigDecimal("-2000.00"));
     }
 
     @Test
     public void shouldReturnCorrectIncomes() {
-        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.CEILING), cashFlowWithoutPayment.getIncomes());
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1000).add(VALUE_OF_1500).setScale(2, RoundingMode.CEILING),
-                cashFlowWithPayment.getIncomes());
+        CashFlow cashFlow = new CashFlow(LocalDate.now());
+        cashFlow.addPayment(paymentOf2000);
+        cashFlow.addPayment(paymentOf1000);
+        cashFlow.addPayment(paymentOfMinus1000);
+        cashFlow.addPayment(paymentOfMinus500);
+
+        BigDecimal expected = new BigDecimal("3000.00");
+        assertEquals(expected, cashFlow.getIncomes());
     }
 
     @Test
     public void shouldReturnCorrectExpenses() {
-        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.CEILING), cashFlowWithoutPayment.getExpenses());
-        assertEquals(VALUE_OF_500.add(VALUE_OF_1000).negate().setScale(2, RoundingMode.CEILING),
-                cashFlowWithPayment.getExpenses());
+        CashFlow cashFlow = new CashFlow(LocalDate.now());
+        cashFlow.addPayment(paymentOf2000);
+        cashFlow.addPayment(paymentOf1000);
+        cashFlow.addPayment(paymentOfMinus1000);
+        cashFlow.addPayment(paymentOfMinus500);
+
+        BigDecimal expected = new BigDecimal("-1500.00");
+        assertEquals(expected, cashFlow.getExpenses());
     }
 
     @Test
     public void shouldReturnCorrectBalance() {
-        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.CEILING), cashFlowWithoutPayment.getBalance());
+        CashFlow cashFlow = new CashFlow(LocalDate.now());
+        cashFlow.addPayment(paymentOf2000);
+        cashFlow.addPayment(paymentOf1000);
+        cashFlow.addPayment(paymentOfMinus1000);
+        cashFlow.addPayment(paymentOfMinus500);
+        cashFlow.addPayment(paymentOf500);
+        cashFlow.addPayment(paymentOfMinus1000);
 
-        BigDecimal expectedBalance = BigDecimal.valueOf(1500.0);
-        assertEquals(expectedBalance.setScale(2, RoundingMode.CEILING), cashFlowWithPayment.getBalance());
+
+        BigDecimal expected = new BigDecimal("1000.00");
+        assertEquals(expected, cashFlow.getBalance());
     }
 }

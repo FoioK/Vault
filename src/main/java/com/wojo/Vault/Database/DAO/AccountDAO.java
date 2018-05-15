@@ -3,22 +3,19 @@ package com.wojo.Vault.Database.DAO;
 import com.wojo.Vault.Database.Model.Account;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountDAO {
 
-    Account addNewAccount(Integer idPerson, String countryCode, int length);
-
-    boolean insertAccountToDB(Account account, Integer idPerson);
-
-    void insertAccountData(Integer idPerson);
-
-    <T> Integer deleteAccount(T value);
-
-    Integer searchAccountByNumber(String accountNumber);
+    List<Account> findAllByPersonId(String personId);
     
-    BigDecimal getAccountValue(String idAccount);
+    String findIdByNumber(String number);
 
-    BigDecimal getAccountValueForNumber(String number);
+    boolean isNumberExist(String accountNumber);
 
-    boolean setValue(BigDecimal newValue, String number);
+    boolean insertAccount(Account account);
+
+    boolean setValue(String number, BigDecimal value);
+
+    BigDecimal getValueByNumber(String number);
 }

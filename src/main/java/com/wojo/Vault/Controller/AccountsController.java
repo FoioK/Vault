@@ -11,7 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class AccountsController {
 
@@ -71,21 +72,21 @@ public class AccountsController {
     }
 
     private void setLabelsText() {
-        number.setText(accountService.getFormatAccountNumber());
-        value.setText(accountService.getAccountValue().toString());
+        number.setText(accountService.getFormatAccountNumber(CurrentPerson.getActiveAccount()));
+        value.setText(CurrentPerson.getActiveAccount().getValue().toString());
         setLastRecentTransactionText();
     }
 
     private void setLastRecentTransactionText() {
         List<List<Label>> labels = getLabelsList();
         final int[] index = {0};
-        paymentService.getLastThreePayment()
+        paymentService.getLastThreePayment(CurrentPerson.getActiveAccount().getAccountId())
                 .stream()
                 .limit(3)
                 .forEach(payment -> {
                     labels.get(index[0]).get(0).setText(payment.getDate().toString());
                     labels.get(index[0]).get(1).setText(payment.getTitle());
-                    BigDecimal amount = payment.getPaymentValue();
+                    BigDecimal amount = payment.getAmount();
                     if (amount.compareTo(BigDecimal.ZERO) < 0) {
                         labels.get(index[0]).get(2).setTextFill(Color.RED);
                     }
@@ -121,7 +122,7 @@ public class AccountsController {
         this.rootController = rootController;
     }
 
-    public void setDesktopController(DesktopController desktopController) {
+    void setDesktopController(DesktopController desktopController) {
         this.desktopController = desktopController;
     }
 }

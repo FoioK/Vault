@@ -11,12 +11,12 @@ public class LongDeposit extends Deposit {
     public static final BigDecimal MINIMAL_AMOUNT = BigDecimal.valueOf(500);
     public static final Integer NUMBER_OF_DAYS = 30;
 
-    public LongDeposit(Integer idDeposit, Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+    public LongDeposit(String idDeposit, String idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         super(idDeposit, idAccount, depositAmount, startDate);
         this.setData(startDate);
     }
 
-    public LongDeposit(Integer idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
+    public LongDeposit(String idAccount, BigDecimal depositAmount, LocalDateTime startDate) {
         super(idAccount, depositAmount, startDate);
         this.setData(startDate);
     }

@@ -1,102 +1,141 @@
 package com.wojo.Vault.Database.Model;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Person {
 
-    private static int idPersonInDatabase;
-    private static String firstName;
-    private static String lastName;
-    private static String personId;
-    private static String address;
-    private static String telephoneNumber;
-    private static String email;
-    private static String login;
-    private static String password;
-    private static List<Account> accounts = new ArrayList<>();
+    public static final Integer LOGIN_LENGTH = 9;
 
-    public static int getIdPersonInDatabase() {
-        return idPersonInDatabase;
+    private String personId;
+    private String firstName;
+    private String lastName;
+    private String telephoneNumber;
+    private String login;
+    private char[] password;
+    private LocalDateTime createTime;
+    private List<Address> addressList;
+    private List<Account> accountList;
+
+    public Person(String personId) {
+        this.personId = personId;
     }
 
-    public static void setIdPersonInDatabase(int idPersonInDatabase) {
-        Person.idPersonInDatabase = idPersonInDatabase;
+    public Person(String firstName, String lastName, String telephoneNumber, String login, char[] password,
+                  LocalDateTime createTime) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.telephoneNumber = telephoneNumber;
+        this.login = login;
+        this.password = password;
+        this.createTime = createTime;
     }
 
-    public static String getFirstName() {
-        return firstName;
+    public Person(String personId, String firstName, String lastName, String telephoneNumber, String login,
+                  char[] password, LocalDateTime createTime) {
+        this.personId = personId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.telephoneNumber = telephoneNumber;
+        this.login = login;
+        this.password = password;
+        this.createTime = createTime;
     }
 
-    public static void setFirstName(String firstName) {
-        Person.firstName = firstName;
-    }
-
-    public static String getLastName() {
-        return lastName;
-    }
-
-    public static void setLastName(String lastName) {
-        Person.lastName = lastName;
-    }
-
-    public static String getPersonId() {
+    public String getPersonId() {
         return personId;
     }
 
-    public static void setPersonId(String personId) {
-        Person.personId = personId;
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
-    public static String getAddress() {
-        return address;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public static void setAddress(String address) {
-        Person.address = address;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public static String getTelephoneNumber() {
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getTelephoneNumber() {
         return telephoneNumber;
     }
 
-    public static void setTelephoneNumber(String telephoneNumber) {
-        Person.telephoneNumber = telephoneNumber;
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
     }
 
-    public static String getEmail() {
-        return email;
-    }
-
-    public static void setEmail(String email) {
-        Person.email = email;
-    }
-
-    public static String getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public static void setLogin(String login) {
-        Person.login = login;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public static String getPassword() {
+    public char[] getPassword() {
         return password;
     }
 
-    public static void setPassword(String password) {
-        Person.password = password;
+    public void setPassword(char[] password) {
+        this.password = password;
     }
 
-    public static void addAccount(Account account) {
-        accounts.add(account);
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public static List<Account> getAccounts() {
-        return accounts;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
-    public static void setAccounts(List<Account> accounts) {
-        Person.accounts = accounts;
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
+    }
+
+    public List<Account> getAccountList() {
+        return accountList;
+    }
+
+    public void setAccountList(List<Account> accountList) {
+        this.accountList = accountList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+
+        return Objects.equals(personId, person.personId) &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName) &&
+                Objects.equals(telephoneNumber, person.telephoneNumber) &&
+                Objects.equals(login, person.login) &&
+                Arrays.equals(password, person.password) &&
+                Objects.equals(createTime.toLocalDate(), person.createTime.toLocalDate());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(personId, firstName, lastName, telephoneNumber, login, createTime.toLocalDate());
+        result = 31 * result + Arrays.hashCode(password);
+
+        return result;
     }
 }

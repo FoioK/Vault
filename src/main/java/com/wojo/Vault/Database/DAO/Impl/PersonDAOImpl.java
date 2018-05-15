@@ -1,149 +1,163 @@
 package com.wojo.Vault.Database.DAO.Impl;
 
-import com.wojo.Vault.Database.DAO.AccountDAO;
 import com.wojo.Vault.Database.DAO.PersonDAO;
-import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Database.DBManager;
+import com.wojo.Vault.Database.Model.Address;
+import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Exception.ExecuteStatementException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class PersonDAOImpl implements PersonDAO {
 
-    private AccountDAO accountDAO = new AccountDAOImpl();
-
-    public boolean searchPersonLogin(String login) {
-        if (login == null) {
+    public boolean insertPersonAndAddress(Person person, Address address) {
+        Integer personId;
+        Integer addressId;
+        try {
+            personId = getLastPersonId() + 1;
+            addressId = getLastAddressId() + 1;
+        } catch (SQLException e) {
+            System.out.println("Find max personId and addressId error");
             return false;
         }
-        String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN LIKE ?";
-        ResultSet resultSet;
-        try {
-            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
-            return resultSet.next() && resultSet.getInt(1) != 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        if (personId < 0 || addressId < 0) {
+            return false;
         }
+
+        String disableForeignKeyCheck = "SET FOREIGN_KEY_CHECKS = 0";
+        String enableForeignKeyCheck = "SET FOREIGN_KEY_CHECKS = 1";
+
+        String updatePersonStatement = "INSERT INTO person " +
+                "(PERSON_ID, FIRST_NAME, LAST_NAME, TELEPHONE_NUMBER, LOGIN, PASSWORD, CREATE_TIME) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?)";
+        List<String> dataToUpdatePerson = Arrays.asList(
+                String.valueOf(personId),
+                person.getFirstName(),
+                person.getLastName(),
+                person.getTelephoneNumber(),
+                person.getLogin(),
+                String.valueOf(person.getPassword()),
+                person.getCreateTime().toString()
+        );
+
+        String updateAddressStatement = "INSERT INTO address (ADDRESS_ID, CITY, STREET, APARTMENT_NUMBER) VALUES (?, ?, ?, ?)";
+        List<String> dataToUpdateAddress = Arrays.asList(
+                String.valueOf(addressId),
+                address.getCity(),
+                address.getStreet(),
+                address.getApartmentNumber()
+        );
+
+        String updatePersonHasAddressStatement =
+                "INSERT INTO person_has_address (PERSON_ID, ADDRESS_ID) VALUES (?, ?)";
+        List<String> dataToUpdatePersonHasAddress = Arrays.asList(
+                String.valueOf(personId),
+                String.valueOf(addressId)
+        );
+
+        Map<List<String>, String> dataToUpdate = new HashMap<>(3);
+        dataToUpdate.put(dataToUpdatePerson, updatePersonStatement);
+        dataToUpdate.put(dataToUpdateAddress, updateAddressStatement);
+        dataToUpdate.put(dataToUpdatePersonHasAddress, updatePersonHasAddressStatement);
+
+        try {
+            return DBManager.dbExecuteUpdate(disableForeignKeyCheck, null) == 0 &&
+                    DBManager.dbExecuteTransactionUpdate(dataToUpdate) &&
+                    DBManager.dbExecuteUpdate(enableForeignKeyCheck, null) == 0;
+        } catch (ExecuteStatementException e) {
+            System.out.println(e.errorCode() + ": Insert person");
+        }
+
         return false;
     }
 
-    public String[] getIdPersonAndPassword(String login) {
-        //TODO zapezpieczyc NullPointerException w miejscach użycia metody
-        String queryStatement = "SELECT idPerson, PASSWORD FROM person " +
-                "WHERE LOGIN LIKE ?";
+    private Integer getLastPersonId() throws SQLException {
+        String queryStatement = "SELECT MAX(PERSON_ID) FROM person";
+        ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement, null);
+
+        return resultSet.next() ? resultSet.getInt(1) : -1;
+    }
+
+    private Integer getLastAddressId() throws SQLException {
+        String queryStatement = "SELECT MAX(ADDRESS_ID) FROM address";
+        ResultSet resultSet = DBManager.dbExecuteQuery(queryStatement, null);
+
+        return resultSet.next() ? resultSet.getInt(1) : -1;
+    }
+
+    /**
+     *
+     * @return return Person object, when don't find person return object with id "-1"
+     * or null if the case of an exception.
+     */
+    public Person findByLogin(String login) {
+        String queryStatement = "SELECT * FROM person WHERE LOGIN = ?";
+
         ResultSet resultSet;
-        String[] idPersonAndPassword = new String[2];
         try {
             resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
-            if (resultSet.next()) {
-                idPersonAndPassword[0] = resultSet.getString("idPerson");
-                idPersonAndPassword[1] = resultSet.getString("PASSWORD");
-                return idPersonAndPassword;
-            } else {
-                return null;
-            }
+            return resultSet.next() ? getPersonObject(resultSet) : new Person("-1");
+        } catch (ExecuteStatementException e) {
+            System.out.println("find person by login: " + e.errorCode());
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("ResultSet error: Find login");
         }
+
         return null;
     }
 
-    public boolean insertPersonData(Integer idPerson) {
-        String queryStatement = "SELECT * FROM person WHERE idPerson = ?";
+    @Override
+    public String findIdByLogin(String login) {
+        String queryStatement = "SELECT PERSON_ID FROM person WHERE LOGIN LIKE ?";
+
+
         ResultSet resultSet;
         try {
-            resultSet = DBManager.dbExecuteQuery(queryStatement,
-                    Collections.singletonList(String.valueOf(idPerson)));
-            if (resultSet.next()) {
-                Person.setIdPersonInDatabase(resultSet.getInt("idPerson"));
-                Person.setFirstName(resultSet.getString("FIRST_NAME"));
-                Person.setLastName(resultSet.getString("LAST_NAME"));
-                Person.setPersonId(resultSet.getString("PERSON_ID"));
-                Person.setAddress(resultSet.getString("ADDRESS"));
-                Person.setTelephoneNumber(resultSet.getString("TELEPHONE_NUMBER"));
-                Person.setEmail(resultSet.getString("EMAIL"));
-                Person.setLogin(resultSet.getString("LOGIN"));
-                Person.setPassword(resultSet.getString("PASSWORD"));
-                accountDAO.insertAccountData(idPerson);
-                return true;
-            }
-            else {
-                return false;
-            }
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
+            return resultSet.next() ? resultSet.getString("PERSON_ID") : "";
+        } catch (ExecuteStatementException e) {
+            System.out.println("find person id by login: " + e.errorCode());
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("ResultSet error: Find person id by login");
         }
+
+        return "";
+    }
+
+    private Person getPersonObject(ResultSet resultSet) throws SQLException {
+        return new Person(
+                resultSet.getString("PERSON_ID"),
+                resultSet.getString("FIRST_NAME"),
+                resultSet.getString("LAST_NAME"),
+                resultSet.getString("TELEPHONE_NUMBER"),
+                resultSet.getString("LOGIN"),
+                resultSet.getString("PASSWORD").toCharArray(),
+                LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(resultSet.getTimestamp("CREATE_TIME").getTime()),
+                        TimeZone.getDefault().toZoneId())
+        );
+    }
+
+    @Override
+    public boolean isLoginExist(String login) {
+        String queryStatement = "SELECT COUNT(LOGIN) FROM person WHERE LOGIN LIKE ?";
+
+        ResultSet resultSet;
+        try {
+            resultSet = DBManager.dbExecuteQuery(queryStatement, Collections.singletonList(login));
+            return resultSet.next() && resultSet.getInt(1) > 0;
+        } catch (ExecuteStatementException e) {
+            System.out.println("check login: " + e.errorCode());
+        } catch (SQLException e) {
+            System.out.println("ResultSet error: check login");
+        }
+
         return false;
-    }
-
-    public int insertPersonToDB(List<String> accountData) {
-        if (accountData.size() < 8) {
-            return -1;
-        }
-
-        String updateStatement = "INSERT INTO person " +
-                "(FIRST_NAME, LAST_NAME, PERSON_ID, " +
-                "ADDRESS, TELEPHONE_NUMBER, EMAIL, " +
-                "LOGIN, PASSWORD) " +
-                "VALUES " +
-                "(?, ?, ?," +
-                "?, ?, ?, " +
-                "?, ?)";
-        try {
-            DBManager.dbExecuteUpdate(updateStatement, accountData);
-            return getIdPerson(accountData.get(6));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    private int getIdPerson(String login) {
-        String updateStatement = "SELECT idPerson FROM person " +
-                "WHERE LOGIN LIKE ?";
-        ResultSet resultSet;
-        try {
-            resultSet = DBManager.dbExecuteQuery(updateStatement, Collections.singletonList(login));
-            return resultSet.next() ? resultSet.getInt("idPerson") : 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public <T> boolean deletePerson(T value) {
-        String updateStatement;
-        if (value instanceof Integer) {
-            updateStatement = "DELETE FROM person WHERE idPerson = ?";
-            System.out.println(String.valueOf(value));
-            try {
-                DBManager.dbExecuteUpdate(updateStatement, Collections.singletonList(String.valueOf(value)));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            accountDAO.deleteAccount(value);
-            return true;
-        } else if (value instanceof String && ((String) value).length() != 0) {
-            updateStatement = "DELETE FROM person WHERE LOGIN LIKE ? OR " +
-                    "(FIRST_NAME LIKE ? AND LAST_NAME LIKE ?)";
-            Integer idPerson = 0;
-            try {
-                DBManager.dbExecuteUpdate(updateStatement,
-                        Arrays.asList(String.valueOf(value), String.valueOf(value),
-                                String.valueOf(value)));
-                idPerson = getIdPerson(String.valueOf(value));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (idPerson != 0) {
-                accountDAO.deleteAccount(idPerson);
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 }

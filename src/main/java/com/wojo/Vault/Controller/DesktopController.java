@@ -2,9 +2,9 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.wojo.Vault.Controller.Loader.ViewLoader;
-import com.wojo.Vault.Database.Model.CashFlow;
-import com.wojo.Vault.Database.Model.Payment;
-import com.wojo.Vault.Database.Model.Person;
+import com.wojo.Vault.Database.Model.*;
+import com.wojo.Vault.Exception.AppException;
+import com.wojo.Vault.Exception.ErrorCode;
 import com.wojo.Vault.Main;
 import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.CashFlowService;
@@ -20,7 +20,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import java.math.BigDecimal;
+
 public class DesktopController {
+
+    private Person person;
     private RootController rootController;
 
     private AccountService accountService = new AccountServiceImpl();
@@ -92,6 +96,8 @@ public class DesktopController {
 
     @FXML
     public void initialize() {
+        person = CurrentPerson.getInstance();
+
         addEventHandlers();
         setLabelsText();
     }
@@ -117,25 +123,38 @@ public class DesktopController {
     }
 
     private void setLabelsText() {
-        fullName.setText(Person.getFirstName() + " " + Person.getLastName());
+        fullName.setText(person.getFirstName() + " " + person.getLastName());
 
         setAccountsLabel();
     }
 
-    private void setAccountsLabel() {
-        accountsNumber.setText(accountService.getFormatAccountNumber());
-
-        Payment deposit = paymentService.getRecentDeposit();
-        if (deposit != null) {
-            recentDeposit.setText(deposit.getSenderName() + " " + deposit.getPaymentValue() + " PLN");
+    private void setAccountsLabel() throws AppException {
+        if (person.getAccountList().size() != 0) {
+            accountsNumber.setText(accountService.getFormatAccountNumber(person.getAccountList().get(0)));
+        } else {
+            if (accountService.setAccounts(person)) {
+                accountsNumber.setText(accountService.getFormatAccountNumber(person.getAccountList().get(0)));
+            } else {
+                if (!accountService.createAccount(new Account(person.getPersonId(), "", BigDecimal.ZERO))) {
+                    throw new AppException("Set account error", ErrorCode.NO_ACCOUNT_FOR_PERSON);
+                }
+            }
         }
-        Payment debit = paymentService.getRecentDebit();
-        if (debit != null) {
-            recentDebit.setText(debit.getRecipientName() + " " + debit.getPaymentValue() + " PLN");
-            recentDebit.setTextFill(Color.RED);
+
+        String accountId = CurrentPerson.getActiveAccount().getAccountId();
+        Payment recentDeposit = paymentService.getRecentDeposit(accountId);
+        if (recentDeposit != null) {
+            this.recentDeposit.setText(person.getLastName() + " " + person.getFirstName() + " "
+                    + recentDeposit.getAmount() + " PLN");
         }
 
-        CashFlow lastMonthFlow = cashFlowService.getLastMothFlow();
+        Payment recentDebit = paymentService.getRecentDebit(accountId);
+        if (recentDebit != null) {
+            this.recentDebit.setText(recentDebit.getRecipientName() + " " + recentDebit.getAmount() + " PLN");
+            this.recentDebit.setTextFill(Color.RED);
+        }
+
+        CashFlow lastMonthFlow = cashFlowService.getLastMothFlow(accountId);
         cashFlowMonth.setText(lastMonthFlow.getMonth().toString());
         cashFlowYear.setText(lastMonthFlow.getYear() + "");
         cashFlowIncomes.setText(lastMonthFlow.getIncomes().toString());
@@ -157,7 +176,7 @@ public class DesktopController {
         mainPaneSetScreen(pane);
     }
 
-    protected void goToAccounts() {
+    void goToAccounts() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), ACCOUNTS_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         AccountsController controller = loader.getController();
@@ -166,7 +185,7 @@ public class DesktopController {
         mainPaneSetScreen(pane);
     }
 
-    protected void goToPayments() {
+    void goToPayments() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), PAYMENTS_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         PaymentsController controller = loader.getController();
@@ -174,7 +193,7 @@ public class DesktopController {
         mainPaneSetScreen(pane);
     }
 
-    protected void goToPaymentsHistory() {
+    void goToPaymentsHistory() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), PAYMENTS_HISTORY_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 60);
         PaymentsHistoryController controller = loader.getController();

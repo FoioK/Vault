@@ -1,16 +1,15 @@
 package com.wojo.Vault.Database.DAO;
 
-import java.util.List;
+import com.wojo.Vault.Database.Model.Address;
+import com.wojo.Vault.Database.Model.Person;
 
 public interface PersonDAO {
 
-    boolean searchPersonLogin(String login);
+    boolean insertPersonAndAddress(Person person, Address address);
 
-    String[] getIdPersonAndPassword(String login);
+    Person findByLogin(String login);
 
-    boolean insertPersonData(Integer idPerson);
-
-    int insertPersonToDB(List<String> accountData);
-
-    <T> boolean deletePerson(T value);
+    String findIdByLogin(String login);
+    
+    boolean isLoginExist(String login);
 }

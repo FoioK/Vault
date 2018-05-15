@@ -1,45 +1,53 @@
 package com.wojo.Vault.Database.Model;
 
-import com.wojo.Vault.Database.Model.Generators.AccountDataGenerator;
-
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Account {
 
-    private Integer idAccount;
-    private String IBAN_NUMBER;
+    public static final Integer NUMBER_LENGTH = 26;
+    public static final Integer ROUND_SCALE = 2;
+
+    private String accountId;
+    private String personId;
+    private String number;
     private BigDecimal value;
 
-    public Account(String countryCode, int length, BigDecimal value) {
-        AccountDataGenerator accountDataGenerator = new AccountDataGenerator();
-        IBAN_NUMBER = accountDataGenerator.generateIBAN(countryCode, length);
+    public Account(String personId, String number, BigDecimal value) {
+        this.personId = personId;
+        this.number = number;
         this.value = value;
     }
 
-    public Account(Integer idAccount, String IBAN_NUMBER, BigDecimal value) {
-        this.idAccount = idAccount;
-        this.IBAN_NUMBER = IBAN_NUMBER;
+    public Account(String accountId, String personId, String number, BigDecimal value) {
+        this.accountId = accountId;
+        this.personId = personId;
+        this.number = number;
         this.value = value;
     }
 
-    public Account() {
-        this(0, "", new BigDecimal("0"));
+    public String getAccountId() {
+        return accountId;
     }
 
-    public Integer getIdAccount() {
-        return idAccount;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
-    public void setIdAccount(Integer idAccount) {
-        this.idAccount = idAccount;
+    public String getPersonId() {
+        return personId;
     }
 
-    public String getIBAN_NUMBER() {
-        return IBAN_NUMBER;
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
-    public void setIBAN_NUMBER(String IBAN_NUMBER) {
-        this.IBAN_NUMBER = IBAN_NUMBER;
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public BigDecimal getValue() {
@@ -48,5 +56,22 @@ public class Account {
 
     public void setValue(BigDecimal value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+        Account account = (Account) o;
+        return Objects.equals(accountId, account.accountId) &&
+                Objects.equals(personId, account.personId) &&
+                Objects.equals(number, account.number) &&
+                Objects.equals(value, account.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(accountId, personId, number, value);
     }
 }

@@ -2,13 +2,12 @@ package com.wojo.Vault.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Deposit;
 import com.wojo.Vault.Database.Model.DepositsModel.LongDeposit;
 import com.wojo.Vault.Database.Model.DepositsModel.MiddleDeposit;
 import com.wojo.Vault.Database.Model.DepositsModel.ShortDeposit;
-import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.DepositService;
-import com.wojo.Vault.Service.impl.AccountServiceImpl;
 import com.wojo.Vault.Service.impl.DepositServiceImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +28,6 @@ import java.util.ResourceBundle;
 public class DepositsController {
 
     private RootController rootController;
-    private AccountService accountService = new AccountServiceImpl();
     private DepositService depositService = new DepositServiceImpl();
     private Deposit.DepositType depositType;
 
@@ -56,10 +54,10 @@ public class DepositsController {
 
     @FXML
     void initialize() {
+        setDepositsTypeBox();
+
         setErrorMessagesVisibleFalse();
         addEventHandlers();
-
-        setDepositsTypeBox();
 
         this.showActiveDepositsList();
     }
@@ -88,16 +86,19 @@ public class DepositsController {
 
     private void openDepositProcess() {
         setErrorMessagesVisibleFalse();
+
         if (depositsTypeBox.getSelectionModel().isSelected(0)) {
             badTypeMessage.setVisible(true);
             return;
         }
+
+        Account currentAccount = CurrentPerson.getActiveAccount();
         String depositDescription = depositsTypeBox.getSelectionModel().getSelectedItem();
         BigDecimal amountValue;
         try {
             amountValue = BigDecimal.valueOf(Double.valueOf(amount.getText()))
                     .setScale(2, RoundingMode.CEILING);
-            if (amountValue.compareTo(accountService.getAccountValue()) > 0
+            if (amountValue.compareTo(currentAccount.getValue()) > 0
                     || !checkMinValue(amountValue, depositDescription)) {
                 badAmountMessage.setVisible(true);
                 return;
@@ -106,7 +107,9 @@ public class DepositsController {
             badAmountMessage.setVisible(true);
             return;
         }
-        depositService.createDeposit(amountValue, depositType);
+
+        depositService.createDeposit(currentAccount, amountValue, depositType);
+        rootController.loadDesktopPane();
     }
 
     private boolean checkMinValue(BigDecimal amountValue, String depositDescription) {
@@ -121,6 +124,7 @@ public class DepositsController {
             minimalAmount = LongDeposit.MINIMAL_AMOUNT;
             depositType = Deposit.DepositType.Long;
         }
+
         return minimalAmount != null && amountValue.compareTo(minimalAmount) >= 0;
     }
 
@@ -130,7 +134,8 @@ public class DepositsController {
 
     @SuppressWarnings("Duplicates")
     private void showActiveDepositsList() {
-        List<Deposit> allActiveDeposits = depositService.getActiveDeposits();
+        List<Deposit> allActiveDeposits =
+                depositService.getActiveDeposits(CurrentPerson.getActiveAccount());
 
         if (allActiveDeposits.size() > 3) {
             activeList.setPrefSize(PANE_WIDTH,

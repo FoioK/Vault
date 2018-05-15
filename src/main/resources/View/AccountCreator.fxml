@@ -111,13 +111,41 @@
                             <children>
                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
                                     <children>
-                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
-                                               text="%AccountCreator.address">
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.city">
                                             <font>
                                                 <Font size="26.0"/>
                                             </font>
                                         </Label>
-                                        <JFXTextField fx:id="addressField" prefWidth="350.0">
+                                        <JFXTextField fx:id="city" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0" text="%AccountCreator.street">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="street" prefWidth="350.0">
+                                            <font>
+                                                <Font size="24.0"/>
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
+                                    <children>
+                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                               text="%AccountCreator.apartmentNumber">
+                                            <font>
+                                                <Font size="26.0"/>
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="apartmentNumber" prefWidth="350.0">
                                             <font>
                                                 <Font size="24.0"/>
                                             </font>
@@ -132,11 +160,15 @@
                                 </Label>
                             </children>
                         </VBox>
+                    </children>
+                </VBox>
+                <VBox prefHeight="550.0" prefWidth="600.0">
+                    <children>
                         <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">
                                     <children>
-                                        <Label alignment="CENTER_RIGHT" prefWidth="225.0"
+                                        <Label alignment="CENTER_RIGHT" prefWidth="200.0"
                                                text="%AccountCreator.telephoneNumber">
                                             <font>
                                                 <Font size="26.0"/>
@@ -158,10 +190,6 @@
                                 </Label>
                             </children>
                         </VBox>
-                    </children>
-                </VBox>
-                <VBox prefHeight="550.0" prefWidth="600.0">
-                    <children>
                         <VBox alignment="CENTER" prefHeight="110.0" prefWidth="600.0">
                             <children>
                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" spacing="20.0">

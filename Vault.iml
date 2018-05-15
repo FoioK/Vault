@@ -24,5 +24,6 @@
     <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:1.10.0" level="project" />
     <orderEntry type="library" name="Maven: de.jensd:fontawesomefx:8.1" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.45" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:8.5.16" level="project" />
   </component>
 </module>

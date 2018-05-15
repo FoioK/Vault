@@ -1,18 +1,17 @@
 package com.wojo.Vault.Service;
 
 import com.wojo.Vault.Database.Model.Account;
+import com.wojo.Vault.Database.Model.Person;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface AccountService {
-    Account addNewAccount(Integer idPerson, String countryCode, int length);
 
-    boolean createAccount(String login, List<String> accountDataList, String countryCode, int length);
+    boolean createAccount(Account account);
 
-    String getFormatAccountNumber();
+    boolean addValue(BigDecimal value, String number);
 
-    BigDecimal getAccountValue();
+    String getFormatAccountNumber(Account account);
 
-    boolean addValueToAccount(BigDecimal value, String number);
+    boolean setAccounts(Person person);
 }

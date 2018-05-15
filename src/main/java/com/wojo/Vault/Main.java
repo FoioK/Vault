@@ -10,9 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public class Main extends Application {
 
     private static final String ROOT_VIEW = "Root";
@@ -29,17 +26,13 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        connectionToDatabase();
         launch(args);
+        connectionToDatabase();
     }
 
     private static void connectionToDatabase() {
         DBManager.setOriginalConnectionPath();
-        try {
-            DBManager.dbConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+        DBManager.dbConnection();
     }
 
     public static void exitApplication() {
@@ -48,10 +41,6 @@ public class Main extends Application {
     }
 
     private static void disconnectionFromDatabase() {
-        try {
-            DBManager.dbDisconnect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DBManager.dbDisconnect();
     }
 }
