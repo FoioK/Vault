@@ -83,7 +83,7 @@ public class LoginStep1Controller {
         setErrorMessagesVisibleFalse();
 
         String login = loginField.getText();
-        Person person;
+        final Person person;
 
         if ((person = personService.findPersonByLogin(login)) != null) {
             loadLoginStep2(person);
@@ -96,11 +96,12 @@ public class LoginStep1Controller {
     private static final String ACCOUNT_CREATOR_VIEW = "AccountCreator";
 
     private void loadLoginStep2(Person person) {
+        CurrentPerson.setPerson(person);
+
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), LOGIN_STEP2_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 225, 100);
         LoginStep2Controller controller = loader.getController();
         controller.setRootController(rootController);
-        controller.setPerson(person);
         rootController.setScreen(pane);
     }
 
@@ -134,15 +135,15 @@ public class LoginStep1Controller {
             return;
         }
 
-//        if (accountService.addValueToAccount(amount, String.valueOf(number))) {
-//            JOptionPane.showMessageDialog(null,
-//                    bundle.getString("LoginStep1.addValueSuccess"),
-//                    "Success", JOptionPane.PLAIN_MESSAGE);
-//        } else {
-//            JOptionPane.showMessageDialog(null,
-//                    bundle.getString("LoginStep1.badAddValueMessage"),
-//                    "Warning", JOptionPane.WARNING_MESSAGE);
-//        }
+        if (accountService.addValue(amount, String.valueOf(number))) {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("LoginStep1.addValueSuccess"),
+                    "Success", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    bundle.getString("LoginStep1.badAddValueMessage"),
+                    "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     protected void setRootController(RootController rootController) {

@@ -20,7 +20,7 @@ public class RootController {
         loadLoginStep1();
     }
 
-    protected void loadLoginStep1() {
+    void loadLoginStep1() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), LOGIN_STEP1_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 225, 100);
         LoginStep1Controller controller = loader.getController();
@@ -28,7 +28,7 @@ public class RootController {
         setScreen(pane);
     }
 
-    protected <T extends Parent> void setScreen(T pane) {
+    <T extends Parent> void setScreen(T pane) {
         root.getChildren().clear();
         loadMainWindow();
         root.getChildren().add(pane);
@@ -40,7 +40,7 @@ public class RootController {
         root.getChildren().add(mainPane);
     }
 
-    protected void loadDesktopPane() {
+    void loadDesktopPane() {
         FXMLLoader loader = ViewLoader.loadView(this.getClass(), DESKTOP_VIEW);
         AnchorPane pane = (AnchorPane) ViewLoader.loadPane(loader, 0, 0);
         DesktopController controller = loader.getController();

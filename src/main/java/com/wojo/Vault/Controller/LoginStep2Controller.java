@@ -35,6 +35,8 @@ public class LoginStep2Controller {
 
     @FXML
     void initialize() {
+        person = CurrentPerson.getInstance();
+
         setErrorMessages();
         addEventHandlers();
     }
@@ -72,9 +74,5 @@ public class LoginStep2Controller {
 
     protected void setRootController(RootController rootController) {
         this.rootController = rootController;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 }
