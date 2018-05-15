@@ -15,9 +15,8 @@ public class AccountDataGenerator {
 
     private String generateNumberProcess(int length) {
         String number = generateRandomNumber(new Random(), length);
-        
-        return accountDAO.isNumberExist(number) ?
-                generateNumberProcess(length) : generateRandomNumber(new Random(), length);
+
+        return accountDAO.isNumberExist(number) ? generateNumberProcess(length) : number;
     }
 
     private String generateRandomNumber(Random random, int length) {
