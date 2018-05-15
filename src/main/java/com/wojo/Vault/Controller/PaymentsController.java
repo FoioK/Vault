@@ -13,9 +13,6 @@ import java.math.BigDecimal;
 
 public class PaymentsController {
 
-    private RootController rootController;
-    private PaymentService paymentService = new PaymentServiceImpl();
-
 
     @FXML
     private JFXButton backToDesktopPane;
@@ -57,6 +54,9 @@ public class PaymentsController {
         addEventHandlers();
     }
 
+    private RootController rootController;
+    private PaymentService paymentService = new PaymentServiceImpl();
+
     private void initTextLimiters() {
         TextFieldFilter.lengthLimiter(recipientName, 75);
 
@@ -92,6 +92,7 @@ public class PaymentsController {
 
     private boolean sendTransferProcess() {
         setErrorMessage();
+
         return checkData() && sendTransfer();
     }
 
@@ -125,13 +126,17 @@ public class PaymentsController {
             badTitleMessage.setVisible(true);
             isCorrect = false;
         }
+
         return isCorrect;
     }
 
     private boolean sendTransfer() {
-        return paymentService.sendTransfer(recipientName.getText()
-                , recipientAccountNumber.getText(), title.getText()
-                , new BigDecimal(paymentValue.getText()));
+        return paymentService.sendTransfer(
+                CurrentPerson.getActiveAccount(),
+                recipientName.getText(),
+                recipientAccountNumber.getText(),
+                title.getText(),
+                new BigDecimal(paymentValue.getText()));
     }
 
     private void loadDesktopPane() {

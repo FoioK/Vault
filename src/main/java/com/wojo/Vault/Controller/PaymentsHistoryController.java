@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentsHistoryController {
@@ -38,28 +37,26 @@ public class PaymentsHistoryController {
 
     private AccountService accountService = new AccountServiceImpl();
     private PaymentService paymentService = new PaymentServiceImpl();
-    private List<Payment> allPayments = new ArrayList<>();
 
     @FXML
     void initialize() {
         numberPrettyPaint.setText(getFormatAccountNumber());
-        allPayments = getPaymentsList();
 
         backToAccountsPane.addEventHandler(ActionEvent.ACTION, e -> desktopController.goToAccounts());
 
-        showPaymentsHistoryProcess();
+        showPaymentsHistoryProcess(getPaymentsList());
     }
 
     private String getFormatAccountNumber() {
-        return accountService.getFormatAccountNumber();
+        return accountService.getFormatAccountNumber(CurrentPerson.getActiveAccount());
     }
 
     private List<Payment> getPaymentsList() {
-        return paymentService.getAllPayment();
+        return paymentService.findAll(CurrentPerson.getActiveAccount().getAccountId());
     }
 
     @SuppressWarnings("Duplicates")
-    private void showPaymentsHistoryProcess() {
+    private void showPaymentsHistoryProcess(List<Payment> allPayments) {
         if (allPayments.size() > 5) {
             scrollPane.setPrefSize(SCROLL_PANE_WIDTH,
                     (allPayments.size() * PAYMENT_ROW_HEIGHT)
@@ -85,9 +82,11 @@ public class PaymentsHistoryController {
         date.setLayoutY(40);
         date.setAlignment(Pos.CENTER);
 
+        String senderName = CurrentPerson.getInstance().getLastName() +
+                        CurrentPerson.getInstance().getFirstName();
         Label recipientOrSender =
-                new Label(payment.getPaymentValue().compareTo(BigDecimal.ZERO) < 0 ?
-                        payment.getRecipientName() : payment.getSenderName());
+                new Label(payment.getAmount().compareTo(BigDecimal.ZERO) < 0 ?
+                        payment.getRecipientName() : senderName);
         recipientOrSender.setPrefSize(300, 30);
         recipientOrSender.setLayoutX(405);
         recipientOrSender.setLayoutY(15);
@@ -99,8 +98,8 @@ public class PaymentsHistoryController {
         title.setLayoutY(55);
         title.setAlignment(Pos.CENTER);
 
-        Label value = new Label(payment.getPaymentValue().toString() + " PLN");
-        if (payment.getPaymentValue().compareTo(BigDecimal.ZERO) < 0) {
+        Label value = new Label(payment.getAmount().toString() + " PLN");
+        if (payment.getAmount().compareTo(BigDecimal.ZERO) < 0) {
             value.setTextFill(Color.RED);
         }
         value.setPrefSize(200, 30);
