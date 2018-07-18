@@ -23,6 +23,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserRole> roles;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    private Person person;
+
     public Long getId() {
         return id;
     }
@@ -61,5 +64,13 @@ public class User {
 
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }
