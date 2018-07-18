@@ -8,7 +8,6 @@
     <packaging>jar</packaging>
 
     <name>Vault</name>
-    <url>http://maven.apache.org</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -17,47 +16,30 @@
         <relativePath/>
     </parent>
 
-    <profiles>
-        <profile>
-            <id>NonGUITest</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <excludedGroups>com.wojo.Vault.Categories.GUITest</excludedGroups>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.8.3</version>
-                <configuration>
-                    <mainClass>com.wojo.Vault.Main</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-    </build>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>10</maven.compiler.source>
-        <maven.compiler.target>10</maven.compiler.target>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>10</java.version>
     </properties>
+
+    <!--<build>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<groupId>com.zenjava</groupId>-->
+    <!--<artifactId>javafx-maven-plugin</artifactId>-->
+    <!--<version>8.8.3</version>-->
+    <!--<configuration>-->
+    <!--<mainClass>com.wojo.Vault.Main</mainClass>-->
+    <!--</configuration>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
+    <!--<resources>-->
+    <!--<resource>-->
+    <!--<directory>src/main/resources</directory>-->
+    <!--<filtering>true</filtering>-->
+    <!--</resource>-->
+    <!--</resources>-->
+    <!--</build>-->
 
     <dependencies>
 
@@ -95,12 +77,6 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.45</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
             <version>8.5.16</version>
@@ -119,8 +95,19 @@
         </dependency>
 
         <dependency>
+            <groupId>de.roskenet</groupId>
+            <artifactId>springboot-javafx-support</artifactId>
+            <version>2.1.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <dependency>
@@ -129,10 +116,38 @@
         </dependency>
 
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
