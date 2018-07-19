@@ -26,6 +26,12 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private Person person;
 
+    @OneToMany(mappedBy = "createdBy")
+    private Set<AccountType> accountTypes;
+
+    @OneToMany(mappedBy = "createdBy")
+    private Set<DepositType> depositTypes;
+
     public Long getId() {
         return id;
     }
@@ -72,5 +78,21 @@ public class User {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Set<AccountType> getAccountTypes() {
+        return accountTypes;
+    }
+
+    public void setAccountTypes(Set<AccountType> accountTypes) {
+        this.accountTypes = accountTypes;
+    }
+
+    public Set<DepositType> getDepositTypes() {
+        return depositTypes;
+    }
+
+    public void setDepositTypes(Set<DepositType> depositTypes) {
+        this.depositTypes = depositTypes;
     }
 }
