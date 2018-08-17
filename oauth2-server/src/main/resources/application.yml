@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: authorization-server
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: "jdbc:mysql://127.0.0.1:3306/vault"
+    password: "admin"
+    username: "vault_user"
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    max-active: 15
+    max-idle: 10
+    max-wait: 800
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+
+config:
+  oauth2:
+    privateKey: -----BEGIN RSA PRIVATE KEY-----
+      MIIEpQIBAAKCAQEAtRgYb/r1u4afROnUC1SGlyuA9b2kBji4gL8z8f9xRgC+vB3c
+      zOJMTTNMCL+d+mr1EYv6M7G3b9DaxqTcVPoRZIe5DbkFhtipz8x1qccTOhaxTpMC
+      nX12je0pJR/FaqysQI/VqkOuBBsw03O/ETc114/oS0k8Y+6vpDPxsvHQRSY/zb1M
+      js0JIqdvU4sajIHOXZdOnB9FfC3TD0mc1Ur/xyRSBgEvLyrw9IfEih1Ql4KLYF8L
+      99XZ6tXe2j9W9WhipQNE10/acunoRYFAcKG8+8tD0SZTvWZvCZRbRZKotcT8h8vo
+      RMIOaHHWHPHCVUbR0zFM+jYtv4wh2a9aCz89xwIDAQABAoIBAQCklt2/COxGH7ip
+      vYuHMK+SvWtb7ZwiO3MVMLJZg7zDzvGLr+h6HkMS90hnuyAt9P//jqU8To1WBxCP
+      8k5+vTkJkYFTQ5IOWOUdg8p9H/4NkYpcy6hY0yrpG1+F6jZXGdEEbLXZJeIGwV/D
+      DzPcxb0dyiFqK4nDma/xIXTPGpAcB3oUeMVuorZwKc7wol2RJuA+qwE8FQj6ElFu
+      iHXVVo7S4bTDpFK8BVuwK4lsbVLOeC7TPOpLgA9pNYEuZLaDLSh5NdqBgHd2mZqJ
+      JqXaHC13aZJSVjqID1AahsZtRJpnRZE1MsAmGT0yrJUxks4C6B11n0CR9cjEZSKm
+      DKYCuSYBAoGBAO5btutCcU/yuCS8a99UP9QCqnHEhOfyjBGPjHvYqSZBlZhYomOZ
+      LJSWHIyoMi9/wdHCQmiBhCDNTJOG5mS2DSytucRahb8CbK0w2BYgvimo+e/wGbff
+      9Ovd+JfQoYWHdy8oMcpDPs6Bq7T0rVkBu+VAm6MwNuIftR0V4zHABwyHAoGBAMJ/
+      XttlQEfvEd4VbEqxu0sC8SBouYMSGgws9AC6ScbG1OuLU4ZI/fd2/SsF+YE2POT1
+      ykRbREixsIPi6ALE4oKYjStStXke0xSpsIt1YAb5Hbg6EKDBOV0rRPnradLljJnf
+      a/O2AFJL/YnhE6zQLC3/D32Z+JQ3EPDySV0OudTBAoGASKCXds2y+xpI86CZ+d2Q
+      6Ue6qZmoqYglF8C2nJHi0G5RZ68yI8jrZYbrwgwJ5qE17HUViQRVvyzu9VC4aN1z
+      3DY/EU5HzHCvroHghbWKW+VJ6sss+vL5jNkAwzllzer97NeBfFDLFV87c5LOMv2t
+      Q+hQxAOP5YylwewGYwVQ4IcCgYEAns0qIM3RpynuF7q8GVx2BG/ZelGnLfoopEpL
+      yxBOzmpnTA4M2zZbjaJsYKVXKwWiwHpidF9kKEpUScqJDkG8g06U7ItyOftN8q/9
+      wk/KYMcjWdim3OoGsShz/+4TECt2GehOlsTCDG+ZCetoig/KEqAPAMknKbSwM1pP
+      RhiQ58ECgYEAiGh1cfx4UqfFNbrURtdlPlyPXxGJpwLhgNL3NiFxcAtHDvr4SmDy
+      K9PU1QhCf+wRm7dQHqNVIyrbX/H/BtzzMzZuOIBEO6uPXcvSCuDsRKuxQy1lJbSV
+      kGmzgq4x42J47bVtvsNZsyJpwzbi9tt1X2kekI+363rhgXDveIFl98A=
+      -----END RSA PRIVATE KEY-----
+    publicKey: -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtRgYb/r1u4afROnUC1SG
+      lyuA9b2kBji4gL8z8f9xRgC+vB3czOJMTTNMCL+d+mr1EYv6M7G3b9DaxqTcVPoR
+      ZIe5DbkFhtipz8x1qccTOhaxTpMCnX12je0pJR/FaqysQI/VqkOuBBsw03O/ETc1
+      14/oS0k8Y+6vpDPxsvHQRSY/zb1Mjs0JIqdvU4sajIHOXZdOnB9FfC3TD0mc1Ur/
+      xyRSBgEvLyrw9IfEih1Ql4KLYF8L99XZ6tXe2j9W9WhipQNE10/acunoRYFAcKG8
+      +8tD0SZTvWZvCZRbRZKotcT8h8voRMIOaHHWHPHCVUbR0zFM+jYtv4wh2a9aCz89
+      xwIDAQAB
+      -----END PUBLIC KEY-----
+    clientid: vault_id
+    clientSecret: vault_secret
