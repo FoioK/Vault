@@ -13,7 +13,10 @@ public class Role {
     @Column(nullable = false, length = 64)
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    private Set<RolePermission> permissions;
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<UserRole> users;
 
     public Long getId() {
@@ -30,6 +33,14 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<RolePermission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<RolePermission> permissions) {
+        this.permissions = permissions;
     }
 
     public Set<UserRole> getUsers() {

@@ -12,7 +12,7 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private Set<PersonAccount> persons;
 
     @Column(nullable = false, length = 28)
@@ -27,13 +27,13 @@ public class Account {
     @Column(nullable = false)
     private LocalDateTime createTime;
 
-    @OneToMany(mappedBy = "from")
+    @OneToMany(mappedBy = "from", fetch = FetchType.LAZY)
     private Set<Payment> sendPayments;
 
-    @OneToMany(mappedBy = "insideTo")
+    @OneToMany(mappedBy = "insideTo", fetch = FetchType.LAZY)
     private Set<Payment> receivedPayments;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private Set<Deposit> deposits;
 
     public Long getId() {

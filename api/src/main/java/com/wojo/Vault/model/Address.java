@@ -19,7 +19,7 @@ public class Address {
     @Column(length = 10)
     private String apartmentNumber;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
     private Set<PersonAddress> persons;
 
     public Long getId() {

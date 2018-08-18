@@ -6,17 +6,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class UserRole {
+public class RolePermission {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private UserEntity user;
+    private Role role;
 
     @ManyToOne
-    private Role role;
+    private Permission permission;
 
     public Long getId() {
         return id;
@@ -26,19 +26,19 @@ public class UserRole {
         this.id = id;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 }

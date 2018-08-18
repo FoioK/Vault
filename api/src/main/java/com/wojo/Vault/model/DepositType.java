@@ -20,9 +20,9 @@ public class DepositType {
     private BigDecimal percent;
 
     @ManyToOne
-    private User createdBy;
+    private UserEntity createdBy;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
     private Set<Deposit> deposits;
 
     public Long getId() {
@@ -57,11 +57,11 @@ public class DepositType {
         this.percent = percent;
     }
 
-    public User getCreatedBy() {
+    public UserEntity getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(UserEntity createdBy) {
         this.createdBy = createdBy;
     }
 

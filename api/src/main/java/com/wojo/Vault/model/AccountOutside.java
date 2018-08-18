@@ -16,7 +16,7 @@ public class AccountOutside {
     @Column(nullable = false, length = 128)
     private String recipientName;
 
-    @OneToMany(mappedBy = "outsideTo")
+    @OneToMany(mappedBy = "outsideTo", fetch = FetchType.LAZY)
     private Set<Payment> payments;
 
     public Long getId() {

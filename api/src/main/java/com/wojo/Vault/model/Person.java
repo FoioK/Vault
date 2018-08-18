@@ -11,7 +11,7 @@ public class Person {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private User user;
+    private UserEntity user;
 
     @Column(nullable = false, length = 50)
     private String firstName;
@@ -19,7 +19,7 @@ public class Person {
     @Column(nullable = false, length = 50)
     private String lastName;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<PersonAddress> addresses;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
@@ -36,11 +36,11 @@ public class Person {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

@@ -14,9 +14,9 @@ public class AccountType {
     private String name;
 
     @ManyToOne
-    private User createdBy;
+    private UserEntity createdBy;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
     private Set<Account> accounts;
 
     public Long getId() {
@@ -35,11 +35,11 @@ public class AccountType {
         this.name = name;
     }
 
-    public User getCreatedBy() {
+    public UserEntity getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(UserEntity createdBy) {
         this.createdBy = createdBy;
     }
 
