@@ -26,14 +26,14 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter {
             info.put("email", user.getEmail());
         }
         if (user.getCreateTime() != null) {
-            info.put("createTime", user.getCreateTime());
+            info.put("createTime", user.getCreateTime().toString());
         }
         if (user.getUserType() != null) {
             info.put("user_type", user.getUserType());
         }
-        DefaultOAuth2AccessToken customAccesToken = new DefaultOAuth2AccessToken(accessToken);
-        customAccesToken.setAdditionalInformation(info);
+        DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
+        customAccessToken.setAdditionalInformation(info);
 
-        return super.enhance(customAccesToken, authentication);
+        return super.enhance(customAccessToken, authentication);
     }
 }

@@ -34,14 +34,15 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User login not found!"));
 
         if (Objects.equals(userEntity.getUserType(), "super_admin")) {
-            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("SUPER_ADMIN");
+            GrantedAuthority grantedAuthority =
+                    new SimpleGrantedAuthority("ROLE_super_admin");
             userEntity.setGrantedAuthorityList(Collections.singletonList(grantedAuthority));
         } else {
             Collection<GrantedAuthority> permissions = new ArrayList<>();
             userRepository.getPermissions(login)
                     .stream()
                     .map(SimpleGrantedAuthority::new)
-                    .forEach(permissions::add);
+                    .forEach(p -> permissions.add(new SimpleGrantedAuthority("ROLE_" + p)));
 
             userEntity.setGrantedAuthorityList(permissions);
         }
