@@ -1,3 +1,44 @@
-<p>
-  login works!
-</p>
+<div class="container-fluid login-form">
+  <div class="col col-12 col-sm-8 col-lg-6 offset-sm-2 offset-lg-3">
+    <div class="row login-header title">
+      LOG IN
+    </div>
+    <form [formGroup]="loginForm"
+          (submit)="getAccessToken()">
+      <div class="row login-content">
+        <div class="col-12">
+          <div class="row">
+            <div class="col col-12 col-md-5 login-input-name">
+              User ID
+            </div>
+            <div class="col col-12 col-md-6">
+              <input formControlName="login"
+                     class="form-control"
+                     type="text"
+                     placeholder="Enter ID">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-12 col-md-5 login-input-name">
+              Password
+            </div>
+            <div class="col col-12 col-md-6">
+              <input formControlName="password"
+                     class="form-control"
+                     type="password"
+                     placeholder="Enter password">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-12 col-md-6 offset-md-5">
+              <button class="btn btn-color login-submit"
+                      type="submit"
+                      [disabled]="loginForm.invalid">SIGN IN
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
