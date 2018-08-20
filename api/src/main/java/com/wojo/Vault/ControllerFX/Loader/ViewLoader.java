@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controller.Loader;
+package com.wojo.Vault.ControllerFX.Loader;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;

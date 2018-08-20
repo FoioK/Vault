@@ -1,6 +1,6 @@
 package com.wojo.Vault;
 
-import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.ControllerFX.Loader.ViewLoader;
 import com.wojo.Vault.Database.DBManager;
 import javafx.application.Application;
 import javafx.application.Platform;

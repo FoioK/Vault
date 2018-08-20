@@ -1,8 +1,8 @@
-package com.wojo.Vault.Controller;
+package com.wojo.Vault.ControllerFX;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.ControllerFX.Loader.ViewLoader;
 import com.wojo.Vault.Database.Model.Person;
 import com.wojo.Vault.Service.AccountService;
 import com.wojo.Vault.Service.PersonService;

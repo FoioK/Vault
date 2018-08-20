@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controller.Loader;
+package com.wojo.Vault.ControllerFX.Loader;
 
 import com.wojo.Vault.Database.DBManager;
 import javafx.fxml.FXMLLoader;

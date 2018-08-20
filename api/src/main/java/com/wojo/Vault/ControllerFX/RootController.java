@@ -1,6 +1,6 @@
-package com.wojo.Vault.Controller;
+package com.wojo.Vault.ControllerFX;
 
-import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.ControllerFX.Loader.ViewLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

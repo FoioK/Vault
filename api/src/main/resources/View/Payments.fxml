@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="840.0" prefWidth="1100.0" style="-fx-background-color: transparent;"
             xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.wojo.Vault.Controller.PaymentsController">
+            fx:controller="com.wojo.Vault.ControllerFX.PaymentsController">
     <Pane layoutX="25.0" layoutY="40.0" prefHeight="700.0" prefWidth="1050.0"
           style="-fx-background-color: #ffffff;">
         <Pane prefHeight="150.0" prefWidth="1050.0" style="-fx-background-color: #70d4f6;">

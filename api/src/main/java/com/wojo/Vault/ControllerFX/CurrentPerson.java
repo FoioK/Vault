@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controller;
+package com.wojo.Vault.ControllerFX;
 
 import com.wojo.Vault.Database.Model.Account;
 import com.wojo.Vault.Database.Model.Person;

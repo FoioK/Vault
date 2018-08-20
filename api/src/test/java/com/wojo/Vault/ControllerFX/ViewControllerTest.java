@@ -1,8 +1,7 @@
-package com.wojo.Vault.Controller;
+package com.wojo.Vault.ControllerFX;
 
-import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.ControllerFX.Loader.ViewLoader;
 import com.wojo.Vault.Database.DBManager;
-import com.wojo.Vault.Database.Model.Person;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

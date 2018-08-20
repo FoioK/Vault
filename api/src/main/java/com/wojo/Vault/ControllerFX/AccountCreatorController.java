@@ -1,4 +1,4 @@
-package com.wojo.Vault.Controller;
+package com.wojo.Vault.ControllerFX;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;

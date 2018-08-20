@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1400.0" style="-fx-background-color: #ffffff;"
             xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.wojo.Vault.Controller.LoginStep2Controller">
+            fx:controller="com.wojo.Vault.ControllerFX.LoginStep2Controller">
     <Pane prefHeight="130.0" prefWidth="1400.0" style="-fx-background-color: #70d4f6;">
         <Label layoutX="79.0" layoutY="38.0" text="%LoginStep2.panelName">
             <font>

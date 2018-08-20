@@ -1,7 +1,7 @@
-package com.wojo.Vault.Controller;
+package com.wojo.Vault.ControllerFX;
 
 import com.jfoenix.controls.JFXButton;
-import com.wojo.Vault.Controller.Loader.ViewLoader;
+import com.wojo.Vault.ControllerFX.Loader.ViewLoader;
 import com.wojo.Vault.Database.Model.*;
 import com.wojo.Vault.Exception.AppException;
 import com.wojo.Vault.Exception.ErrorCode;
