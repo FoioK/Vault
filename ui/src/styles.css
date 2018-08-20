@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+.app-background {
+  background: url('../resources/app_back.jpg') fixed center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  opacity: 0.7;
+}
