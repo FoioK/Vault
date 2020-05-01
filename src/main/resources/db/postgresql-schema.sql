@@ -37,7 +37,7 @@ CREATE TABLE Address
     APARTMENT_NUMBER varchar(255)
 );
 
-CREATE TABLE Address
+CREATE TABLE Deposit
 (
     DEPOSIT_ID serial NOT NULL PRIMARY KEY,
     ACCOUNT_ID varchar(255),
